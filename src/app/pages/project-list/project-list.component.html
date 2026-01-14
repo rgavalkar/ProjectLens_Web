@@ -1,0 +1,40 @@
+<!-- Top Header -->
+<header class="topbar">
+  <div class="left">
+    <!-- Hamburger icon to toggle sidebar -->
+    <span class="hamburger" (click)="toggleSidebar()">☰</span>
+
+    <!-- Notebook icon -->
+    <span class="icon-notebook">📓</span>
+
+    <!-- Title in all caps -->
+    <span class="title">PROJECT LENS</span>
+  </div>
+
+  <div class="right">
+    <input type="text" placeholder="Search projects..." [(ngModel)]="searchText" />
+  </div>
+</header>
+
+<!-- Sidebar -->
+<div class="sidebar" [class.open]="isSidebarOpen">
+  <div class="sidebar-header">
+    <h3>Menu</h3>
+    <!-- Close button -->
+    <button class="close-btn" (click)="toggleSidebar()">✕</button>
+  </div>
+  <ul class="sidebar-list">
+    <li>Login</li>
+    <li>Audit Logs</li>
+  </ul>
+</div>
+
+<!-- Overlay behind sidebar -->
+<div class="overlay" *ngIf="isSidebarOpen" (click)="toggleSidebar()"></div>
+
+<!-- Project List -->
+<div class="project-container">
+  <div class="project-card" *ngFor="let project of filteredProjects">
+    {{ project.name }}
+  </div>
+</div>
