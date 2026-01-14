@@ -1,101 +1,216 @@
-/* Topbar */
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  background-color: #fff; /* white background */
-  color: #333; /* dark text */
-  border-bottom: 1px solid #ddd; /* subtle border */
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* optional shadow */
+/* ================= RESET ================= */
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", Arial, sans-serif;
 }
 
-.left {
+/* ================= HEADER ================= */
+.topbar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  padding: 16px 28px;
+
+  /* ✅ SKY BLUE HEADER BAR */
+  background: linear-gradient(90deg, #87CEEB, #B3E5FC);
+  
+  border-bottom: 1px solid #dbeafe;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(6px);
+}
+
+/* LEFT */
+.topbar-left {
   display: flex;
   align-items: center;
+  gap: 14px;
 }
 
 .hamburger {
+  font-size: 22px;
   cursor: pointer;
-  font-size: 1.5rem;
 }
 
-/* Notebook icon */
-.icon-notebook {
-  margin-left: 1rem; /* spacing after hamburger */
-  font-size: 1.5rem;
+/* ================= CENTER TITLE ================= */
+.topbar-center {
+  text-align: center;
 }
 
-/* Title */
-.title {
-  margin-left: 0.5rem;
-  font-weight: bold;
-  font-size: 1.2rem;
-  text-transform: uppercase; /* all caps */
-  letter-spacing: 1px;
+.app-title {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  color: #1e3a8a; /* darker blue for contrast */
+  margin: 0;
 }
 
-/* Search bar */
-.right input {
-  padding: 0.3rem 0.5rem;
-  border-radius: 4px;
-  border: 1px solid #ccc;
+.app-title span {
+  color: #1e3a8a;
 }
 
-/* Sidebar (keep your current styles) */
+.title-underline {
+  width: 90px;
+  height: 4px;
+  margin: 6px auto 0;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #1e3a8a, #3b82f6, #1e3a8a);
+  box-shadow: 0 2px 8px rgba(30, 58, 138, 0.4);
+  transition: transform 0.3s ease;
+}
+
+.topbar:hover .title-underline {
+  transform: scaleX(1.1);
+}
+
+/* ================= SEARCH BAR BELOW HEADER ================= */
+.search-container-right {
+  display: flex;
+  justify-content: flex-end;  /* aligns the search box to the right */
+  padding: 12px 28px;
+  background: #ffffff;
+  border-bottom: 1px solid #dbeafe;
+}
+
+
+.search-box {
+  position: relative;
+}
+
+.search-box input {
+  width: 250px;
+  padding: 10px 42px 10px 16px;
+  border-radius: 25px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+  width: 300px;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.search-icon {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: #1f2933;
+}
+
+/* ================= SIDEBAR (RIGHT SIDE) ================= */
+/* ================= SIDEBAR (LEFT SIDE) ================= */
 .sidebar {
   position: fixed;
   top: 0;
-  left: -100%;
-  width: 300px;
+  left: -260px; /* move sidebar offscreen to the left */
+  width: 260px;
   height: 100%;
-  background-color: #fff;
-  box-shadow: 2px 0 8px rgba(0,0,0,0.2);
-  z-index: 1000;
-  padding: 1rem;
+  background: #ffffff;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15); /* shadow on right side of sidebar */
   transition: left 0.3s ease;
+  z-index: 1000;
 }
 
 .sidebar.open {
-  left: 0;
+  left: 0; /* slide in from left */
 }
+
 
 .sidebar-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 0.5rem;
+  padding: 16px;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .close-btn {
   background: none;
   border: none;
-  font-size: 1.2rem;
+  font-size: 18px;
   cursor: pointer;
 }
 
 .sidebar-list {
   list-style: none;
   padding: 0;
-  margin-top: 2rem;
+  margin: 0;
 }
 
 .sidebar-list li {
-  padding: 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
   cursor: pointer;
+  font-size: 15px;
+  transition: background 0.2s ease;
 }
 
+.sidebar-list li:hover {
+  background: #f3f4f6;
+}
+
+/* ================= OVERLAY ================= */
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.4);
-  z-index: 900;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 999;
 }
 
+/* ================= PROJECT LIST ================= */
 .project-container {
-  padding: 1rem;
+  padding: 40px;
+}
+
+.project-card {
+  padding: 18px;
+  margin-bottom: 14px;
+  border-radius: 10px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+  .topbar {
+    grid-template-columns: auto 1fr;
+    row-gap: 14px;
+  }
+
+  .search-container {
+    padding: 12px;
+  }
+
+  .search-box input {
+    width: 100%;
+  }
+}
+
+/* ================= PROJECT ICON BESIDE TITLE ================= */
+.title-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.project-icon {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
 }
