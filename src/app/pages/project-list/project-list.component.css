@@ -151,16 +151,17 @@
   cursor: pointer; /* indicates hoverable card */
 }
 
-.project-card:hover {
+/* .project-card:hover {
   background: linear-gradient(90deg, #8c9197, #8c9197);
   color: white;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
   transform: translateY(-4px);
-}
+} */
 
 .project-card h3 {
   margin: 0 0 6px;
-  color: #28292c;
+  color: #1a73e8; /* blue */
+  font-weight: 600;
 }
 
 /* ================= ICON ================= */
@@ -174,3 +175,23 @@
 .project-icon {
   width: 34px;
 }
+
+.image-info {
+  display: flex;
+  align-items: center;
+  gap: 6px; /* small spacing */
+  margin-top: 6px;
+}
+
+.image-icon {
+  width: 30px;      
+  height: 30px;     
+  object-fit: contain;
+  border-radius: 12px; /* small rounded corners */
+}
+
+.image-info span {
+  font-size: 16px;  /* slightly smaller number to match icon */
+  font-weight: 600;
+}
+

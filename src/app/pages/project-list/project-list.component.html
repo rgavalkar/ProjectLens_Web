@@ -7,7 +7,7 @@
 
   <div class="topbar-center">
     <div class="title-wrapper">
-      <img src="src\assets\icons\project-lens.png " class="project-icon">
+      <img src="src\assets\icons\project-lens.png" class="project-icon">
       <h1 class="app-title">PROJECT <span>LENS</span></h1>
     </div>
     <!-- <div class="title-underline"></div> -->
@@ -41,19 +41,28 @@
 <div class="overlay" *ngIf="isSidebarOpen" (click)="toggleSidebar()"></div>
 
 <!-- ================= PROJECT LIST ================= -->
-<div class="project-container">
 
-  <div class="project-card" *ngFor="let project of filteredProjects">
-    <h3>{{ project.fileName }}</h3>
-    <p><b>Device:</b> {{ project.deviceModel }}</p>
-    <p><b>Files:</b> {{ project.fileCount }}</p>
-    <p><b>PO:</b> {{ project.poNumber }}</p>
-    <p><b>BOL:</b> {{ project.bolNumber }}</p>
-    <p><b>Date:</b> {{ project.recordDate | date }}</p>
-  </div>
+<div class="project-card" *ngFor="let project of filteredProjects">
+  
+  <!-- Title -->
+  <h3>{{ project.fileName }}</h3>
 
-  <p *ngIf="filteredProjects.length === 0" style="text-align:center;color:gray;">
-    No projects found
+  <!-- Created time -->
+  <p class="created-time">
+    Created: {{ getTimeAgo(project.createdOn) }}
+    ({{ project.createdOn | date:'dd MMM yyyy, hh:mm a' }})
   </p>
 
+  <!-- Image count -->
+  <div class="image-info">
+    <img src="assets/icons/image_icon.jpg" alt="images" class="image-icon" />
+    <span>{{ project.fileCount }}</span>
+  </div>
+
 </div>
+
+<p *ngIf="!loading && filteredProjects.length === 0" class="no-projects">
+  No projects found
+</p>
+
+
