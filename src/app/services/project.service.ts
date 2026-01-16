@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class ProjectService {
 
-  private apiUrl = 'https://projectlensapi-a5bmb9gjchezf7bc.eastus2-01.azurewebsites.net/api/Upload/all';
+  private apiUrl = '/api/Upload/all'; // ✅ PROXY URL (NO CORS)
 
   constructor(private http: HttpClient) {}
 

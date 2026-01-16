@@ -1,36 +1,21 @@
 <!-- ================= HEADER ================= -->
 <header class="topbar">
 
-  <!-- LEFT -->
   <div class="topbar-left">
     <span class="hamburger" (click)="toggleSidebar()">☰</span>
   </div>
 
-  <!-- CENTER TITLE -->
   <div class="topbar-center">
     <div class="title-wrapper">
-      <img src="assets/icons/project-lens.png" class="project-icon">
-      <h1 class="app-title">
-        PROJECT <span>LENS</span>
-      </h1>
+      <img src="src\assets\icons\project-lens.png " class="project-icon">
+      <h1 class="app-title">PROJECT <span>LENS</span></h1>
     </div>
-    <div class="title-underline"></div>
+    <!-- <div class="title-underline"></div> -->
   </div>
-
-  <!-- RIGHT SEARCH (Removed from here) -->
-  <!--
-  <div class="topbar-right">
-    <div class="search-box">
-      <input type="text" placeholder="Search projects..." [(ngModel)]="searchText"/>
-      <span class="search-icon">🔍</span>
-    </div>
-  </div>
-  -->
 
 </header>
 
-<!-- ================= SEARCH BELOW HEADER ================= -->
-<!-- ================= SEARCH BELOW HEADER ================= -->
+<!-- ================= SEARCH BELOW HEADER (RIGHT) ================= -->
 <div class="search-container-right">
   <div class="search-box">
     <input type="text" placeholder="Search projects..." [(ngModel)]="searchText"/>
@@ -38,8 +23,7 @@
   </div>
 </div>
 
-
-<!-- ================= SIDEBAR ================= -->
+<!-- ================= SIDEBAR (LEFT) ================= -->
 <div class="sidebar" [class.open]="isSidebarOpen">
 
   <div class="sidebar-header">
@@ -48,23 +32,28 @@
   </div>
 
   <ul class="sidebar-list">
-    <li>
-      <span>Audit Logs</span>
-    </li>
-
-    <li>
-      <span>Logout</span>
-    </li>
+    <li>Audit Logs</li>
+    <li>Logout</li>
   </ul>
 
 </div>
 
-<!-- Overlay -->
 <div class="overlay" *ngIf="isSidebarOpen" (click)="toggleSidebar()"></div>
 
 <!-- ================= PROJECT LIST ================= -->
 <div class="project-container">
+
   <div class="project-card" *ngFor="let project of filteredProjects">
-    {{ project.name }}
+    <h3>{{ project.fileName }}</h3>
+    <p><b>Device:</b> {{ project.deviceModel }}</p>
+    <p><b>Files:</b> {{ project.fileCount }}</p>
+    <p><b>PO:</b> {{ project.poNumber }}</p>
+    <p><b>BOL:</b> {{ project.bolNumber }}</p>
+    <p><b>Date:</b> {{ project.recordDate | date }}</p>
   </div>
+
+  <p *ngIf="filteredProjects.length === 0" style="text-align:center;color:gray;">
+    No projects found
+  </p>
+
 </div>

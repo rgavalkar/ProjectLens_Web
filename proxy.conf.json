@@ -1,0 +1,8 @@
+{
+  "/api": {
+    "target": "https://projectlensapi-a5bmb9gjchezf7bc.eastus2-01.azurewebsites.net",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}
