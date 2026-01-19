@@ -10,12 +10,11 @@
       <img src="assets/icons/project-lens.png" alt="images" class="project-icon">
       <h1 class="app-title">PROJECT <span>LENS</span></h1>
     </div>
-    <!-- <div class="title-underline"></div> -->
   </div>
 
 </header>
 
-<!-- ================= SEARCH BELOW HEADER (RIGHT) ================= -->
+<!-- ================= SEARCH BELOW HEADER ================= -->
 <div class="search-container-right">
   <div class="search-box">
     <input type="text" placeholder="Search projects..." [(ngModel)]="searchText"/>
@@ -23,9 +22,8 @@
   </div>
 </div>
 
-<!-- ================= SIDEBAR (LEFT) ================= -->
+<!-- ================= SIDEBAR ================= -->
 <div class="sidebar" [class.open]="isSidebarOpen">
-
   <div class="sidebar-header">
     <h3>Project Lens</h3>
     <button class="close-btn" (click)="toggleSidebar()">✕</button>
@@ -35,7 +33,6 @@
     <li>Audit Logs</li>
     <li>Logout</li>
   </ul>
-
 </div>
 
 <div class="overlay" *ngIf="isSidebarOpen" (click)="toggleSidebar()"></div>
@@ -54,18 +51,22 @@
   </div>
 
   <div class="project-right">
+
     <div class="image-info">
       <img src="assets/icons/image_icon.jpg" alt="images" class="image-icon" />
       <span>
         {{ project.fileCount }} {{ project.fileCount === 1 ? 'photo' : 'photos' }}
       </span>
     </div>
+
+    <div class="project-actions">
+      <button class="view-btn" (click)="viewProject(project)">View</button>
+      <button class="download-btn" (click)="downloadPDF(project)">Download</button>
+    </div>
+
   </div>
 </div>
-
 
 <p *ngIf="!loading && filteredProjects.length === 0" class="no-projects">
   No projects found
 </p>
-
-

@@ -36,14 +36,6 @@
   color: #1e3a8a;
 }
 
-.title-underline {
-  width: 90px;
-  height: 4px;
-  margin: 6px auto 0;
-  border-radius: 6px;
-  background: linear-gradient(90deg, #1e3a8a, #3b82f6, #1e3a8a);
-}
-
 /* ================= SEARCH BAR ================= */
 .search-container-right {
   display: flex;
@@ -56,8 +48,7 @@
 .search-box {
   position: relative;
   width: 100%;
-  max-width: 480px; /* bigger base width */
-  transition: all 0.3s ease;
+  max-width: 480px;
 }
 
 .search-box input {
@@ -67,15 +58,7 @@
   border: 1px solid #d1d5db;
   outline: none;
   font-size: 16px;
-  transition: all 0.3s ease, box-shadow 0.3s ease;
   background: #f3f4f6;
-}
-
-.search-box input:focus {
-  width: 100%;
-  border-color: #3b82f6;
-  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.25);
-  background: #ffffff;
 }
 
 .search-icon {
@@ -83,16 +66,9 @@
   right: 18px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 18px;
-  color: #3b82f6;
-  transition: transform 0.3s ease;
 }
 
-.search-box input:focus + .search-icon {
-  transform: translateY(-50%) scale(1.2);
-}
-
-/* ================= SIDEBAR (LEFT) ================= */
+/* ================= SIDEBAR ================= */
 .sidebar {
   position: fixed;
   top: 0;
@@ -102,45 +78,13 @@
   background: #ffffff;
   box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15);
   transition: left 0.3s ease;
-  z-index: 1000;
 }
 
 .sidebar.open {
   left: 0;
 }
 
-.sidebar-header {
-  display: flex;
-  justify-content: space-between;
-  padding: 16px;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.sidebar-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.sidebar-list li {
-  padding: 14px 20px;
-  cursor: pointer;
-  border-radius: 8px; /* smooth corners */
-  transition: all 0.3s ease; /* smooth hover animation */
-}
-
-.sidebar-list li:hover {
-  background: linear-gradient(90deg, #3b82f6, #60a5fa);
-  color: white; /* text color changes on hover */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transform: translateX(4px); /* slight slide effect */
-}
-
 /* ================= PROJECT LIST ================= */
-.project-container {
-  padding: 30px;
-}
-
 .project-card {
   padding: 12px 16px;
   margin-bottom: 20px;
@@ -148,25 +92,14 @@
   background: #f9fafb;
   border: 2px solid #e9ebf0;
   border-left: 4px solid #b3e5fc;
-  transition: all 0.3s ease; /* smooth hover transition */
-  cursor: pointer;            /* indicates hoverable card */ 
-
-} 
-
-/* .project-card:hover {
-  background: linear-gradient(90deg, #8c9197, #8c9197);
-  color: white;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-  transform: translateY(-4px);
-} */
+}
 
 .project-card h3 {
   margin: 0 0 6px;
-  color: #1a73e8; /* blue */
-  font-weight: 600;
+  color: #1a73e8;
 }
 
-/* ================= ICON ================= */
+/* ================= ICONS ================= */
 .title-wrapper {
   display: flex;
   align-items: center;
@@ -181,20 +114,48 @@
 .image-info {
   display: flex;
   align-items: center;
-  gap: 6px; /* small spacing */
+  gap: 6px;
   margin-top: 6px;
 }
 
 .image-icon {
-  width: 40px;      
-  height: 35px;     
+  width: 40px;
+  height: 35px;
   object-fit: contain;
-  border-radius: 14px; /* small rounded corners */
+  border-radius: 14px;
 }
 
-.image-info span {
-  font-size: 16px;  /* slightly smaller number to match icon */
-  font-weight: 400;
+/* ================= ACTION BUTTONS ================= */
+
+.project-right {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
+/* ✅ MAIN CHANGE IS HERE */
+.project-actions {
+  display: flex;
+  flex-direction: column;     /* 👈 makes buttons vertical */
+  gap: 10px;
+  align-items: flex-end;      /* 👈 keeps them to the right */
+}
 
+.view-btn,
+.download-btn {
+  padding: 6px 18px;
+  border-radius: 20px;
+  border: none;
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.3s;
+  width: 100px;               /* 👈 equal button width */
+}
+
+.view-btn:hover,
+.download-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(59,130,246,0.3);
+}
