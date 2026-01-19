@@ -7,7 +7,7 @@
 
   <div class="topbar-center">
     <div class="title-wrapper">
-      <img src="src\assets\icons\project-lens.png" class="project-icon">
+      <img src="assets/icons/project-lens.png" alt="images" class="project-icon">
       <h1 class="app-title">PROJECT <span>LENS</span></h1>
     </div>
     <!-- <div class="title-underline"></div> -->
@@ -43,23 +43,26 @@
 <!-- ================= PROJECT LIST ================= -->
 
 <div class="project-card" *ngFor="let project of filteredProjects">
-  
-  <!-- Title -->
-  <h3>{{ project.fileName }}</h3>
 
-  <!-- Created time -->
-  <p class="created-time">
-    Created: {{ getTimeAgo(project.createdOn) }}
-    ({{ project.createdOn | date:'dd MMM yyyy, hh:mm a' }})
-  </p>
+  <div class="project-left">
+    <h3>{{ project.fileName }}</h3>
 
-  <!-- Image count -->
-  <div class="image-info">
-    <img src="assets/icons/image_icon.jpg" alt="images" class="image-icon" />
-    <span>{{ project.fileCount }}</span>
+    <p class="created-time">
+      Created: {{ getTimeAgo(project.createdOn) }}
+      ({{ project.createdOn | date:'dd MMM yyyy, hh:mm a' }})
+    </p>
   </div>
 
+  <div class="project-right">
+    <div class="image-info">
+      <img src="assets/icons/image_icon.jpg" alt="images" class="image-icon" />
+      <span>
+        {{ project.fileCount }} {{ project.fileCount === 1 ? 'photo' : 'photos' }}
+      </span>
+    </div>
+  </div>
 </div>
+
 
 <p *ngIf="!loading && filteredProjects.length === 0" class="no-projects">
   No projects found

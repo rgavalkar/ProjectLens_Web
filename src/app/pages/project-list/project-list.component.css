@@ -142,14 +142,16 @@
 }
 
 .project-card {
-  padding: 18px;
-  margin-bottom: 14px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
   border-radius: 10px;
   background: #f9fafb;
-  border: 1px solid #e5e7eb;
+  border: 2px solid #e9ebf0;
+  border-left: 4px solid #b3e5fc;
   transition: all 0.3s ease; /* smooth hover transition */
-  cursor: pointer; /* indicates hoverable card */
-}
+  cursor: pointer;            /* indicates hoverable card */ 
+
+} 
 
 /* .project-card:hover {
   background: linear-gradient(90deg, #8c9197, #8c9197);
@@ -184,14 +186,15 @@
 }
 
 .image-icon {
-  width: 30px;      
-  height: 30px;     
+  width: 40px;      
+  height: 35px;     
   object-fit: contain;
-  border-radius: 12px; /* small rounded corners */
+  border-radius: 14px; /* small rounded corners */
 }
 
 .image-info span {
   font-size: 16px;  /* slightly smaller number to match icon */
-  font-weight: 600;
+  font-weight: 400;
 }
+
 
