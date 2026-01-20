@@ -1,28 +1,27 @@
 <!-- ================= HEADER ================= -->
-<header class="topbar">
 
+<header class="topbar">
   <div class="topbar-left">
     <span class="hamburger" (click)="toggleSidebar()">☰</span>
-  </div>
 
-  <div class="topbar-center">
-    <div class="title-wrapper">
-      <img src="assets/icons/project-lens.png" alt="images" class="project-icon">
+    <div class="title-wrapper header-title">
+      <img src="assets/icons/project-lens.png.jpg" alt="images" class="project-icon" />
       <h1 class="app-title">PROJECT <span>LENS</span></h1>
     </div>
   </div>
-
 </header>
 
 <!-- ================= SEARCH BELOW HEADER ================= -->
+
 <div class="search-container-right">
   <div class="search-box">
-    <input type="text" placeholder="Search projects..." [(ngModel)]="searchText"/>
+    <input type="text" placeholder="Search projects..." [(ngModel)]="searchText" />
     <span class="search-icon">🔍</span>
   </div>
 </div>
 
 <!-- ================= SIDEBAR ================= -->
+
 <div class="sidebar" [class.open]="isSidebarOpen">
   <div class="sidebar-header">
     <h3>Project Lens</h3>
@@ -37,34 +36,78 @@
 
 <div class="overlay" *ngIf="isSidebarOpen" (click)="toggleSidebar()"></div>
 
-<!-- ================= PROJECT LIST ================= -->
+<!-- ================= PROJECT TABLE ================= -->
 
-<div class="project-card" *ngFor="let project of filteredProjects">
+<div class="table-container">
 
-  <div class="project-left">
-    <h3>{{ project.fileName }}</h3>
+  <table class="project-table">
 
-    <p class="created-time">
-      Created: {{ getTimeAgo(project.createdOn) }}
-      ({{ project.createdOn | date:'dd MMM yyyy, hh:mm a' }})
-    </p>
-  </div>
+    <thead>
+      <tr>
+        <th>SL No</th>
+        <th>PO Number</th>
+        <th>BOL Number</th>
+        <th>File Name</th>
+        <th>Created Date</th>
+        <th>File Count</th>
+        <th>View</th>
+        <th>Download</th>
+        <th>Share</th>
+      </tr>
+    </thead>
 
-  <div class="project-right">
+    <tbody>
+      <tr *ngFor="let project of filteredProjects; let i = index">
 
-    <div class="image-info">
-      <img src="assets/icons/image_icon.jpg" alt="images" class="image-icon" />
-      <span>
-        {{ project.fileCount }} {{ project.fileCount === 1 ? 'photo' : 'photos' }}
-      </span>
-    </div>
+        <td>{{ i + 1 }}</td>
 
-    <div class="project-actions">
-      <button class="view-btn" (click)="viewProject(project)">View</button>
-      <button class="download-btn" (click)="downloadPDF(project)">Download</button>
-    </div>
+        <td>{{ project.poNumber || '-' }}</td>
 
-  </div>
+        <td>{{ project.bolNumber || '-' }}</td>
+
+        <td class="file-name">
+          {{ project.fileName }}
+        </td>
+
+        <td class="created-date">
+          <div class="date">
+            {{ project.createdOn | date:'dd MMM yyyy' }}
+          </div>
+          <div class="time">
+            {{ project.createdOn | date:'hh:mm a' }}
+          </div>
+        </td>
+
+
+        <td>
+          {{ project.fileCount }}
+        </td>
+
+
+        <!-- VIEW -->
+        <td>
+          <button class="icon-btn view" (click)="viewProject(project)">
+            👁
+          </button>
+        </td>
+
+        <!-- DOWNLOAD BUTTON (UPDATED) -->
+        <td>
+          <button class="download-btn" (click)="downloadPDF(project)">
+            Download
+          </button>
+        </td>
+
+        <!-- SHARE -->
+        <td>
+          <button class="icon-btn share">🔗</button>
+        </td>
+
+      </tr>
+    </tbody>
+
+  </table>
+
 </div>
 
 <p *ngIf="!loading && filteredProjects.length === 0" class="no-projects">

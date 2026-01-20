@@ -29,8 +29,6 @@ export class ProjectListComponent implements OnInit {
     this.projectService.getProjects().subscribe({
       next: (response: any) => {
         console.log('API RESPONSE:', response);
-
-        // Adjust if backend key is different
         this.projects = response?.data || response || [];
         this.loading = false;
       },
@@ -52,6 +50,7 @@ export class ProjectListComponent implements OnInit {
     this.isSidebarOpen = !this.isSidebarOpen;
   }
 
+  // ✅ REQUIRED BY HTML (ERROR FIX)
   getTimeAgo(dateString: string): string {
     if (!dateString) return '';
 
@@ -69,53 +68,61 @@ export class ProjectListComponent implements OnInit {
     return `${diffDays} days ago`;
   }
 
-  // ================= VIEW BUTTON =================
-  viewProject(project: any) {
-    const newTab = window.open('', '_blank');
-
-    if (newTab) {
-      newTab.document.write(`
-        <html>
-          <head>
-            <title>${project.fileName}</title>
-            <style>
-              body { font-family: Arial; padding: 30px; background: #f4f9ff; }
-              h1 { color: #1e3a8a; }
-              img { max-width: 300px; margin-top: 20px; border-radius: 12px; }
-              .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 6px 16px rgba(0,0,0,0.1); }
-            </style>
-          </head>
-          <body>
-            <div class="card">
-              <h1>${project.fileName}</h1>
-              <p><b>Created On:</b> ${new Date(project.createdOn).toLocaleString()}</p>
-              <img src="assets/icons/image_icon.jpg" />
-            </div>
-          </body>
-        </html>
-      `);
-    }
+  // ================= VIEW BUTTON (BLUE HEADER) =================
+ // ================= VIEW BUTTON (FIXED) =================
+viewProject(project: any) {
+  if (!project?.shareLink) {
+    alert('View link not available from API');
+    return;
   }
+
+  window.open(project.shareLink, '_blank', 'noopener,noreferrer');
+}
 
   // ================= DOWNLOAD BUTTON =================
-  downloadPDF(project: any) {
-    const doc = new jsPDF();
+downloadPDF(project: any) {
+  const doc = new jsPDF('p', 'mm', 'a4');
 
-    doc.setFontSize(18);
-    doc.text(project.fileName, 20, 20);
+  // ===== BORDER =====
+  doc.rect(10, 10, 190, 277);
 
-    doc.setFontSize(12);
-    doc.text(`Created On: ${new Date(project.createdOn).toLocaleString()}`, 20, 35);
+  // ===== HEADER DATA FROM FILE =====
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
 
-    doc.text("Project Image:", 20, 55);
+  doc.text(`Subject : ${project.subject || project.fileName}`, 20, 30);
 
-    const img = new Image();
-    img.src = 'assets/icons/image_icon.jpg';
+  doc.text(
+    `Date : ${project.createdOn ? new Date(project.createdOn).toLocaleDateString() : ''}`,
+    20,
+    45
+  );
 
-    img.onload = () => {
-      doc.addImage(img, 'JPEG', 20, 65, 60, 60);
-      doc.save(`${project.fileName}.pdf`);
-    };
-  }
+  doc.text(`Facility : ${project.facility || ''}`, 20, 60);
 
+  doc.text(
+    `Picture Count : ${project.pictureCount || project.images?.length || 1}`,
+    20,
+    75
+  );
+
+  // ===== DIVIDER LINE =====
+  doc.line(10, 90, 200, 90);
+
+  // ===== IMAGE =====
+  const img = new Image();
+
+  // image coming from file itself
+  img.crossOrigin = 'anonymous';
+  img.src = project.imageUrl || project.images?.[0];
+
+  img.onload = () => {
+    doc.addImage(img, 'JPEG', 45, 105, 120, 130);
+    doc.save(`${project.fileName}.pdf`);
+  };
+
+  img.onerror = () => {
+    doc.save(`${project.fileName}.pdf`);
+  };
+}
 }

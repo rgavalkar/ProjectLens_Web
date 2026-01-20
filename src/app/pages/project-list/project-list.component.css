@@ -5,18 +5,16 @@
 
 /* ================= HEADER ================= */
 .topbar {
-  display: grid;
-  grid-template-columns: auto 1fr;
+  display: flex;
   align-items: center;
   padding: 16px 28px;
-  background: linear-gradient(90deg, #87CEEB, #B3E5FC);
-  border-bottom: 1px solid #dbeafe;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  /* background: linear-gradient(90deg, #164ce0, #164ce0); */
 }
 
 .topbar-left {
   display: flex;
   align-items: center;
+  gap: 50px; /* space between hamburger and title */
 }
 
 .hamburger {
@@ -29,12 +27,18 @@
 }
 
 .app-title {
-  font-size: 28px;
-  font-weight: 800;
-  letter-spacing: 4px;
-  margin: 0;
-  color: #1e3a8a;
+  font-size: 30px;        /* same size for both words */
+  font-weight: 500;       /* or 400 for normal */
+  font-family: inherit;  /* ensure same font */
+  display: flex;
+  gap: 6px;
+  align-items: center;
 }
+
+.app-title span {
+  font-weight: inherit;  /* IMPORTANT: removes bold from LENS */
+}
+
 
 /* ================= SEARCH BAR ================= */
 .search-container-right {
@@ -42,7 +46,7 @@
   justify-content: flex-end;
   padding: 12px 28px;
   background: #ffffff;
-  border-bottom: 1px solid #dbeafe;
+  /* border-bottom: 1px solid #dbeafe; */
 }
 
 .search-box {
@@ -139,6 +143,7 @@
   flex-direction: column;     /* 👈 makes buttons vertical */
   gap: 10px;
   align-items: flex-end;      /* 👈 keeps them to the right */
+  margin-top: -75px;          /* 👈 moves buttons slightly upward */
 }
 
 .view-btn,
@@ -146,7 +151,7 @@
   padding: 6px 18px;
   border-radius: 20px;
   border: none;
-  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  /* background: linear-gradient(90deg, #d167c3, #1a73e8); */
   color: white;
   cursor: pointer;
   font-size: 14px;
@@ -158,4 +163,143 @@
 .download-btn:hover {
   transform: scale(1.05);
   box-shadow: 0 4px 10px rgba(59,130,246,0.3);
+}
+
+/* ================= VERTICAL COLUMN LAYOUT ================= */
+
+.project-grid-container {
+  column-count: 3;           /* number of vertical columns */
+  column-gap: 24px;
+  padding: 20px 28px;
+}
+
+.project-card {
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 20px;
+  break-inside: avoid;       /* prevents card breaking */
+}
+
+/* ================= TABLE DESIGN (ENTERPRISE STYLE) ================= */
+
+.table-container {
+  margin: 20px 28px;
+  border-radius: 8px;
+  overflow-x: auto;
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(28, 92, 212, 0.08);
+}
+
+.project-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+
+.project-table thead {
+  background: #b4b8be;
+  color: #0a0909;
+}
+
+.project-table th {
+  padding: 14px 12px;
+  text-align: left;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.project-table td {
+  padding: 12px;
+  border-bottom: 1px solid #e5e7eb;
+  color: #1f2937;
+}
+
+.project-table tbody tr:hover {
+  background: #f3f7ff;
+}
+
+.file-name {
+  font-weight: 600;
+  color: #1a73e8;
+}
+
+/* ================= ICON BUTTONS ================= */
+
+.icon-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 25px;
+}
+
+.icon-btn.view {
+  color: #595e6b;
+}
+
+.icon-btn.download {
+  color: #595e6b;
+}
+
+.icon-btn.share {
+  color: #595e6b;
+}
+
+.icon-btn:hover {
+  transform: scale(1.2);
+}
+
+.download-btn {
+  background-color: #767c88;
+  color: #ffffff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.2s ease;
+}
+
+.download-btn:hover {
+  background-color: #787a81;
+}
+
+/* ===== TABLE HEADER ===== */
+.project-table thead th {
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* ===== CENTER THESE COLUMNS DATA ===== */
+.project-table td:nth-child(1),   /* # */
+.project-table td:nth-child(6),   /* File Count */
+.project-table td:nth-child(7),   /* View */
+.project-table td:nth-child(8),   /* Download */
+.project-table td:nth-child(9) {  /* Share */
+  text-align: center;
+}
+
+/* ===== KEEP TEXT COLUMNS center ===== */
+.project-table td:nth-child(2),
+.project-table td:nth-child(3),
+.project-table td:nth-child(4),
+.project-table td:nth-child(5) {
+  text-align: center;
+}
+
+
+.created-date {
+  text-align: center;
+  line-height: 1.3;
+}
+
+.created-date .date {
+  font-weight: 600;
+  font-size: 14px;
+  color: #1f2937;
+}
+
+.created-date .time {
+  font-size: 14px;
+  color: #d81313;
 }
