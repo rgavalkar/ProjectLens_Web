@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 export class ProjectService {
 
   private apiUrl = '/api/Upload/all'; // ✅ PROXY URL (NO CORS)
+  // private apiurl= '/api/Upload/savemailrequest';
 
   constructor(private http: HttpClient) {}
 

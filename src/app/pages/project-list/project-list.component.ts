@@ -18,7 +18,17 @@ export class ProjectListComponent implements OnInit {
   isSidebarOpen: boolean = false;
   loading: boolean = false;
 
-  constructor(private projectService: ProjectService) {}
+  // ================= SHARE POPUP VARIABLES =================
+  showSharePopup: boolean = false;
+  selectedProject: any = null;
+
+  shareForm = {
+    name: '',
+    to: '',
+    cc: ''
+  };
+
+  constructor(private projectService: ProjectService) { }
 
   ngOnInit(): void {
     this.loadProjects();
@@ -50,6 +60,17 @@ export class ProjectListComponent implements OnInit {
     this.isSidebarOpen = !this.isSidebarOpen;
   }
 
+  closeSidebar() {
+  this.isSidebarOpen = false;
+}
+  // 
+  // ✅ THIS IS WHAT YOU ADD
+  focusSearch(input: HTMLInputElement) {
+    input.focus();
+  }
+  onSearch(): void {
+  }
+
   // ✅ REQUIRED BY HTML (ERROR FIX)
   getTimeAgo(dateString: string): string {
     if (!dateString) return '';
@@ -69,60 +90,91 @@ export class ProjectListComponent implements OnInit {
   }
 
   // ================= VIEW BUTTON (BLUE HEADER) =================
- // ================= VIEW BUTTON (FIXED) =================
-viewProject(project: any) {
-  if (!project?.shareLink) {
-    alert('View link not available from API');
-    return;
+  // ================= VIEW BUTTON (FIXED) =================
+  viewProject(project: any) {
+    if (!project?.shareLink) {
+      alert('View link not available from API');
+      return;
+    }
+
+    window.open(project.shareLink, '_blank', 'noopener,noreferrer');
   }
 
-  window.open(project.shareLink, '_blank', 'noopener,noreferrer');
-}
-
   // ================= DOWNLOAD BUTTON =================
-downloadPDF(project: any) {
-  const doc = new jsPDF('p', 'mm', 'a4');
+  downloadPDF(project: any) {
+    const doc = new jsPDF('p', 'mm', 'a4');
 
-  // ===== BORDER =====
-  doc.rect(10, 10, 190, 277);
+    // ===== BORDER =====
+    doc.rect(10, 10, 190, 277);
 
-  // ===== HEADER DATA FROM FILE =====
-  doc.setFontSize(14);
-  doc.setFont('helvetica', 'bold');
+    // ===== HEADER DATA FROM FILE =====
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
 
-  doc.text(`Subject : ${project.subject || project.fileName}`, 20, 30);
+    doc.text(`Subject : ${project.subject || project.fileName}`, 20, 30);
 
-  doc.text(
-    `Date : ${project.createdOn ? new Date(project.createdOn).toLocaleDateString() : ''}`,
-    20,
-    45
-  );
+    doc.text(
+      `Date : ${project.createdOn ? new Date(project.createdOn).toLocaleDateString() : ''}`,
+      20,
+      45
+    );
 
-  doc.text(`Facility : ${project.facility || ''}`, 20, 60);
+    doc.text(`Facility : ${project.facility || ''}`, 20, 60);
 
-  doc.text(
-    `Picture Count : ${project.pictureCount || project.images?.length || 1}`,
-    20,
-    75
-  );
+    doc.text(
+      `Picture Count : ${project.pictureCount || project.images?.length || 1}`,
+      20,
+      75
+    );
 
-  // ===== DIVIDER LINE =====
-  doc.line(10, 90, 200, 90);
+    // ===== DIVIDER LINE =====
+    doc.line(10, 90, 200, 90);
 
-  // ===== IMAGE =====
-  const img = new Image();
+    // ===== IMAGE =====
+    const img = new Image();
 
-  // image coming from file itself
-  img.crossOrigin = 'anonymous';
-  img.src = project.imageUrl || project.images?.[0];
+    // image coming from file itself
+    img.crossOrigin = 'anonymous';
+    img.src = project.imageUrl || project.images?.[0];
 
-  img.onload = () => {
-    doc.addImage(img, 'JPEG', 45, 105, 120, 130);
-    doc.save(`${project.fileName}.pdf`);
-  };
+    img.onload = () => {
+      doc.addImage(img, 'JPEG', 45, 105, 120, 130);
+      doc.save(`${project.fileName}.pdf`);
+    };
 
-  img.onerror = () => {
-    doc.save(`${project.fileName}.pdf`);
-  };
-}
+    img.onerror = () => {
+      doc.save(`${project.fileName}.pdf`);
+    };
+  }
+
+  // ================= SHARE POPUP FUNCTIONS =================
+
+  openSharePopup(project: any) {
+    this.selectedProject = project;
+    this.showSharePopup = true;
+
+    this.shareForm = {
+      name: '',
+      to: '',
+      cc: ''
+    };
+  }
+
+  closeSharePopup() {
+    this.showSharePopup = false;
+  }
+
+  sendEmail() {
+    if (!this.shareForm.name || !this.shareForm.to) {
+      alert('Name and To email are required');
+      return;
+    }
+
+    console.log('Sharing project:', this.selectedProject);
+    console.log('Email data:', this.shareForm);
+
+    alert('Email sent successfully (demo)');
+
+    this.closeSharePopup();
+  }
 }

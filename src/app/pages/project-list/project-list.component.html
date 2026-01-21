@@ -15,33 +15,52 @@
 
 <div class="search-container-right">
   <div class="search-box">
-    <input type="text" placeholder="Search projects..." [(ngModel)]="searchText" />
-    <span class="search-icon">🔍</span>
+    <input #searchInput type="text" placeholder="Search projects..." [(ngModel)]="searchText" />
+    <span class="search-icon" (click)="focusSearch(searchInput)">
+      🔍
+    </span>
   </div>
 </div>
 
 <!-- ================= SIDEBAR ================= -->
+<!-- overlay -->
+<div class="sidebar-overlay" *ngIf="isSidebarOpen" (click)="closeSidebar()">
+</div>
 
 <div class="sidebar" [class.open]="isSidebarOpen">
-  <div class="sidebar-header">
-    <h3>Project Lens</h3>
+  <!-- Header / Branding -->
+  <div class="sidebar-header vertical">
+    <img src="assets/icons/project-lens.png.jpg" class="sidebar-main-icon" />
+
+    <h3 class="sidebar-title">PROJECT LENS </h3>
+
+    <p class="sidebar-subtitle">
+      Manage your jobs & photos
+    </p>
+
     <button class="close-btn" (click)="toggleSidebar()">✕</button>
   </div>
 
+  <!-- Menu -->
   <ul class="sidebar-list">
-    <li>Audit Logs</li>
-    <li>Logout</li>
+    <li class="menu-item">
+      <span class="menu-icon">📋</span>
+      <span>Audit Logs</span>
+    </li>
+
+    <hr class="sidebar-divider" />
+
+    <li class="menu-item logout">
+      <span class="menu-icon">🚪</span>
+      <span>Logout</span>
+    </li>
   </ul>
 </div>
-
-<div class="overlay" *ngIf="isSidebarOpen" (click)="toggleSidebar()"></div>
 
 <!-- ================= PROJECT TABLE ================= -->
 
 <div class="table-container">
-
   <table class="project-table">
-
     <thead>
       <tr>
         <th>SL No</th>
@@ -58,11 +77,8 @@
 
     <tbody>
       <tr *ngFor="let project of filteredProjects; let i = index">
-
         <td>{{ i + 1 }}</td>
-
         <td>{{ project.poNumber || '-' }}</td>
-
         <td>{{ project.bolNumber || '-' }}</td>
 
         <td class="file-name">
@@ -78,11 +94,7 @@
           </div>
         </td>
 
-
-        <td>
-          {{ project.fileCount }}
-        </td>
-
+        <td>{{ project.fileCount }}</td>
 
         <!-- VIEW -->
         <td>
@@ -91,7 +103,7 @@
           </button>
         </td>
 
-        <!-- DOWNLOAD BUTTON (UPDATED) -->
+        <!-- DOWNLOAD -->
         <td>
           <button class="download-btn" (click)="downloadPDF(project)">
             Download
@@ -100,16 +112,43 @@
 
         <!-- SHARE -->
         <td>
-          <button class="icon-btn share">🔗</button>
+          <button class="icon-btn share" (click)="openSharePopup(project)">
+            🔗
+          </button>
         </td>
-
       </tr>
     </tbody>
-
   </table>
-
 </div>
 
 <p *ngIf="!loading && filteredProjects.length === 0" class="no-projects">
   No projects found
 </p>
+
+<!-- ================= SHARE POPUP ================= -->
+
+<div class="popup-overlay" *ngIf="showSharePopup">
+  <div class="share-popup">
+    <h2>Share via Email</h2>
+
+    <div class="form-group">
+      <label>Name</label>
+      <input type="text" [(ngModel)]="shareForm.name" />
+    </div>
+
+    <div class="form-group">
+      <label>To</label>
+      <input type="email" [(ngModel)]="shareForm.to" />
+    </div>
+
+    <div class="form-group">
+      <label>CC (optional)</label>
+      <input type="email" [(ngModel)]="shareForm.cc" />
+    </div>
+
+    <div class="popup-actions">
+      <button class="btn-cancel" (click)="closeSharePopup()">Cancel</button>
+      <button class="btn-send" (click)="sendEmail()">Send Email</button>
+    </div>
+  </div>
+</div>
