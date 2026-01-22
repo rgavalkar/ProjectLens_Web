@@ -7,12 +7,16 @@ import { Observable } from 'rxjs';
 })
 export class ProjectService {
 
-  private apiUrl = '/api/Upload/all'; // ✅ PROXY URL (NO CORS)
-  // private apiurl= '/api/Upload/savemailrequest';
+  private apiUrl = '/api/Upload/all';  
+  private apiurl= '/api/Upload/savemailrequest';
 
   constructor(private http: HttpClient) {}
 
   getProjects(): Observable<any> {
     return this.http.get(this.apiUrl);
   }
+  sendEmail(payload: any): Observable<any> {
+  return this.http.post(this.apiurl, payload);
 }
+}
+

@@ -8,7 +8,6 @@
   display: flex;
   align-items: center;
   padding: 16px 28px 2px;
-
   /* background: linear-gradient(90deg, #164ce0, #164ce0); */
 }
 
@@ -37,20 +36,20 @@
 }
 
 .app-title span {
-  font-weight: inherit;  /* IMPORTANT: removes bold from LENS */
+  font-weight: inherit;  
 }
 
 /* ================= SEARCH BAR ================= */
 .search-container-right {
   display: flex;
-  justify-content: flex-end;   /* ✅ right side */
+  justify-content: flex-end;   
   padding: 16px 28px;
   /* background: #ffffff; */
 }
 
 .search-box {
   position: relative;
-  width: 520px;               /* box width */
+  width: 520px;      /* box width */
 }
 
 .search-box input {
@@ -246,13 +245,13 @@
   justify-content: space-between;
 }
 
-/* ✅ MAIN CHANGE IS HERE */
+
 .project-actions {
   display: flex;
-  flex-direction: column;     /* 👈 makes buttons vertical */
+  flex-direction: column;     /*  makes buttons vertical */
   gap: 10px;
-  align-items: flex-end;      /* 👈 keeps them to the right */
-  margin-top: -75px;          /* 👈 moves buttons slightly upward */
+  align-items: flex-end;      /*  keeps them to the right */
+  margin-top: -75px;          /* moves buttons slightly upward */
 }
 
 .view-btn,
@@ -265,7 +264,7 @@
   cursor: pointer;
   font-size: 14px;
   transition: 0.3s;
-  width: 100px;               /* 👈 equal button width */
+  width: 100px;               /*  equal button width */
 }
 
 .view-btn:hover,
@@ -289,7 +288,7 @@
   break-inside: avoid;       /* prevents card breaking */
 }
 
-/* ================= TABLE DESIGN (ENTERPRISE STYLE) ================= */
+/* ================= TABLE DESIGN  ================= */
 
 .table-container {
   margin: 20px 28px;
@@ -306,7 +305,7 @@
 }
 
 .project-table thead {
-  background: #b4b8be;
+  background: #979ba1;
   color: #0a0909;
 }
 
@@ -380,11 +379,11 @@
 }
 
 /* ===== CENTER THESE COLUMNS DATA ===== */
-.project-table td:nth-child(1),   /* # */
-.project-table td:nth-child(6),   /* File Count */
-.project-table td:nth-child(7),   /* View */
-.project-table td:nth-child(8),   /* Download */
-.project-table td:nth-child(9) {  /* Share */
+.project-table td:nth-child(1),   
+.project-table td:nth-child(6),  
+.project-table td:nth-child(7),   
+.project-table td:nth-child(8),   
+.project-table td:nth-child(9) {  
   text-align: center;
 }
 
@@ -495,8 +494,8 @@
   display: flex;
   flex-direction: column;
 
-  align-items: flex-start;   /* ✅ move left */
-  text-align: left;          /* ✅ text left */
+  align-items: flex-start;   /*  move left */
+  text-align: left;          /* text left */
 
   padding: 24px 20px 20px;
   background: #36c2fa;
@@ -560,7 +559,7 @@
 }
 
 .sidebar-header.vertical {
-  background: #2e84e7;          /* 👈 background color */
+  background: #2e84e7;          /* background color */
   
   /* border-bottom: 1px solid #366cb3; */
 }

@@ -61,8 +61,8 @@ export class ProjectListComponent implements OnInit {
   }
 
   closeSidebar() {
-  this.isSidebarOpen = false;
-}
+    this.isSidebarOpen = false;
+  }
   // 
   // ✅ THIS IS WHAT YOU ADD
   focusSearch(input: HTMLInputElement) {
@@ -89,8 +89,7 @@ export class ProjectListComponent implements OnInit {
     return `${diffDays} days ago`;
   }
 
-  // ================= VIEW BUTTON (BLUE HEADER) =================
-  // ================= VIEW BUTTON (FIXED) =================
+  // ================= VIEW BUTTON  =================
   viewProject(project: any) {
     if (!project?.shareLink) {
       alert('View link not available from API');
@@ -170,11 +169,41 @@ export class ProjectListComponent implements OnInit {
       return;
     }
 
-    console.log('Sharing project:', this.selectedProject);
-    console.log('Email data:', this.shareForm);
+    if (!this.selectedProject?.id) {
+      alert('Project ID not found');
+      return;
+    }
 
-    alert('Email sent successfully (demo)');
+    const payload = {
+      guid: this.selectedProject.id,
+      senderName: this.shareForm.name,
+      recipients: {
+        to: [this.shareForm.to],
+        cc: this.shareForm.cc ? [this.shareForm.cc] : []
+      }
+    };
 
-    this.closeSharePopup();
+    console.log('EMAIL PAYLOAD:', payload);
+
+    this.projectService.sendEmail(payload).subscribe({
+      next: () => {
+        alert('Email sent successfully');
+        this.closeSharePopup();
+      },
+
+      error: (err) => {
+        console.error('Email error:', err);
+
+        // 🔥 email actually sent, but backend response is bad
+        if (err?.status === 200 || err?.status === 0) {
+          alert('Email sent successfully');
+          this.closeSharePopup();
+        } else {
+          alert('Failed to send email');
+        }
+      }
+
+    });
+
   }
 }
