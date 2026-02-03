@@ -63,6 +63,13 @@ export class ProjectListComponent implements OnInit {
   closeSidebar() {
     this.isSidebarOpen = false;
   }
+
+  isExpanded = false;
+
+toggleSidebarExpand() {
+  this.isExpanded = !this.isExpanded;
+}
+
   // 
   // ✅ THIS IS WHAT YOU ADD
   focusSearch(input: HTMLInputElement) {
@@ -194,7 +201,7 @@ export class ProjectListComponent implements OnInit {
       error: (err) => {
         console.error('Email error:', err);
 
-        // 🔥 email actually sent, but backend response is bad
+        // email actually sent, but backend response is bad
         if (err?.status === 200 || err?.status === 0) {
           alert('Email sent successfully');
           this.closeSharePopup();
@@ -206,4 +213,57 @@ export class ProjectListComponent implements OnInit {
     });
 
   }
+  // ================= PAGINATION =================
+
+itemsPerPage: number = 15;
+pageSizeOptions: number[] = [15, 30, 50];
+currentPage: number = 1;
+
+get totalPages(): number {
+  return Math.ceil(this.filteredProjects.length / this.itemsPerPage);
 }
+
+get pageStart(): number {
+  return (this.currentPage - 1) * this.itemsPerPage;
+}
+
+get pageEnd(): number {
+  const end = this.pageStart + this.itemsPerPage;
+  return end > this.filteredProjects.length
+    ? this.filteredProjects.length
+    : end;
+}
+
+get paginatedProjects(): any[] {
+  return this.filteredProjects.slice(this.pageStart, this.pageEnd);
+}
+
+onItemsPerPageChange(): void {
+  this.currentPage = 1;
+}
+
+nextPage(): void {
+  if (this.currentPage < this.totalPages) {
+    this.currentPage++;
+  }
+}
+
+prevPage(): void {
+  if (this.currentPage > 1) {
+    this.currentPage--;
+  }
+}
+
+goToFirst(): void {
+  this.currentPage = 1;
+}
+
+goToLast(): void {
+  this.currentPage = this.totalPages;
+}
+get displayEnd(): number {
+  return Math.min(this.pageEnd, this.filteredProjects.length);
+}
+}
+
+
