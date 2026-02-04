@@ -1,15 +1,62 @@
+<!-- ================= MINI SIDE ICON BAR ================= -->
+
+<div class="mini-sidebar" [class.expanded]="isExpanded">
+
+  <!-- Audit Logs -->
+  <div class="mini-item">
+    <span class="mini-icon">📋</span>
+    <span class="mini-text">Audit Logs</span>
+  </div>
+
+  <!-- Logout -->
+  <div class="mini-item logout">
+    <span class="mini-icon">🚪</span>
+    <span class="mini-text">Logout</span>
+  </div>
+
+  <!-- Expand / Collapse -->
+  <div class="mini-expand" (click)="toggleSidebarExpand()">
+    <span *ngIf="!isExpanded">»</span>
+    <span *ngIf="isExpanded">«</span>
+  </div>
+
+</div>
+
 <!-- ================= HEADER ================= -->
-
 <header class="topbar">
-  <div class="topbar-left">
-    <!-- <span class="hamburger" (click)="toggleSidebar()">☰</span> -->
-
+  <div class="topbar-left-fixed">
     <div class="title-wrapper header-title">
-      <img src="assets/icons/project-lens.png.jpg" alt="images" class="project-icon" />
+      <img src="assets/icons/project-lens.png.jpg" class="project-icon" />
       <h1 class="app-title">PROJECT <span>LENS</span></h1>
     </div>
   </div>
 </header>
+
+<!-- ===== LEFT SIDEBAR UNDER LOGO ===== -->
+
+<div class="side-under-logo" [class.expanded]="isExpanded">
+
+  <div class="side-item" title="Audit Logs">
+    <span class="side-icon">📋</span>
+    <span class="side-text">Audit Logs</span>
+  </div>
+
+  <div class="side-item" title="Users" (click)="openUsersPopup()">
+    <span class="side-icon">👥</span>
+    <span class="side-text">Users</span>
+  </div>
+
+  <div class="side-item logout" title="Logout">
+    <span class="side-icon">🚪</span>
+    <span class="side-text">Logout</span>
+  </div>
+
+  <!-- expand arrow -->
+  <div class="side-expand" (click)="toggleSidebarExpand()">
+    »
+  </div>
+
+</div>
 
 <!-- ================= SEARCH BELOW HEADER ================= -->
 
@@ -24,44 +71,12 @@
 
 <!-- ================= SIDEBAR ================= -->
 <!-- overlay -->
-<div class="sidebar-overlay" *ngIf="isSidebarOpen" (click)="closeSidebar()">
-</div>
+<!-- <div class="sidebar-overlay" *ngIf="isSidebarOpen" (click)="closeSidebar()">
 
-<div class="sidebar" [class.open]="isSidebarOpen">
-  <!-- Header / Branding -->
-  <div class="sidebar-header vertical">
-    <img src="assets/icons/project-lens.png.jpg" class="sidebar-main-icon" />
 
-    <h3 class="sidebar-title">PROJECT LENS </h3>
-
-    <p class="sidebar-subtitle">
-      Manage your jobs & photos
-    </p>
-
-    <button class="close-btn" (click)="toggleSidebar()">✕</button>
-  </div>
-
-  <!-- Menu -->
-  <ul class="sidebar-list">
-    <li class="menu-item">
-      <span class="menu-icon">📋</span>
-      <span>Audit Logs</span>
-    </li>
-
-    <hr class="sidebar-divider" />
-
-    <li class="menu-item logout">
-      <span class="menu-icon">🚪</span>
-      <span>Logout</span>
-    </li>
-  </ul>
-</div>
-
-<!-- ================= PROJECT TABLE ================= -->
-
+<!================= PROJECT TABLE ================= -->
 <div class="table-container">
 
-  
   <table class="project-table header-table">
     <thead>
       <tr>
@@ -78,7 +93,7 @@
     </thead>
   </table>
 
- 
+
   <div class="table-scroll-wrapper">
     <table class="project-table body-table">
       <tbody>
@@ -179,7 +194,94 @@
       <button class="btn-send" (click)="sendEmail()">Send Email</button>
     </div>
   </div>
-
- 
-
 </div>
+
+<!-- ================= USERS LIST POPUP ================= -->
+
+<div class="popup-overlay" *ngIf="showUsersPopup">
+  <div class="share-popup large">
+
+    <div class="popup-header users-header">
+      <h2>Users</h2>
+
+      <div class="header-actions">
+        <button class="close-icon" (click)="closeUsersPopup()">✕</button>
+        <button class="btn-send" (click)="openCreateUserPopup()">+ New User</button>
+      </div>
+    </div>
+
+
+    <table class="project-table">
+      <thead>
+        <tr>
+          <th>SL No</th>
+          <th>Username</th>
+          <th>User ID</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ user.username }}</td>
+          <td>{{ user.userId }}</td>
+          <td>{{user.email}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ================= CREATE USER POPUP ================= -->
+
+<div class="popup-overlay" *ngIf="showCreateUserPopup">
+  <div class="share-popup">
+
+    <h2>Create User</h2>
+
+    <!-- ROW 1 -->
+    <div class="form-row">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" [(ngModel)]="newUser.username" />
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <div class="input-wrapper">
+          <input type="text" [(ngModel)]="newUser.email" #emailInput />
+          <span class="input-icon" (click)="copyEmail(emailInput.value)">📋</span>
+        </div>
+      </div>
+
+
+      <!-- ROW 2 -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>User ID</label>
+          <input type="text" [(ngModel)]="newUser.userId" />
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <div class="input-wrapper">
+            <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="newUser.password" />
+            <span class="input-icon" (click)="togglePassword()">👁</span>
+          </div>
+        </div>
+
+
+        <!-- ADMIN -->
+        <div class="form-group checkbox-group">
+          <input type="checkbox" [(ngModel)]="newUser.isAdmin" />
+          <label>Is Admin</label>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="popup-actions">
+          <button class="btn-cancel" (click)="closeCreateUserPopup()">Cancel</button>
+          <button class="btn-send" (click)="createUser()">Create</button>
+        </div>
+
+      </div>
+    </div>

@@ -264,6 +264,102 @@ goToLast(): void {
 get displayEnd(): number {
   return Math.min(this.pageEnd, this.filteredProjects.length);
 }
+
+// ================= USERS =================
+
+showUsersPopup = false;
+showCreateUserPopup = false;
+
+users: any[] = [];   // grid data
+
+newUser = {
+  username: '',
+  userId: '',
+  email: '',
+  password: '',
+  isAdmin: false
+};
+
+// open users grid
+openUsersPopup() {
+  this.showUsersPopup = true;
 }
+// close users grid
+closeUsersPopup() {
+  this.showUsersPopup = false;
+}
+
+// open create form
+openCreateUserPopup() {
+  this.newUser = {
+    username: '',
+    userId: '',
+    email: '',
+    password: '',
+    isAdmin: false
+  };
+  this.showCreateUserPopup = true;
+}
+
+
+// close create form
+closeCreateUserPopup() {
+  this.showCreateUserPopup = false;
+}
+
+// create user
+createUser() {
+
+  if (
+  !this.newUser.username ||
+  !this.newUser.userId ||
+  !this.newUser.email ||
+  !this.newUser.password
+) {
+  alert('Username, User ID, Email and Password are required');
+  return;
+}
+
+
+  // const userId = 'USR' + (this.users.length + 1); 
+
+  const createdUser = {
+  username: this.newUser.username,
+  userId: this.newUser.userId,
+  email: this.newUser.email,
+  isAdmin: this.newUser.isAdmin
+};
+
+
+  // push into grid
+  this.users.push(createdUser);
+
+  alert('User created successfully');
+
+  this.closeCreateUserPopup();
+}
+
+// ================= PASSWORD VISIBILITY =================
+
+showPassword: boolean = false;
+
+togglePassword() {
+  this.showPassword = !this.showPassword;
+}
+
+// ================= COPY EMAIL =================
+
+copyEmail(email: string) {
+  if (!email) {
+    alert('Email is empty');
+    return;
+  }
+
+  navigator.clipboard.writeText(email);
+  alert('Email copied to clipboard');
+}
+
+}
+
 
 

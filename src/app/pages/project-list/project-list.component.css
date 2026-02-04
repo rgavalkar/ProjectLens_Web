@@ -32,7 +32,7 @@
 .search-container-right {
   display: flex;
   justify-content: flex-end;   
-  padding: 4px 40px;
+  padding:4px 40px;
   /* background: #ffffff; */
 }
 
@@ -113,76 +113,6 @@
 
   /* background: rgba(0, 0, 0, 0.3);   */
   z-index: 998;
-}
-
-/* ================= SIDEBAR IMPROVEMENTS ================= */
-
-.sidebar {
-  border-top-right-radius: 18px;
-  border-bottom-right-radius: 18px;
-  overflow: hidden;
-}
-
-/* Header */
-.sidebar-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 18px 16px;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.sidebar-header h3 {
-  font-size: 18px;
-  font-weight: 600;
-  margin: 0;
-  flex-grow: 1;
-}
-
-.sidebar-icon {
-  width: 32px;
-  height: 32px;
-}
-
-/* Close button */
-.close-btn {
-  border: none;
-  background: none;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-/* Menu list */
-.sidebar-list {
-  list-style: none;
-  padding: 12px 0;
-  margin: 0;
-}
-
-.sidebar-list li {
-  padding: 12px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.sidebar-list li:hover {
-  background: #f3f4f6;
-}
-
-/* Divider */
-.sidebar-divider {
-  border: none;
-  height: 2px;
-  background: #e5e7eb;
-  margin: 8px 0;
-  width: 100%;
-}
-
-/* Logout styling */
-.sidebar-list .logout {
-  color: #dc2626;
-  font-weight: 500;
 }
 
 /* ================= PROJECT LIST ================= */
@@ -643,8 +573,6 @@
   cursor: not-allowed;
 }
 
-
-
 .header-table,
 .body-table {
   table-layout: fixed;
@@ -657,5 +585,430 @@
   box-sizing: border-box;
 }
 
+/* ================= MINI SIDEBAR ================= */
+
+.mini-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 64px;
+  height: 100vh;
+  background: #dae0e6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  z-index: 1200;
+  transition: width 0.25s ease;
+}
+
+/* expanded width */
+.mini-sidebar.expanded {
+  width: 200px;
+}
+
+/* each icon item */
+.mini-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 12px;
+  cursor: pointer;
+  color: #cbd5f1;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.mini-item:hover {
+  background: #1f2a44;
+}
+
+/* icon */
+.mini-icon {
+  font-size: 20px;
+  min-width: 32px;
+  text-align: center;
+}
+
+/* hidden text default */
+.mini-text {
+  opacity: 0;
+  white-space: nowrap;
+  transition: opacity 0.2s ease;
+}
+
+/* show text when expanded */
+.mini-sidebar.expanded .mini-text {
+  opacity: 1;
+}
+
+/* tooltip on hover when collapsed */
+.mini-sidebar:not(.expanded) .mini-item:hover::after {
+  content: attr(title);
+  position: absolute;
+  left: 70px;
+  background: #dae0e6;
+  color: #ffffff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+
+.mini-item.logout {
+  color: #f87171;
+}
+
+/* expand arrow bottom */
+.mini-expand {
+  margin-top: auto;
+  padding: 16px;
+  cursor: pointer;
+  color: #94a3b8;
+  font-size: 18px;
+  width: 100%;
+  text-align: center;
+}
+
+.mini-expand:hover {
+  background: #1f2a44;
+}
+
+/* ===== shift your page content right ===== */
+
+.topbar,
+.search-container-right,
+.table-container,
+.pagination-container {
+  margin-left: 64px;
+}
+
+.mini-sidebar.expanded ~ .topbar,
+.mini-sidebar.expanded ~ .search-container-right,
+.mini-sidebar.expanded ~ .table-container,
+.mini-sidebar.expanded ~ .pagination-container {
+  margin-left: 200px;
+}
+
+/* ================= FIXED LOGO AREA ================= */
+
+.topbar-left-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 260px;
+  height: 90px;
+  background: #ffffff;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+}
+
+/* keep rest header normal */
+.topbar {
+  padding-left: 280px;   /* pushes other header content right */
+}
+
+
+/* ================= SIDEBAR UNDER LOGO ================= */
+
+.side-under-logo {
+  position: fixed;
+  top: 90px;                 /* starts below PROJECT LENS */
+  left: 0;
+  width: 70px;
+  height: calc(100vh - 90px);
+  background: #071a2f;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 10px;
+  transition: width 0.25s ease;
+  z-index: 1100;
+}
+
+.side-under-logo.expanded {
+  width: 220px;
+}
+
+/* items */
+.side-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  color: #cbd5f1;
+  cursor: pointer;
+  position: relative;
+}
+
+.side-item:hover {
+  background: #1f2a44;
+}
+
+.side-icon {
+  font-size: 20px;
+  min-width: 30px;
+  text-align: center;
+}
+
+/* hidden labels */
+.side-text {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+/* show labels when expanded */
+.side-under-logo.expanded .side-text {
+  opacity: 1;
+}
+
+/* tooltip when collapsed */
+.side-under-logo:not(.expanded) .side-item:hover::after {
+  content: attr(title);
+  position: absolute;
+  left: 75px;
+  background: #111827;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+/* expand arrow */
+.side-expand {
+  margin-top: auto;
+  padding: 16px;
+  cursor: pointer;
+  color: #94a3b8;
+  font-size: 18px;
+  width: 100%;
+  text-align: center;
+}
+
+.side-expand:hover {
+  background: #1f2a44;
+}
+
+.side-item.logout {
+  color: #f87171;
+}
+
+
+/* ================= PAGE CONTENT SHIFT ================= */
+
+.search-container-right,
+.table-container,
+.pagination-container {
+  margin-left: 90px;
+}
+
+.side-under-logo.expanded ~ .search-container-right,
+.side-under-logo.expanded ~ .table-container,
+.side-under-logo.expanded ~ .pagination-container {
+  margin-left: 240px;
+}
+
+/* ================= SERVICE DESK STYLE SIDEBAR FIX ================= */
+
+/* fixed header logo area stays visible */
+.topbar-left-fixed {
+  z-index: 2000;
+  background:transparent;
+}
+
+/* sidebar under logo */
+.side-under-logo {
+  position: fixed;
+  top: 90px;
+  left: 0;
+  width: 72px;
+  height: calc(100vh - 90px);
+  background: #071a2f;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  z-index: 1500;
+  overflow: visible;    
+}
+
+/* expanded panel */
+.side-under-logo.expanded {
+  width: 240px;
+}
+
+/* menu items */
+.side-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  color: #cbd5f1;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* icons always visible */
+.side-icon {
+  font-size: 20px;
+  width: 28px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* text hidden only when collapsed */
+.side-text {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* show labels when expanded */
+.side-under-logo.expanded .side-text {
+  opacity: 1;
+}
+
+/* hover highlight like Service Desk */
+.side-item:hover {
+  background: #13243b;
+  border-left: 4px solid #ff7a00;
+}
+
+/* logout color */
+.side-item.logout {
+  color: #ff6b6b;
+}
+
+/* tooltip when collapsed */
+.side-under-logo:not(.expanded) .side-item:hover::after {
+  content: attr(title);
+  position: absolute;
+  left: 80px;
+  background: #111827;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+/* bottom arrow */
+.side-expand {
+  margin-top: auto;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  color: #9aa4b2;
+  font-size: 18px;
+}
+
+.side-expand:hover {
+  background: #13243b;
+}
+
+
+/* ================= CONTENT OFFSET ================= */
+/* keep your header fixed — move only content */
+.search-container-right,
+.table-container,
+.pagination-container {
+  margin-left: 70px;
+}
+
+/* Move content down below header */
+.search-container-right,
+.table-container {
+  margin-top: 55px;   
+}
+
+/* users popup size */
+/* Users popup size */
+.share-popup.large {
+  min-height: 400px;   /* increase as needed */
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* popup header */
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+/* checkbox */
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+/* ensure sidebar items are clickable */
+.side-under-logo {
+  z-index: 3000 !important;
+  pointer-events: auto;
+}
+
+.side-item {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding-right: 40px; /* space for icon */
+}
+
+.input-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 18px;
+  opacity: 0.7;
+}
+
+.input-icon:hover {
+  opacity: 1;
+}
+
+
+.users-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.close-icon {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.close-icon:hover {
+  opacity: 1;
+}
 
 
