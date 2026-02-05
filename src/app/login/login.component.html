@@ -1,0 +1,55 @@
+<p>login works!</p>
+<div class="login-container">
+
+  <!-- Logo -->
+  <img
+    src="assets/icons/project-lens.png"
+    alt="Project Lens Logo"
+    class="login-logo"
+  />
+
+  <!-- Project Name -->
+  <h1 class="project-title">PROJECT LENS</h1>
+
+  <!-- Login Heading -->
+  <h2 class="login-heading">Login</h2>
+
+  <!-- Sub text -->
+  <p class="login-subtext">Enter your UserID and Password</p>
+
+  <!-- Login Form -->
+  <form class="login-form">
+
+    <!-- User ID -->
+    <input
+      type="text"
+      placeholder="UserID"
+      class="login-input"
+    />
+
+    <!-- Password -->
+    <div class="password-wrapper">
+      <input
+        [type]="showPassword ? 'text' : 'password'"
+        placeholder="Password"
+        class="login-input"
+      />
+      <span class="toggle-password" (click)="togglePassword()">
+        {{ showPassword ? '🙈' : '👁️' }}
+      </span>
+    </div>
+
+    <!-- Remember Me -->
+    <div class="remember-me">
+      <input type="checkbox" id="remember" />
+      <label for="remember">Remember me</label>
+    </div>
+
+    <!-- Login Button -->
+    <button type="button" class="login-btn">
+      Login
+    </button>
+
+  </form>
+
+</div>

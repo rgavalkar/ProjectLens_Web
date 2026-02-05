@@ -291,6 +291,8 @@ closeUsersPopup() {
 
 // open create form
 openCreateUserPopup() {
+  this.showUsersPopup = false;     
+
   this.newUser = {
     username: '',
     userId: '',
@@ -298,13 +300,14 @@ openCreateUserPopup() {
     password: '',
     isAdmin: false
   };
+
   this.showCreateUserPopup = true;
 }
-
 
 // close create form
 closeCreateUserPopup() {
   this.showCreateUserPopup = false;
+  this.showUsersPopup = true; 
 }
 
 // create user
@@ -319,9 +322,6 @@ createUser() {
   alert('Username, User ID, Email and Password are required');
   return;
 }
-
-
-  // const userId = 'USR' + (this.users.length + 1); 
 
   const createdUser = {
   username: this.newUser.username,

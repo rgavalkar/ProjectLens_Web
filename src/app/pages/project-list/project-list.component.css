@@ -593,7 +593,7 @@
   left: 0;
   width: 64px;
   height: 100vh;
-  background: #dae0e6;
+  background: #071a2f;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -704,7 +704,7 @@
   z-index: 1200;
   display: flex;
   align-items: center;
-  padding-left: 20px;
+  padding-left: 90px;
 }
 
 /* keep rest header normal */
@@ -747,8 +747,10 @@
 }
 
 .side-item:hover {
-  background: #1f2a44;
+  background: rgba(255, 255, 255, 0.08);
+  border-left: 4px solid #3b82f6;
 }
+
 
 .side-icon {
   font-size: 20px;
@@ -819,7 +821,7 @@
 /* fixed header logo area stays visible */
 .topbar-left-fixed {
   z-index: 2000;
-  background:transparent;
+  background:#dae0e6;
 }
 
 /* sidebar under logo */
@@ -925,14 +927,12 @@
 }
 
 /* users popup size */
-/* Users popup size */
 .share-popup.large {
   min-height: 400px;   /* increase as needed */
   max-height: 70vh;
   display: flex;
   flex-direction: column;
 }
-
 
 /* popup header */
 .popup-header {
@@ -989,7 +989,7 @@
 
 .users-header {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   align-items: center;
 }
 
@@ -1000,6 +1000,9 @@
 }
 
 .close-icon {
+  position: absolute;    /* ✅ KEY FIX */
+  top: 2px;             /* aligns to popup top */
+  right:8px;  
   background: none;
   border: none;
   font-size: 20px;
@@ -1009,6 +1012,39 @@
 
 .close-icon:hover {
   opacity: 1;
+}
+
+
+/* ================= BIG USERS POPUP ================= */
+
+.share-popup.large {
+  width: 80vw;              /* BIG rectangular width */
+  position: relative; 
+  max-width: 1100px;
+  min-height: 520px;
+  max-height: 75vh;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* users table scroll inside popup */
+.share-popup.large table {
+  width: 100%;
+}
+
+.share-popup.large tbody {
+  display: block;
+  max-height: 380px;
+  overflow-y: auto;
+  max-height: calc(75vh - 220px);
+}
+
+.share-popup.large thead,
+.share-popup.large tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
 }
 
 
