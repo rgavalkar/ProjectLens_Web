@@ -1,11 +1,11 @@
 .login-container {
   height: 100vh;
-  background: linear-gradient(180deg, #0f172a, #020617);
+  background: linear-gradient(135deg, #e4ebee, #e4ebee, #e4ebee);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
+  color: #0c0c0c;
   font-family: "Segoe UI", sans-serif;
 }
 
@@ -30,7 +30,7 @@
 .login-subtext {
   margin: 6px 0 24px;
   font-size: 14px;
-  color: #cbd5e1;
+  color: #0c0c0c;
 }
 
 .login-form {
@@ -42,6 +42,7 @@
 
 .login-input {
   width: 100%;
+  padding: 12px 44px 12px 14px;
   padding: 12px 14px;
   border-radius: 8px;
   border: none;
@@ -51,6 +52,7 @@
 
 .password-wrapper {
   position: relative;
+  width: 100%;
 }
 
 .toggle-password {
@@ -74,7 +76,7 @@
   border: none;
   border-radius: 8px;
   background: #2563eb;
-  color: white;
+  color: #0c0c0c;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;

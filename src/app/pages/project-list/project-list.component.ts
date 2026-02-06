@@ -66,9 +66,9 @@ export class ProjectListComponent implements OnInit {
 
   isExpanded = false;
 
-toggleSidebarExpand() {
-  this.isExpanded = !this.isExpanded;
-}
+  toggleSidebarExpand() {
+    this.isExpanded = !this.isExpanded;
+  }
 
   // 
   // ✅ THIS IS WHAT YOU ADD
@@ -215,85 +215,64 @@ toggleSidebarExpand() {
   }
   // ================= PAGINATION =================
 
-itemsPerPage: number = 15;
-pageSizeOptions: number[] = [15, 30, 50];
-currentPage: number = 1;
+  itemsPerPage: number = 15;
+  pageSizeOptions: number[] = [15, 30, 50];
+  currentPage: number = 1;
 
-get totalPages(): number {
-  return Math.ceil(this.filteredProjects.length / this.itemsPerPage);
-}
-
-get pageStart(): number {
-  return (this.currentPage - 1) * this.itemsPerPage;
-}
-
-get pageEnd(): number {
-  const end = this.pageStart + this.itemsPerPage;
-  return end > this.filteredProjects.length
-    ? this.filteredProjects.length
-    : end;
-}
-
-get paginatedProjects(): any[] {
-  return this.filteredProjects.slice(this.pageStart, this.pageEnd);
-}
-
-onItemsPerPageChange(): void {
-  this.currentPage = 1;
-}
-
-nextPage(): void {
-  if (this.currentPage < this.totalPages) {
-    this.currentPage++;
+  get totalPages(): number {
+    return Math.ceil(this.filteredProjects.length / this.itemsPerPage);
   }
-}
 
-prevPage(): void {
-  if (this.currentPage > 1) {
-    this.currentPage--;
+  get pageStart(): number {
+    return (this.currentPage - 1) * this.itemsPerPage;
   }
-}
 
-goToFirst(): void {
-  this.currentPage = 1;
-}
+  get pageEnd(): number {
+    const end = this.pageStart + this.itemsPerPage;
+    return end > this.filteredProjects.length
+      ? this.filteredProjects.length
+      : end;
+  }
 
-goToLast(): void {
-  this.currentPage = this.totalPages;
-}
-get displayEnd(): number {
-  return Math.min(this.pageEnd, this.filteredProjects.length);
-}
+  get paginatedProjects(): any[] {
+    return this.filteredProjects.slice(this.pageStart, this.pageEnd);
+  }
 
-// ================= USERS =================
+  onItemsPerPageChange(): void {
+    this.currentPage = 1;
+  }
 
-showUsersPopup = false;
-showCreateUserPopup = false;
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
 
-users: any[] = [];   // grid data
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
 
-newUser = {
-  username: '',
-  userId: '',
-  email: '',
-  password: '',
-  isAdmin: false
-};
+  goToFirst(): void {
+    this.currentPage = 1;
+  }
 
-// open users grid
-openUsersPopup() {
-  this.showUsersPopup = true;
-}
-// close users grid
-closeUsersPopup() {
-  this.showUsersPopup = false;
-}
+  goToLast(): void {
+    this.currentPage = this.totalPages;
+  }
+  get displayEnd(): number {
+    return Math.min(this.pageEnd, this.filteredProjects.length);
+  }
 
-// open create form
-openCreateUserPopup() {
-  this.showUsersPopup = false;     
+  // ================= USERS =================
 
-  this.newUser = {
+  showUsersPopup = false;
+  showCreateUserPopup = false;
+
+  users: any[] = [];   // grid data
+
+  newUser = {
     username: '',
     userId: '',
     email: '',
@@ -301,63 +280,84 @@ openCreateUserPopup() {
     isAdmin: false
   };
 
-  this.showCreateUserPopup = true;
-}
-
-// close create form
-closeCreateUserPopup() {
-  this.showCreateUserPopup = false;
-  this.showUsersPopup = true; 
-}
-
-// create user
-createUser() {
-
-  if (
-  !this.newUser.username ||
-  !this.newUser.userId ||
-  !this.newUser.email ||
-  !this.newUser.password
-) {
-  alert('Username, User ID, Email and Password are required');
-  return;
-}
-
-  const createdUser = {
-  username: this.newUser.username,
-  userId: this.newUser.userId,
-  email: this.newUser.email,
-  isAdmin: this.newUser.isAdmin
-};
-
-
-  // push into grid
-  this.users.push(createdUser);
-
-  alert('User created successfully');
-
-  this.closeCreateUserPopup();
-}
-
-// ================= PASSWORD VISIBILITY =================
-
-showPassword: boolean = false;
-
-togglePassword() {
-  this.showPassword = !this.showPassword;
-}
-
-// ================= COPY EMAIL =================
-
-copyEmail(email: string) {
-  if (!email) {
-    alert('Email is empty');
-    return;
+  // open users grid
+  openUsersPopup() {
+    this.showUsersPopup = true;
+  }
+  // close users grid
+  closeUsersPopup() {
+    this.showUsersPopup = false;
   }
 
-  navigator.clipboard.writeText(email);
-  alert('Email copied to clipboard');
-}
+  // open create form
+  openCreateUserPopup() {
+    this.showUsersPopup = false;
+
+    this.newUser = {
+      username: '',
+      userId: '',
+      email: '',
+      password: '',
+      isAdmin: false
+    };
+
+    this.showCreateUserPopup = true;
+  }
+
+  // close create form
+  closeCreateUserPopup() {
+    this.showCreateUserPopup = false;
+    this.showUsersPopup = true;
+  }
+
+  // create user
+  createUser() {
+
+    if (
+      !this.newUser.username ||
+      !this.newUser.userId ||
+      !this.newUser.email ||
+      !this.newUser.password
+    ) {
+      alert('Username, User ID, Email and Password are required');
+      return;
+    }
+
+    const createdUser = {
+      username: this.newUser.username,
+      userId: this.newUser.userId,
+      email: this.newUser.email,
+      isAdmin: this.newUser.isAdmin
+    };
+
+
+    // push into grid
+    this.users.push(createdUser);
+
+    alert('User created successfully');
+
+    this.closeCreateUserPopup();
+  }
+
+  // ================= PASSWORD VISIBILITY =================
+
+  showPassword: boolean = false;
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
+
+  // ================= COPY EMAIL =================
+
+  copyEmail(email: string) {
+    if (!email) {
+      alert('Email is empty');
+      return;
+    }
+
+    navigator.clipboard.writeText(email);
+    alert('Email copied to clipboard');
+  }
 
 }
 
