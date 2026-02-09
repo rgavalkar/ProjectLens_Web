@@ -5,14 +5,14 @@ import { LoginComponent } from './pages/login/login.component';
 
 
 
-// export const routes: Routes = [
-//   { path: '', component: ProjectListComponent },              // Project list page
-//   { path: 'project/:id', component: ProjectDetailsComponent } // Project details page
-// ];
-
-
 export const routes: Routes = [
-  { path: '', component: LoginComponent },
-  { path: 'dashboard', component: ProjectListComponent },
-  { path: 'project/:id', component: ProjectDetailsComponent }
+  { path: '', component: ProjectListComponent },              // Project list page
+  { path: 'project/:id', component: ProjectDetailsComponent } // Project details page
 ];
+
+
+// export const routes: Routes = [
+//   { path: '', component: LoginComponent },
+//   { path: 'dashboard', component: ProjectListComponent },
+//   { path: 'project/:id', component: ProjectDetailsComponent }
+// ];

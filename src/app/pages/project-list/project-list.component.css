@@ -237,6 +237,24 @@
   position: relative;
 }
 
+.table-scroll-wrapper::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-scroll-wrapper::-webkit-scrollbar-track {
+  background: #e5e7eb;
+  border-radius: 10px;
+}
+
+.table-scroll-wrapper::-webkit-scrollbar-thumb {
+  background: #9ca3af;
+  border-radius: 10px;
+}
+
+.table-scroll-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
 .project-table {
   width: 100%;
   border-collapse: separate;
@@ -543,9 +561,11 @@
 .pagination-container {
   display: flex;
   justify-content: flex-end;
-  padding-right: 60px;
-  gap: 60px;
+  align-items: center;
+  padding-right: 24px;
+  gap: 20px;
 }
+
 
 
 .pagination-left {
@@ -561,6 +581,8 @@
   cursor: pointer;
   background: #ffffff;
 }
+
+
 
 .pagination-center {
   color: #06080a;
@@ -581,6 +603,7 @@
   font-size: 14px;
   transition: 0.2s ease;
 }
+
 
 .pagination-right button:hover:not(:disabled) {
   background: #2563eb;
@@ -837,7 +860,7 @@
   margin-left: 240px;
 }
 
-/* ================= SERVICE DESK STYLE SIDEBAR FIX ================= */
+
 
 /* fixed header logo area stays visible */
 .topbar-left-fixed {
@@ -858,11 +881,16 @@
   align-items: stretch;
   z-index: 1500;
   overflow: visible;
+  border-top-right-radius: 14px;
+  border-bottom-right-radius: 14px;
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.25);
 }
 
 /* expanded panel */
 .side-under-logo.expanded {
   width: 240px;
+  border-top-right-radius: 14px;
+  border-bottom-right-radius: 14px;
 }
 
 /* menu items */
@@ -1020,7 +1048,9 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  margin-right: 16px;
 }
+
 
 .close-icon {
   position: absolute;
