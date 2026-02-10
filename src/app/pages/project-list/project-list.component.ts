@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProjectService } from '../../services/project.service';
+import { UserService } from '../../services/user.service';
+
 import jsPDF from 'jspdf';
 
 @Component({
@@ -28,7 +30,10 @@ export class ProjectListComponent implements OnInit {
     cc: ''
   };
 
-  constructor(private projectService: ProjectService) { }
+  constructor(
+    private projectService: ProjectService,
+    private userService: UserService
+  ) { }
 
   ngOnInit(): void {
     this.loadProjects();
@@ -70,21 +75,16 @@ export class ProjectListComponent implements OnInit {
     this.isExpanded = !this.isExpanded;
   }
 
-  // 
-  // ✅ THIS IS WHAT YOU ADD
   focusSearch(input: HTMLInputElement) {
     input.focus();
   }
-  onSearch(): void {
-  }
 
-  // ✅ REQUIRED BY HTML (ERROR FIX)
+  onSearch(): void { }
+
   getTimeAgo(dateString: string): string {
     if (!dateString) return '';
-
     const createdDate = new Date(dateString);
     const now = new Date();
-
     const diffMs = now.getTime() - createdDate.getTime();
     const diffMinutes = Math.floor(diffMs / (1000 * 60));
     const diffHours = Math.floor(diffMinutes / 60);
@@ -102,44 +102,23 @@ export class ProjectListComponent implements OnInit {
       alert('View link not available from API');
       return;
     }
-
     window.open(project.shareLink, '_blank', 'noopener,noreferrer');
   }
 
   // ================= DOWNLOAD BUTTON =================
   downloadPDF(project: any) {
     const doc = new jsPDF('p', 'mm', 'a4');
-
-    // ===== BORDER =====
     doc.rect(10, 10, 190, 277);
-
-    // ===== HEADER DATA FROM FILE =====
     doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
 
     doc.text(`Subject : ${project.subject || project.fileName}`, 20, 30);
-
-    doc.text(
-      `Date : ${project.createdOn ? new Date(project.createdOn).toLocaleDateString() : ''}`,
-      20,
-      45
-    );
-
+    doc.text(`Date : ${project.createdOn ? new Date(project.createdOn).toLocaleDateString() : ''}`, 20, 45);
     doc.text(`Facility : ${project.facility || ''}`, 20, 60);
-
-    doc.text(
-      `Picture Count : ${project.pictureCount || project.images?.length || 1}`,
-      20,
-      75
-    );
-
-    // ===== DIVIDER LINE =====
+    doc.text(`Picture Count : ${project.pictureCount || project.images?.length || 1}`, 20, 75);
     doc.line(10, 90, 200, 90);
 
-    // ===== IMAGE =====
     const img = new Image();
-
-    // image coming from file itself
     img.crossOrigin = 'anonymous';
     img.src = project.imageUrl || project.images?.[0];
 
@@ -154,16 +133,10 @@ export class ProjectListComponent implements OnInit {
   }
 
   // ================= SHARE POPUP FUNCTIONS =================
-
   openSharePopup(project: any) {
     this.selectedProject = project;
     this.showSharePopup = true;
-
-    this.shareForm = {
-      name: '',
-      to: '',
-      cc: ''
-    };
+    this.shareForm = { name: '', to: '', cc: '' };
   }
 
   closeSharePopup() {
@@ -197,11 +170,8 @@ export class ProjectListComponent implements OnInit {
         alert('Email sent successfully');
         this.closeSharePopup();
       },
-
       error: (err) => {
         console.error('Email error:', err);
-
-        // email actually sent, but backend response is bad
         if (err?.status === 200 || err?.status === 0) {
           alert('Email sent successfully');
           this.closeSharePopup();
@@ -209,12 +179,10 @@ export class ProjectListComponent implements OnInit {
           alert('Failed to send email');
         }
       }
-
     });
-
   }
-  // ================= PAGINATION =================
 
+  // ================= PAGINATION =================
   itemsPerPage: number = 15;
   pageSizeOptions: number[] = [15, 30, 50];
   currentPage: number = 1;
@@ -229,9 +197,7 @@ export class ProjectListComponent implements OnInit {
 
   get pageEnd(): number {
     const end = this.pageStart + this.itemsPerPage;
-    return end > this.filteredProjects.length
-      ? this.filteredProjects.length
-      : end;
+    return end > this.filteredProjects.length ? this.filteredProjects.length : end;
   }
 
   get paginatedProjects(): any[] {
@@ -243,15 +209,11 @@ export class ProjectListComponent implements OnInit {
   }
 
   nextPage(): void {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-    }
+    if (this.currentPage < this.totalPages) this.currentPage++;
   }
 
   prevPage(): void {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-    }
+    if (this.currentPage > 1) this.currentPage--;
   }
 
   goToFirst(): void {
@@ -261,16 +223,15 @@ export class ProjectListComponent implements OnInit {
   goToLast(): void {
     this.currentPage = this.totalPages;
   }
+
   get displayEnd(): number {
     return Math.min(this.pageEnd, this.filteredProjects.length);
   }
 
   // ================= USERS =================
-
   showUsersPopup = false;
   showCreateUserPopup = false;
-
-  users: any[] = [];   // grid data
+  users: any[] = [];
 
   newUser = {
     username: '',
@@ -280,86 +241,80 @@ export class ProjectListComponent implements OnInit {
     isAdmin: false
   };
 
-  // open users grid
   openUsersPopup() {
     this.showUsersPopup = true;
+    this.loadUsers();
   }
-  // close users grid
+
   closeUsersPopup() {
     this.showUsersPopup = false;
   }
 
-  // open create form
   openCreateUserPopup() {
     this.showUsersPopup = false;
-
-    this.newUser = {
-      username: '',
-      userId: '',
-      email: '',
-      password: '',
-      isAdmin: false
-    };
-
+    this.newUser = { username: '', userId: '', email: '', password: '', isAdmin: false };
     this.showCreateUserPopup = true;
   }
 
-  // close create form
+  loadUsers() {
+    this.userService.getUsers().subscribe({
+      next: (res: any) => {
+        this.users = res?.data || res || [];
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Failed to load users');
+      }
+    });
+  }
+
   closeCreateUserPopup() {
     this.showCreateUserPopup = false;
     this.showUsersPopup = true;
   }
 
-  // create user
-  createUser() {
+  // ================= CREATE USER (API CALL INTEGRATED) =================
+ createUser() {
 
-    if (
-      !this.newUser.username ||
-      !this.newUser.userId ||
-      !this.newUser.email ||
-      !this.newUser.password
-    ) {
-      alert('Username, User ID, Email and Password are required');
-      return;
-    }
-
-    const createdUser = {
-      username: this.newUser.username,
-      userId: this.newUser.userId,
-      email: this.newUser.email,
-      isAdmin: this.newUser.isAdmin
-    };
-
-
-    // push into grid
-    this.users.push(createdUser);
-
-    alert('User created successfully');
-
-    this.closeCreateUserPopup();
+  if (
+    !this.newUser.username ||
+    !this.newUser.userId ||
+    !this.newUser.email ||
+    !this.newUser.password
+  ) {
+    alert('Username, User ID, Email and Password are required');
+    return;
   }
 
+  this.userService.createUser(this.newUser).subscribe({
+    next: (res) => {
+      alert('User created successfully');
+      // reload users from backend
+      this.loadUsers();
+      this.closeCreateUserPopup();
+    },
+    error: (err) => {
+      console.error(err);
+      alert('Failed to create user');
+    }
+  });
+}
+
+
   // ================= PASSWORD VISIBILITY =================
-
   showPassword: boolean = false;
-
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
 
   // ================= COPY EMAIL =================
-
   copyEmail(email: string) {
     if (!email) {
       alert('Email is empty');
       return;
     }
-
     navigator.clipboard.writeText(email);
     alert('Email copied to clipboard');
   }
 
 }
-
-
-

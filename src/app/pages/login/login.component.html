@@ -1,35 +1,29 @@
-
 <div class="login-container">
 
   <img src="assets/icons/project-lens.png.jpg" alt="" class="login-logo" />
   <h1 class="project-title">PROJECT LENS</h1>
   <h2 class="login-heading">Login</h2>
   <p class="login-subtext">Enter your User ID and Password</p>
-  
+
   <form class="login-form">
-    <input type="text" placeholder="User ID" class="login-input" />
+    <input type="text" placeholder="User ID" class="login-input" [(ngModel)]="credentials.userId" name="userId" />
 
-   <!-- Password -->
-<div class="password-wrapper">
-  <input
-    [type]="showPassword ? 'text' : 'password'"
-    placeholder="Password"
-    class="login-input"
-  />
 
-  <span
-    class="toggle-password material-icons"
-    (click)="togglePassword()">
-    {{ showPassword ? '' : '' }}
-  </span>
+    <!-- Password -->
+    <div class="password-wrapper">
+      <input [type]="showPassword ? 'text' : 'password'" placeholder="Password" class="login-input" />
 
-</div>
+      <span class="toggle-password material-icons" (click)="togglePassword()">
+        {{ showPassword ? '' : '' }}
+      </span>
+
+    </div>
 
     <!-- Remember Me -->
-    <div class="remember-me">
+    <!-- <div class="remember-me">
       <input type="checkbox" id="remember" />
       <label for="remember">Remember me</label>
-    </div>
+    </div> -->
 
     <!-- Login Button -->
     <button type="button" class="login-btn">
