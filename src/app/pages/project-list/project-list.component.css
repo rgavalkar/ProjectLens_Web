@@ -91,7 +91,6 @@
   color: #ffffff;
 }
 
-
 /* ================= SIDEBAR ================= */
 .sidebar {
   position: fixed;
@@ -284,11 +283,6 @@
   border-bottom: 2px solid #d1d5db;
 }
 
-/* .project-table thead th:last-child { */
-/* padding-right: 28px;    */
-/* compensate for scrollbar space */
-/* } */
-
 .project-table td {
   padding: 12px;
   border-bottom: 1px solid #e5e7eb;
@@ -416,12 +410,20 @@
 /* ===== FORM ===== */
 .form-group {
   margin-bottom: 15px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .form-group label {
   display: block;
   margin-bottom: 5px;
   font-weight: 600;
+}
+
+.form-group {
+  width: 100%;
 }
 
 .form-group input {
@@ -635,7 +637,7 @@
   left: 0;
   width: 64px;
   height: 100vh;
-  background: #071a2f;
+  background: #969ba0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -995,10 +997,20 @@
 /* checkbox */
 .checkbox-group {
   display: flex;
+  flex-direction: row;
   align-items: center;
-  gap: 10px;
+  justify-content: flex-start;
+  gap: 8px;
+  width: 100%;
+  margin-top: 8px;
+  padding-left: 2px; 
 }
 
+.checkbox-group label {
+  margin: 0;
+  font-weight: 600;
+  cursor: pointer;
+}
 
 /* ensure sidebar items are clickable */
 .side-under-logo {
@@ -1023,7 +1035,7 @@
   /* space for icon */
 }
 
-.input-icon {
+.eye-icon {
   position: absolute;
   right: 12px;
   top: 50%;
@@ -1032,6 +1044,23 @@
   font-size: 18px;
   opacity: 0.7;
 }
+
+.eye-icon:hover {
+  opacity: 1;
+}
+
+/* slash line */
+.eye-icon.slash::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 2px;
+  background: #000;
+  top: 50%;
+  left: 0;
+  transform: rotate(-45deg);
+}
+
 
 .input-icon:hover {
   opacity: 1;
@@ -1101,4 +1130,62 @@
   display: table;
   width: 100%;
   table-layout: fixed;
+}
+
+/* ===== USERS TABLE COLUMN FIX ===== */
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; 
+}
+
+/* SL No column */
+.users-table th:first-child,
+.users-table td:first-child {
+  width: 70px;
+  max-width: 70px;
+  text-align: center;
+}
+
+/* Username */
+.users-table th:nth-child(2),
+.users-table td:nth-child(2) {
+  width: 180px;
+}
+
+/* User ID */
+.users-table th:nth-child(3),
+.users-table td:nth-child(3) {
+  width: 380px;
+}
+
+/* Email */
+.users-table th:nth-child(4),
+.users-table td:nth-child(4) {
+  width: auto;
+}
+
+/* ===== CREATE USER CHECKBOX LEFT ALIGN FIX ===== */
+
+.create-user-popup {
+  align-items: stretch;
+}
+
+/* Wrapper for checkboxes */
+.checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  width: 100%;
+  margin: 8px 0 16px 0;
+  padding-left: 0;
+
+  text-align: left;
+}
+
+/* Checkbox spacing */
+.checkbox-wrapper input[type="checkbox"] {
+  margin-right: 8px;
 }

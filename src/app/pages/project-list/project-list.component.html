@@ -69,12 +69,7 @@
   </div>
 </div>
 
-<!-- ================= SIDEBAR ================= -->
-<!-- overlay -->
-<!-- <div class="sidebar-overlay" *ngIf="isSidebarOpen" (click)="closeSidebar()">
-
-
-<!================= PROJECT TABLE ================= -->
+<!-- <!================= PROJECT TABLE ================= -->
 <div class="table-container">
 
   <table class="project-table header-table">
@@ -169,7 +164,6 @@
 </p>
 
 <!-- ================= SHARE POPUP ================= -->
-
 <div class="popup-overlay" *ngIf="showSharePopup">
   <div class="share-popup">
     <h2>Share via Email</h2>
@@ -197,45 +191,58 @@
 </div>
 
 <!-- ================= USERS LIST POPUP ================= -->
-
 <div class="popup-overlay" *ngIf="showUsersPopup">
   <div class="share-popup large">
 
+    <!-- HEADER -->
     <div class="popup-header users-header">
       <h2>Users</h2>
 
       <div class="header-actions">
-        <button class="close-icon" (click)="closeUsersPopup()">✕</button>
         <button class="btn-send" (click)="openCreateUserPopup()">+ New User</button>
+        <button class="close-icon" (click)="closeUsersPopup()">✕</button>
       </div>
     </div>
 
+    <!-- TABLE WRAPPER -->
+    <div class="users-table-wrapper">
 
-    <table class="project-table">
-      <thead>
-        <tr>
-          <th>SL No</th>
-          <th>Username</th>
-          <th>User ID</th>
-          <th>Email</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let user of users; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td>{{ user.username }}</td>
-          <td>{{ user.userId }}</td>
-          <td>{{user.email}}</td>
-        </tr>
-      </tbody>
-    </table>
+      <table class="project-table users-table">
+        <thead>
+          <tr>
+            <th>SL No</th>
+            <th>Username</th>
+            <th>User ID</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <!-- USERS -->
+          <tr *ngFor="let user of users; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ user.userName || '-' }}</td>
+            <td>{{ user.userID || '-' }}</td>
+            <td>{{ user.userEmail || '-' }}</td>
+          </tr>
+
+          <!-- EMPTY STATE -->
+          <tr *ngIf="users?.length === 0">
+            <td colspan="4" class="no-data">
+              No users found
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
-<!-- ================= CREATE USER POPUP ================= -->
 
+<!-- ================= CREATE USER POPUP ================= -->
 <div class="popup-overlay" *ngIf="showCreateUserPopup">
-  <div class="share-popup">
+  <div class="share-popup create-user-popup">
 
     <h2>Create User</h2>
 
@@ -248,40 +255,46 @@
 
       <div class="form-group">
         <label>Email</label>
-        <div class="input-wrapper">
-          <input type="text" [(ngModel)]="newUser.email" #emailInput />
-          <span class="input-icon" (click)="copyEmail(emailInput.value)">📋</span>
-        </div>
-      </div>
-
-
-      <!-- ROW 2 -->
-      <div class="form-row">
-        <div class="form-group">
-          <label>User ID</label>
-          <input type="text" [(ngModel)]="newUser.userId" />
-        </div>
-
-        <div class="form-group">
-          <label>Password</label>
-          <div class="input-wrapper">
-            <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="newUser.password" />
-            <span class="input-icon" (click)="togglePassword()">👁</span>
-          </div>
-        </div>
-
-
-        <!-- ADMIN -->
-        <div class="form-group checkbox-group">
-          <input type="checkbox" [(ngModel)]="newUser.isAdmin" />
-          <label>Is Admin</label>
-        </div>
-
-        <!-- ACTIONS -->
-        <div class="popup-actions">
-          <button class="btn-cancel" (click)="closeCreateUserPopup()">Cancel</button>
-          <button class="btn-send" (click)="createUser()">Create</button>
-        </div>
-
+        <input type="text" [(ngModel)]="newUser.email" />
       </div>
     </div>
+
+    <!-- Copy Email checkbox-->
+    <div class="checkbox-wrapper">
+      <input type="checkbox" id="copyEmail" (change)="onCopyEmailChange($event)" />
+      <label for="copyEmail">Copy Email</label>
+    </div>
+    <!-- ROW 2 -->
+    <div class="form-row">
+      <div class="form-group">
+        <label>User ID</label>
+        <input type="text" [(ngModel)]="newUser.userId" />
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+
+        <div class="input-wrapper">
+          <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="newUser.password" />
+
+          <span class="eye-icon" [class.slash]="!showPassword" (click)="togglePassword()">
+            👁
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Is Admin checkbox-->
+    <div class="checkbox-wrapper">
+      <input type="checkbox" id="isAdmin" [(ngModel)]="newUser.isAdmin" />
+      <label for="isAdmin">Is Admin</label>
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="popup-actions">
+      <button class="btn-cancel" (click)="closeCreateUserPopup()">Cancel</button>
+      <button class="btn-send" (click)="createUser()">Create</button>
+    </div>
+  </div>
+</div>

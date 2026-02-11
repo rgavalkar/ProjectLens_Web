@@ -35,6 +35,7 @@ export class ProjectListComponent implements OnInit {
     private userService: UserService
   ) { }
 
+
   ngOnInit(): void {
     this.loadProjects();
   }
@@ -240,6 +241,7 @@ export class ProjectListComponent implements OnInit {
     password: '',
     isAdmin: false
   };
+  copyEmailChecked = false;
 
   openUsersPopup() {
     this.showUsersPopup = true;
@@ -251,7 +253,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   openCreateUserPopup() {
-    this.showUsersPopup = false;
+    this.showUsersPopup = true;
     this.newUser = { username: '', userId: '', email: '', password: '', isAdmin: false };
     this.showCreateUserPopup = true;
   }
@@ -259,7 +261,8 @@ export class ProjectListComponent implements OnInit {
   loadUsers() {
     this.userService.getUsers().subscribe({
       next: (res: any) => {
-        this.users = res?.data || res || [];
+        console.log("USERS API =", res);
+        this.users = res;
       },
       error: (err) => {
         console.error(err);
@@ -274,32 +277,62 @@ export class ProjectListComponent implements OnInit {
   }
 
   // ================= CREATE USER (API CALL INTEGRATED) =================
- createUser() {
+  createUser() {
 
-  if (
-    !this.newUser.username ||
-    !this.newUser.userId ||
-    !this.newUser.email ||
-    !this.newUser.password
-  ) {
-    alert('Username, User ID, Email and Password are required');
-    return;
+    if (
+      !this.newUser.username ||
+      !this.newUser.userId ||
+      !this.newUser.email ||
+      !this.newUser.password
+    ) {
+      alert('Username, User ID, Email and Password are required');
+      return;
+    }
+
+    const payload = {
+      userID: this.newUser.userId,
+      userName: this.newUser.username,
+      userEmail: this.newUser.email,
+      password: this.newUser.password,
+      isAdmin: this.newUser.isAdmin
+    };
+
+    console.log("CREATE USER PAYLOAD:", payload);
+
+    this.userService.createUser(payload).subscribe({
+      next: (res) => {
+        alert('User created successfully');
+        this.loadUsers();
+        this.closeCreateUserPopup();
+      },
+      error: (err) => {
+        console.error("CREATE USER ERROR:", err);
+        console.error("BACKEND MESSAGE:", err?.error);
+
+        alert(JSON.stringify(err?.error || 'Failed to create user'));
+      }
+    });
   }
 
-  this.userService.createUser(this.newUser).subscribe({
-    next: (res) => {
-      alert('User created successfully');
-      // reload users from backend
-      this.loadUsers();
-      this.closeCreateUserPopup();
-    },
-    error: (err) => {
-      console.error(err);
-      alert('Failed to create user');
+  onCopyEmailToggle() {
+    if (this.copyEmailChecked) {
+      this.newUser.userId = this.newUser.email || '';
+    } else {
+      this.newUser.userId = '';
     }
-  });
-}
+  }
 
+  onEmailChange() {
+    if (this.copyEmailChecked) {
+      this.newUser.userId = this.newUser.email || '';
+    }
+  }
+
+  onCopyEmailChange(event: any) {
+    if (event.target.checked) {
+      this.newUser.userId = this.newUser.email;
+    }
+  }
 
   // ================= PASSWORD VISIBILITY =================
   showPassword: boolean = false;
@@ -316,5 +349,4 @@ export class ProjectListComponent implements OnInit {
     navigator.clipboard.writeText(email);
     alert('Email copied to clipboard');
   }
-
 }
