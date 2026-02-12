@@ -192,7 +192,8 @@
 
 <!-- ================= USERS LIST POPUP ================= -->
 <div class="popup-overlay" *ngIf="showUsersPopup">
-  <div class="share-popup large">
+  <div class="share-popup large" (click)="$event.stopPropagation()">
+
 
     <!-- HEADER -->
     <div class="popup-header users-header">
@@ -204,6 +205,13 @@
       </div>
     </div>
 
+    <!-- Users Search Bar -->
+    <div class="users-search">
+      <input type="text" placeholder="Search by username, email or user id" [(ngModel)]="userSearchText"
+        (input)="filterUsers()" />
+    </div>
+
+
     <!-- TABLE WRAPPER -->
     <div class="users-table-wrapper">
 
@@ -214,9 +222,9 @@
             <th>Username</th>
             <th>User ID</th>
             <th>Email</th>
+            <th>Actions</th>
           </tr>
         </thead>
-
         <tbody>
 
           <!-- USERS -->
@@ -225,11 +233,15 @@
             <td>{{ user.userName || '-' }}</td>
             <td>{{ user.userID || '-' }}</td>
             <td>{{ user.userEmail || '-' }}</td>
+            <td class="action-cell">
+              <button class="icon-btn edit" (click)="editUser(user)">✏️</button>
+              <button class="icon-btn delete" (click)="deleteUser(user)">🗑️</button>
+            </td>
           </tr>
 
           <!-- EMPTY STATE -->
           <tr *ngIf="users?.length === 0">
-            <td colspan="4" class="no-data">
+            <td colspan="5" class="no-data">
               No users found
             </td>
           </tr>

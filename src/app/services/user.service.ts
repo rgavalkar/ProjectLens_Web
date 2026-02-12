@@ -9,7 +9,7 @@ export class UserService {
 
   private baseUrl = '/api/User';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // ✅ GET ALL USERS
   getUsers(): Observable<any> {
@@ -25,4 +25,12 @@ export class UserService {
   getUserById(userId: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/GetUser/${userId}`);
   }
+
+  // ================= DELETE USER =================
+  deleteUser(userID: string) {
+    return this.http.delete(
+      `${this.baseUrl}/deleteUser/${userID}`
+    );
+  }
+
 }

@@ -15,6 +15,10 @@ import jsPDF from 'jspdf';
 })
 export class ProjectListComponent implements OnInit {
 
+  userSearchText: string = '';
+  allUsers: any[] = [];
+  filteredUsers: any[] = [];
+
   projects: any[] = [];
   searchText: string = '';
   isSidebarOpen: boolean = false;
@@ -185,7 +189,7 @@ export class ProjectListComponent implements OnInit {
 
   // ================= PAGINATION =================
   itemsPerPage: number = 15;
-  pageSizeOptions: number[] = [15, 30, 50];
+  pageSizeOptions: number[] = [15, 30, 50, 100];
   currentPage: number = 1;
 
   get totalPages(): number {
@@ -241,11 +245,16 @@ export class ProjectListComponent implements OnInit {
     password: '',
     isAdmin: false
   };
+
+  // ================= EDIT MODE =================
+  isEditMode: boolean = false;
+  editingUserId: string | null = null;
   copyEmailChecked = false;
 
   openUsersPopup() {
     this.showUsersPopup = true;
     this.loadUsers();
+    this.userSearchText = '';
   }
 
   closeUsersPopup() {
@@ -253,22 +262,49 @@ export class ProjectListComponent implements OnInit {
   }
 
   openCreateUserPopup() {
-    this.showUsersPopup = true;
-    this.newUser = { username: '', userId: '', email: '', password: '', isAdmin: false };
+    this.isEditMode = false;
+    this.editingUserId = null;
+
+    this.newUser = {
+      username: '',
+      userId: '',
+      email: '',
+      password: '',
+      isAdmin: false
+    };
+
+    // this.showUsersPopup = false;
     this.showCreateUserPopup = true;
   }
+
 
   loadUsers() {
     this.userService.getUsers().subscribe({
       next: (res: any) => {
         console.log("USERS API =", res);
-        this.users = res;
+        this.users = res || [];
+        this.allUsers = [...this.users];
+        this.filteredUsers = [...this.users];
       },
       error: (err) => {
         console.error(err);
         alert('Failed to load users');
       }
     });
+  }
+  filterUsers() {
+    const text = this.userSearchText.toLowerCase().trim();
+
+    if (!text) {
+      this.filteredUsers = [...this.allUsers];
+      return;
+    }
+
+    this.filteredUsers = this.allUsers.filter(user =>
+      user.userName?.toLowerCase().includes(text) ||
+      user.userEmail?.toLowerCase().includes(text) ||
+      user.userID?.toLowerCase().includes(text)
+    );
   }
 
   closeCreateUserPopup() {
@@ -278,42 +314,57 @@ export class ProjectListComponent implements OnInit {
 
   // ================= CREATE USER (API CALL INTEGRATED) =================
   createUser() {
-
-    if (
-      !this.newUser.username ||
-      !this.newUser.userId ||
-      !this.newUser.email ||
-      !this.newUser.password
-    ) {
-      alert('Username, User ID, Email and Password are required');
-      return;
-    }
-
-    const payload = {
-      userID: this.newUser.userId,
-      userName: this.newUser.username,
-      userEmail: this.newUser.email,
-      password: this.newUser.password,
-      isAdmin: this.newUser.isAdmin
-    };
-
-    console.log("CREATE USER PAYLOAD:", payload);
-
-    this.userService.createUser(payload).subscribe({
-      next: (res) => {
-        alert('User created successfully');
-        this.loadUsers();
-        this.closeCreateUserPopup();
-      },
-      error: (err) => {
-        console.error("CREATE USER ERROR:", err);
-        console.error("BACKEND MESSAGE:", err?.error);
-
-        alert(JSON.stringify(err?.error || 'Failed to create user'));
-      }
-    });
+  if (
+    !this.newUser.username ||
+    !this.newUser.userId ||
+    !this.newUser.email ||
+    (!this.isEditMode && !this.newUser.password)
+  ) {
+    alert('Username, User ID, Email and Password are required');
+    return;
   }
+  if (this.isEditMode) {
+    const index = this.users.findIndex(
+      u => u.userID === this.editingUserId
+    );
 
+    if (index !== -1) {
+      this.users[index] = {
+        ...this.users[index],
+        userName: this.newUser.username,
+        userID: this.newUser.userId,
+        userEmail: this.newUser.email,
+        isAdmin: this.newUser.isAdmin
+      };
+    }
+    this.allUsers = [...this.users];
+    this.filteredUsers = [...this.users];
+    alert('User updated successfully');
+    this.closeCreateUserPopup();
+    this.isEditMode = false;
+    this.editingUserId = null;
+    return; 
+  }
+  const payload = {
+    userID: this.newUser.userId,
+    userName: this.newUser.username,
+    userEmail: this.newUser.email,
+    password: this.newUser.password,
+    isAdmin: this.newUser.isAdmin
+  };
+
+  this.userService.createUser(payload).subscribe({
+    next: () => {
+      alert('User created successfully');
+      this.loadUsers();
+      this.closeCreateUserPopup();
+    },
+    error: (err) => {
+      console.error(err);
+      alert('Failed to create user');
+    }
+  });
+}
   onCopyEmailToggle() {
     if (this.copyEmailChecked) {
       this.newUser.userId = this.newUser.email || '';
@@ -349,4 +400,50 @@ export class ProjectListComponent implements OnInit {
     navigator.clipboard.writeText(email);
     alert('Email copied to clipboard');
   }
+  // ================= EDIT USER =================
+  editUser(user: any) {
+    console.log('EDIT USER:', user);
+
+    this.isEditMode = true;
+    this.editingUserId = user.userID;
+
+    this.newUser = {
+      username: user.userName,
+      userId: user.userID,
+      email: user.userEmail,
+      password: '',
+      isAdmin: user.isAdmin || false
+    };
+
+    // this.showUsersPopup = false;
+    this.showCreateUserPopup = true;
+  }
+
+
+  // ================= DELETE USER =================
+  deleteUser(user: any) {
+    const confirmDelete = confirm(
+      `Are you sure you want to delete user "${user.userName}"?`
+    );
+
+    if (!confirmDelete) return;
+
+    console.log('DELETE USER:', user);
+
+    // API call 
+    this.userService.deleteUser(user.userID).subscribe({
+      next: () => {
+        alert('User deleted successfully');
+        this.loadUsers();
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Failed to delete user');
+      }
+    });
+  }
+
 }
+
+
+
