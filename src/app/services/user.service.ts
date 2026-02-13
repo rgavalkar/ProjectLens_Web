@@ -26,11 +26,19 @@ export class UserService {
     return this.http.get(`${this.baseUrl}/GetUser/${userId}`);
   }
 
-  // ================= DELETE USER =================
+  // =============== DELETE USER =================
   deleteUser(userID: string) {
     return this.http.delete(
       `${this.baseUrl}/deleteUser/${userID}`
     );
   }
 
+  // ================= LOGIN =================
+  login(credentials: any) {
+    return this.http.post(`${this.baseUrl.replace('/User', '')}/Login`, {
+      userID: credentials.userId,
+      password: credentials.password,
+      appKey: 'PROJECT_LENS_WEB'
+    });
+  }
 }

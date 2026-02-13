@@ -8,12 +8,6 @@
     <span class="mini-text">Audit Logs</span>
   </div>
 
-  <!-- Logout -->
-  <div class="mini-item logout">
-    <span class="mini-icon">🚪</span>
-    <span class="mini-text">Logout</span>
-  </div>
-
   <!-- Expand / Collapse -->
   <div class="mini-expand" (click)="toggleSidebarExpand()">
     <span *ngIf="!isExpanded">»</span>
@@ -46,7 +40,7 @@
     <span class="side-text">Users</span>
   </div>
 
-  <div class="side-item logout" title="Logout">
+  <div class="side-item logout" title="Logout" (click)="logout()">
     <span class="side-icon">🚪</span>
     <span class="side-text">Logout</span>
   </div>
@@ -228,7 +222,7 @@
         <tbody>
 
           <!-- USERS -->
-          <tr *ngFor="let user of users; let i = index">
+          <tr *ngFor="let user of filteredUsers; let i = index">
             <td>{{ i + 1 }}</td>
             <td>{{ user.userName || '-' }}</td>
             <td>{{ user.userID || '-' }}</td>
@@ -240,7 +234,7 @@
           </tr>
 
           <!-- EMPTY STATE -->
-          <tr *ngIf="users?.length === 0">
+          <tr *ngIf="filteredUsers?.length === 0">
             <td colspan="5" class="no-data">
               No users found
             </td>

@@ -11,22 +11,16 @@
 
     <!-- Password -->
     <div class="password-wrapper">
-      <input [type]="showPassword ? 'text' : 'password'" placeholder="Password" class="login-input" />
+      <input [type]="showPassword ? 'text' : 'password'" placeholder="Password" class="login-input"
+        [(ngModel)]="credentials.password" name="password" />
 
-      <span class="toggle-password material-icons" (click)="togglePassword()">
-        {{ showPassword ? '' : '' }}
+      <span class="eye-icon" [class.slash]="!showPassword" (click)="togglePassword()">
+        👁
       </span>
-
     </div>
 
-    <!-- Remember Me -->
-    <!-- <div class="remember-me">
-      <input type="checkbox" id="remember" />
-      <label for="remember">Remember me</label>
-    </div> -->
-
     <!-- Login Button -->
-    <button type="button" class="login-btn">
+    <button type="button" class="login-btn" (click)="login()">
       Login
     </button>
   </form>

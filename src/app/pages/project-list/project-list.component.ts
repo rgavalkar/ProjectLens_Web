@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProjectService } from '../../services/project.service';
 import { UserService } from '../../services/user.service';
+import { Router } from '@angular/router';
+ 
 
 import jsPDF from 'jspdf';
 
@@ -18,7 +20,6 @@ export class ProjectListComponent implements OnInit {
   userSearchText: string = '';
   allUsers: any[] = [];
   filteredUsers: any[] = [];
-
   projects: any[] = [];
   searchText: string = '';
   isSidebarOpen: boolean = false;
@@ -36,7 +37,8 @@ export class ProjectListComponent implements OnInit {
 
   constructor(
     private projectService: ProjectService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) { }
 
 
@@ -236,6 +238,8 @@ export class ProjectListComponent implements OnInit {
   // ================= USERS =================
   showUsersPopup = false;
   showCreateUserPopup = false;
+  selectedUser: any = null;
+
   users: any[] = [];
 
   newUser = {
@@ -277,7 +281,6 @@ export class ProjectListComponent implements OnInit {
     this.showCreateUserPopup = true;
   }
 
-
   loadUsers() {
     this.userService.getUsers().subscribe({
       next: (res: any) => {
@@ -314,57 +317,57 @@ export class ProjectListComponent implements OnInit {
 
   // ================= CREATE USER (API CALL INTEGRATED) =================
   createUser() {
-  if (
-    !this.newUser.username ||
-    !this.newUser.userId ||
-    !this.newUser.email ||
-    (!this.isEditMode && !this.newUser.password)
-  ) {
-    alert('Username, User ID, Email and Password are required');
-    return;
-  }
-  if (this.isEditMode) {
-    const index = this.users.findIndex(
-      u => u.userID === this.editingUserId
-    );
-
-    if (index !== -1) {
-      this.users[index] = {
-        ...this.users[index],
-        userName: this.newUser.username,
-        userID: this.newUser.userId,
-        userEmail: this.newUser.email,
-        isAdmin: this.newUser.isAdmin
-      };
+    if (
+      !this.newUser.username ||
+      !this.newUser.userId ||
+      !this.newUser.email ||
+      (!this.isEditMode && !this.newUser.password)
+    ) {
+      alert('Username, User ID, Email and Password are required');
+      return;
     }
-    this.allUsers = [...this.users];
-    this.filteredUsers = [...this.users];
-    alert('User updated successfully');
-    this.closeCreateUserPopup();
-    this.isEditMode = false;
-    this.editingUserId = null;
-    return; 
-  }
-  const payload = {
-    userID: this.newUser.userId,
-    userName: this.newUser.username,
-    userEmail: this.newUser.email,
-    password: this.newUser.password,
-    isAdmin: this.newUser.isAdmin
-  };
+    if (this.isEditMode) {
+      const index = this.users.findIndex(
+        u => u.userID === this.editingUserId
+      );
 
-  this.userService.createUser(payload).subscribe({
-    next: () => {
-      alert('User created successfully');
-      this.loadUsers();
+      if (index !== -1) {
+        this.users[index] = {
+          ...this.users[index],
+          userName: this.newUser.username,
+          userID: this.newUser.userId,
+          userEmail: this.newUser.email,
+          isAdmin: this.newUser.isAdmin
+        };
+      }
+      this.allUsers = [...this.users];
+      this.filteredUsers = [...this.users];
+      alert('User updated successfully');
       this.closeCreateUserPopup();
-    },
-    error: (err) => {
-      console.error(err);
-      alert('Failed to create user');
+      this.isEditMode = false;
+      this.editingUserId = null;
+      return;
     }
-  });
-}
+    const payload = {
+      userID: this.newUser.userId,
+      userName: this.newUser.username,
+      userEmail: this.newUser.email,
+      password: this.newUser.password,
+      isAdmin: this.newUser.isAdmin
+    };
+
+    this.userService.createUser(payload).subscribe({
+      next: () => {
+        alert('User created successfully');
+        this.loadUsers();
+        this.closeCreateUserPopup();
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Failed to create user');
+      }
+    });
+  }
   onCopyEmailToggle() {
     if (this.copyEmailChecked) {
       this.newUser.userId = this.newUser.email || '';
@@ -443,6 +446,12 @@ export class ProjectListComponent implements OnInit {
     });
   }
 
+  logout() {
+  localStorage.clear();
+  sessionStorage.clear();
+  // window.location.href = '/login';
+  this.router.navigateByUrl('/login');
+}
 }
 
 

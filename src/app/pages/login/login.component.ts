@@ -22,41 +22,30 @@ export class LoginComponent {
   constructor(
     private router: Router,
     private userService: UserService
-  ) {}
+  ) { }
 
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
 
   login() {
-
-    if(!this.credentials.userId){
-      alert('Enter User ID');
-      return;
-    }
-
-    //  CALL BACKEND
-    this.userService.getUserById(this.credentials.userId)
-      .subscribe({
-
-        next: (res:any) => {
-
-          // if user exists -> allow login
-          if(res){
-            alert('Login Successful');
-
-            this.router.navigate(['/dashboard']);
-          }
-          else{
-            alert('User not found');
-          }
-        },
-
-        error: () => {
-          alert('Invalid User ID');
-        }
-
-      });
-
+  if (!this.credentials.userId || !this.credentials.password) {
+    alert('Enter User ID and Password');
+    return;
   }
+
+  this.userService.login(this.credentials).subscribe({
+    next: (res: any) => {
+      console.log('Login Successful');
+      setTimeout(() => {
+        this.router.navigate(['/dashboard']);
+      }, 300);
+    },
+    error: () => {
+      alert('Invalid User ID or Password');
+    }
+  });
 }
+}
+
+
