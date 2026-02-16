@@ -5,7 +5,8 @@
   <h2 class="login-heading">Login</h2>
   <p class="login-subtext">Enter your User ID and Password</p>
 
-  <form class="login-form">
+  <form class="login-form" (ngSubmit)="login()">
+
     <input type="text" placeholder="User ID" class="login-input" [(ngModel)]="credentials.userId" name="userId" />
 
 
@@ -19,8 +20,12 @@
       </span>
     </div>
 
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
     <!-- Login Button -->
-    <button type="button" class="login-btn" (click)="login()">
+    <button type="submit" class="login-btn">
       Login
     </button>
   </form>

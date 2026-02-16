@@ -126,7 +126,6 @@
 
 </div>
 
-
 <!-- ✅ PAGINATION NOW SEPARATE -->
 <div class="pagination-container" *ngIf="filteredProjects.length > 0">
 
@@ -150,8 +149,8 @@
     <button (click)="nextPage()" [disabled]="currentPage === totalPages">▶</button>
     <button (click)="goToLast()" [disabled]="currentPage === totalPages">⏭</button>
   </div>
-
 </div>
+
 
 <p *ngIf="!loading && filteredProjects.length === 0" class="no-projects">
   No projects found
@@ -243,7 +242,7 @@
       </table>
     </div>
   </div>
-</div>
+ 
 
 
 <!-- ================= CREATE USER POPUP ================= -->
