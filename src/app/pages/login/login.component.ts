@@ -50,15 +50,23 @@ export class LoginComponent {
     }
 
     this.userService.login(this.credentials).subscribe({
-      next: (res: any) => {
-        console.log('Login Successful');
+  next: (res: any) => {
+    console.log('Login Successful:', res);
+    this.userService.getUsers().subscribe((users: any[]) => {
+      const matchedUser = users.find(
+        u => u.userID === this.credentials.userId
+      );
 
-        this.errorMessage = '';
+      if (matchedUser) {
+        localStorage.setItem('username', matchedUser.userName);
+      } else {
+        localStorage.setItem('username', this.credentials.userId);
+      }
 
-        setTimeout(() => {
-          this.router.navigate(['/dashboard']);
-        }, 300);
-      },
+      this.router.navigate(['/dashboard']);
+    });
+
+  },
       error: () => {
         this.errorMessage = 'Invalid User ID or Password';
       }

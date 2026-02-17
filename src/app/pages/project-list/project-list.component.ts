@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ProjectService } from '../../services/project.service';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
- 
+
 
 import jsPDF from 'jspdf';
 
@@ -21,6 +21,8 @@ export class ProjectListComponent implements OnInit {
   allUsers: any[] = [];
   filteredUsers: any[] = [];
   projects: any[] = [];
+  loggedInUsername: string = '';
+
   searchText: string = '';
   isSidebarOpen: boolean = false;
   loading: boolean = false;
@@ -43,8 +45,10 @@ export class ProjectListComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.loadProjects();
-  }
+  this.loadProjects();
+  this.loggedInUsername = localStorage.getItem('username') || 'User';
+}
+
 
   loadProjects(): void {
     this.loading = true;
@@ -296,6 +300,7 @@ export class ProjectListComponent implements OnInit {
     });
   }
   filterUsers() {
+    this.usersCurrentPage = 1;
     const text = this.userSearchText.toLowerCase().trim();
 
     if (!text) {
@@ -447,11 +452,63 @@ export class ProjectListComponent implements OnInit {
   }
 
   logout() {
-  localStorage.clear();
-  sessionStorage.clear();
-  // window.location.href = '/login';
-  this.router.navigateByUrl('/login');
-}
+    localStorage.clear();
+    sessionStorage.clear();
+    // window.location.href = '/login';
+    this.router.navigateByUrl('/login');
+  }
+
+  // ================= USERS PAGINATION =================
+
+  usersItemsPerPage: number = 5;
+  usersPageSizeOptions: number[] = [5, 10, 20, 50];
+  usersCurrentPage: number = 1;
+
+  get usersTotalPages(): number {
+    return Math.ceil(this.filteredUsers.length / this.usersItemsPerPage);
+  }
+
+  get usersPageStart(): number {
+    return (this.usersCurrentPage - 1) * this.usersItemsPerPage;
+  }
+
+  get usersPageEnd(): number {
+    const end = this.usersPageStart + this.usersItemsPerPage;
+    return end > this.filteredUsers.length ? this.filteredUsers.length : end;
+  }
+
+  get paginatedUsers(): any[] {
+    return this.filteredUsers.slice(this.usersPageStart, this.usersPageEnd);
+  }
+
+  onUsersItemsPerPageChange(): void {
+    this.usersCurrentPage = 1;
+  }
+
+  nextUsersPage(): void {
+    if (this.usersCurrentPage < this.usersTotalPages) {
+      this.usersCurrentPage++;
+    }
+  }
+
+  prevUsersPage(): void {
+    if (this.usersCurrentPage > 1) {
+      this.usersCurrentPage--;
+    }
+  }
+
+  goToUsersFirst(): void {
+    this.usersCurrentPage = 1;
+  }
+
+  goToUsersLast(): void {
+    this.usersCurrentPage = this.usersTotalPages;
+  }
+
+  get usersDisplayEnd(): number {
+    return Math.min(this.usersPageEnd, this.filteredUsers.length);
+  }
+
 }
 
 
