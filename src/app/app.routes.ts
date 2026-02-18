@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { ProjectListComponent } from './pages/project-list/project-list.component';
 import { ProjectDetailsComponent } from './pages/project-details/project-details.component';
 import { LoginComponent } from './pages/login/login.component';
+import { UsersComponent } from './pages/users/users.component';
 
 // export const routes: Routes = [
 //   { path: '', component: ProjectListComponent },              // Project list page
@@ -12,6 +13,7 @@ export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' }, 
   { path: 'login', component: LoginComponent },
   { path: 'dashboard', component: ProjectListComponent },
+   { path: 'users', component: UsersComponent },  
   { path: 'project/:id', component: ProjectDetailsComponent },
   { path: '**', redirectTo: 'login' } 
 ];

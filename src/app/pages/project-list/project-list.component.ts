@@ -26,6 +26,8 @@ export class ProjectListComponent implements OnInit {
   searchText: string = '';
   isSidebarOpen: boolean = false;
   loading: boolean = false;
+  showUsersSection: boolean = false;
+
 
   // ================= SHARE POPUP VARIABLES =================
   showSharePopup: boolean = false;
@@ -45,10 +47,15 @@ export class ProjectListComponent implements OnInit {
 
 
   ngOnInit(): void {
-  this.loadProjects();
-  this.loggedInUsername = localStorage.getItem('username') || 'User';
-}
+    this.loadProjects();
+    this.loggedInUsername = localStorage.getItem('username') || 'User';
+  }
 
+  goToDashboard() {
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate(['/dashboard']);
+    });
+  }
 
   loadProjects(): void {
     this.loading = true;
@@ -240,7 +247,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   // ================= USERS =================
-  showUsersPopup = false;
+  // showUsersPopup = false;
   showCreateUserPopup = false;
   selectedUser: any = null;
 
@@ -259,15 +266,27 @@ export class ProjectListComponent implements OnInit {
   editingUserId: string | null = null;
   copyEmailChecked = false;
 
-  openUsersPopup() {
-    this.showUsersPopup = true;
+  // openUsersPopup() {
+  //   this.showUsersPopup = true;
+  //   this.loadUsers();
+  //   this.userSearchText = '';
+  // }
+
+  // closeUsersPopup() {
+  //   this.showUsersPopup = false;
+  // }
+
+
+  openUsersSection() {
+    this.showUsersSection = true;
     this.loadUsers();
     this.userSearchText = '';
   }
 
-  closeUsersPopup() {
-    this.showUsersPopup = false;
+  showProjectsSection() {
+    this.showUsersSection = false;
   }
+
 
   openCreateUserPopup() {
     this.isEditMode = false;
@@ -317,8 +336,8 @@ export class ProjectListComponent implements OnInit {
 
   closeCreateUserPopup() {
     this.showCreateUserPopup = false;
-    this.showUsersPopup = true;
   }
+
 
   // ================= CREATE USER (API CALL INTEGRATED) =================
   createUser() {

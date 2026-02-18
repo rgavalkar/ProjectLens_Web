@@ -36,20 +36,17 @@
   display: flex;
   justify-content: flex-end;
   padding: 4px 40px;
-  /* background: #ffffff; */
 }
 
 .search-box {
   position: relative;
   width: 520px;
-  /* box width */
 }
 
 .search-box input {
   width: 100%;
   padding: 12px 48px 12px 16px;
   border-radius: 10px;
-  /* box corners */
   border: 1px solid #d1d5db;
   outline: none;
   font-size: 15px;
@@ -78,7 +75,6 @@
   transform: translateY(-50%);
   font-size: 17px;
   cursor: pointer;
-  /* color: #2563eb; */
   background: #eef2ff;
   padding: 6px;
   border-radius: 8px;
@@ -87,7 +83,6 @@
 
 /* Icon hover */
 .search-icon:hover {
-  /* background: #2563eb; */
   color: #ffffff;
 }
 
@@ -305,8 +300,8 @@
   border: none;
   background: none;
   cursor: pointer;
-  font-size: 16px;           
-  transition: transform 0.2s ease;  
+  font-size: 16px;
+  transition: transform 0.2s ease;
 }
 
 .icon-btn.view {
@@ -720,6 +715,7 @@
 .table-container,
 .pagination-container {
   margin-left: 64px;
+  transition: margin-left 0.25s ease;
 }
 
 .mini-sidebar.expanded~.topbar,
@@ -742,7 +738,13 @@
   display: flex;
   align-items: center;
   padding-left: 90px;
+  transition: width 0.25s ease;
 }
+
+.topbar-left-fixed.expanded {
+  width: 240px;
+}
+
 
 /* keep rest header normal */
 .topbar {
@@ -845,10 +847,10 @@
 /* sidebar under logo */
 .side-under-logo {
   position: fixed;
-  top: 90px;
+  top: 0;
+  height: 100vh;
   left: 0;
   width: 72px;
-  height: calc(100vh - 90px);
   background: #0F172A;
   display: flex;
   flex-direction: column;
@@ -858,6 +860,7 @@
   border-top-right-radius: 14px;
   border-bottom-right-radius: 14px;
   box-shadow: 4px 0 12px rgba(0, 0, 0, 0.25);
+  transition: width 0.25s ease;
 }
 
 /* expanded panel */
@@ -956,9 +959,9 @@
   max-height: 85vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden; 
-  border-radius: 16px;   
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15); 
+  overflow: hidden;
+  border-radius: 16px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
 }
 
 /* popup header */
@@ -978,7 +981,7 @@
   gap: 8px;
   width: 100%;
   margin-top: 8px;
-  padding-left: 2px; 
+  padding-left: 2px;
 }
 
 .checkbox-group label {
@@ -1043,10 +1046,10 @@
 
 
 .users-header {
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
-   margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
 }
 
 
@@ -1101,7 +1104,7 @@
   max-width: 1100px;
   min-height: 520px;
   max-height: 75vh;
-  padding: 12px 20px 20px; 
+  padding: 12px 20px 20px;
   display: flex;
   flex-direction: column;
 }
@@ -1113,7 +1116,7 @@
 
 .users-table-wrapper {
   flex: 1;
-  overflow: hidden; 
+  overflow: hidden;
   min-height: 0;
 }
 
@@ -1125,7 +1128,7 @@
 
 .users-table tbody {
   display: block;
-  max-height: 380px;   
+  max-height: 380px;
   overflow-y: auto;
 }
 
@@ -1140,7 +1143,7 @@
 .users-table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed; 
+  table-layout: fixed;
 }
 
 /* SL No column */
@@ -1196,6 +1199,7 @@
 .page-wrapper.popup-open .topbar-left-fixed {
   background: rgba(0, 0, 0, 0.4);
 }
+
 .popup-overlay {
   z-index: 3000;
 }
@@ -1224,8 +1228,8 @@
   font-size: 40px;
   font-weight: 700;
 
-  margin-top: 0;      
-  margin-bottom: 6px;  
+  margin-top: 0;
+  margin-bottom: 6px;
 }
 
 
@@ -1260,30 +1264,30 @@
 
 
 .users-search input {
-   width: 60%;
-   height: 46px;               
-   padding: 0 18px;             
-   border-radius: 30px;        
-   border: 1px solid #e5e7eb;   
-   background-color: #f9fafb; 
-   outline: none;
-   transition: all 0.3s ease;
+  width: 60%;
+  height: 46px;
+  padding: 0 18px;
+  border-radius: 30px;
+  border: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+  outline: none;
+  transition: all 0.3s ease;
 }
 
 
 .users-search input:focus {
-   background-color: #ffffff;
+  background-color: #ffffff;
 }
 
 .share-popup.large .users-search {
   display: flex;
   justify-content: space-between;
-  align-items: center;   
+  align-items: center;
 }
 
 .share-popup.large .users-search input {
-  width: 50%;         
-  max-width: 500px;    
+  width: 50%;
+  max-width: 500px;
 }
 
 .users-search .btn-new-user {
@@ -1291,7 +1295,7 @@
 }
 
 .users-search button {
-  height: 46px;  
+  height: 46px;
 }
 
 
@@ -1307,15 +1311,32 @@
   flex-shrink: 0;
 }
 
-
 .topbar-right {
   margin-left: auto;
   padding-right: 30px;
-  font-size: 18px;
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  font-size: 28px;
   font-weight: 600;
   color: #1f2937;
 }
-.topbar-right {
-  font-size: 28px;
+
+
+.btn-logout {
+  background: #0f172a;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 13px;
   font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-logout:hover {
+  background: #1e293b;
 }

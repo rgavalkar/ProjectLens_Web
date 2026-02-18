@@ -26,25 +26,34 @@
   </div>
   
   <div class="topbar-right">
+  <span class="welcome-text">
     Welcome, {{ loggedInUsername }}
-  </div>
+  </span>
+  <button class="btn-logout" (click)="logout()">
+    Logout
+  </button>
+</div>
+
 </header>
 
 <!-- ===== LEFT SIDEBAR UNDER LOGO ===== -->
 
 <div class="side-under-logo" [class.expanded]="isExpanded">
 
-  <div class="side-item" title="Audit Logs">
-    <span class="side-icon">📋</span>
-    <span class="side-text">Audit Logs</span>
-  </div>
+ <div class="side-item"
+     title="Project Details"
+     (click)="goToDashboard()">
+  <span class="side-icon">📋</span>
+  <span class="side-text">Project Details</span>
+</div>
 
-  <div class="side-item" title="Users" (click)="openUsersPopup()">
+
+  <div class="side-item" title="Users" (click)="openUsersSection()">
     <span class="side-icon">👥</span>
     <span class="side-text">Users</span>
   </div>
 
-  <div class="side-item logout" title="Logout" (click)="logout()">
+  <div class="side-item" title="Users" (click)="openUsersSection()">
     <span class="side-icon">🚪</span>
     <span class="side-text">Logout</span>
   </div>
@@ -188,7 +197,7 @@
 </div>
 
 <!-- ================= USERS LIST POPUP ================= -->
-<div class="popup-overlay" *ngIf="showUsersPopup">
+<div *ngIf="showUsersSection">
   <div class="share-popup large" (click)="$event.stopPropagation()">
 
 
@@ -198,7 +207,7 @@
 
       <div class="header-actions">
         <button class="btn-send" (click)="openCreateUserPopup()">+ New User</button>
-        <button class="close-icon" (click)="closeUsersPopup()">✕</button>
+        <button class="close-icon" (click)="showProjectsSection()">✕</button>
       </div>
     </div>
 
