@@ -1,82 +1,5 @@
-<!-- ================= MINI SIDE ICON BAR ================= -->
+<!-- ================= PROJECT TABLE ================= -->
 
-<div class="mini-sidebar" [class.expanded]="isExpanded">
-
-  <!-- Audit Logs -->
-  <div class="mini-item">
-    <span class="mini-icon">📋</span>
-    <span class="mini-text">Audit Logs</span>
-  </div>
-
-  <!-- Expand / Collapse -->
-  <div class="mini-expand" (click)="toggleSidebarExpand()">
-    <span *ngIf="!isExpanded">»</span>
-    <span *ngIf="isExpanded">«</span>
-  </div>
-
-</div>
-
-<!-- ================= HEADER ================= -->
-<header class="topbar">
-  <div class="topbar-left-fixed">
-    <div class="title-wrapper header-title">
-      <img src="assets/icons/project-lens.png.jpg" class="project-icon" />
-      <h1 class="app-title">PROJECT <span>LENS</span></h1>
-    </div>
-  </div>
-  
-  <div class="topbar-right">
-  <span class="welcome-text">
-    Welcome, {{ loggedInUsername }}
-  </span>
-  <button class="btn-logout" (click)="logout()">
-    Logout
-  </button>
-</div>
-
-</header>
-
-<!-- ===== LEFT SIDEBAR UNDER LOGO ===== -->
-
-<div class="side-under-logo" [class.expanded]="isExpanded">
-
- <div class="side-item"
-     title="Project Details"
-     (click)="goToDashboard()">
-  <span class="side-icon">📋</span>
-  <span class="side-text">Project Details</span>
-</div>
-
-
-  <div class="side-item" title="Users" (click)="openUsersSection()">
-    <span class="side-icon">👥</span>
-    <span class="side-text">Users</span>
-  </div>
-
-  <div class="side-item" title="Users" (click)="openUsersSection()">
-    <span class="side-icon">🚪</span>
-    <span class="side-text">Logout</span>
-  </div>
-
-  <!-- expand arrow -->
-  <div class="side-expand" (click)="toggleSidebarExpand()">
-    »
-  </div>
-
-</div>
-
-<!-- ================= SEARCH BELOW HEADER ================= -->
-
-<div class="search-container-right">
-  <div class="search-box">
-    <input #searchInput type="text" placeholder="Search projects..." [(ngModel)]="searchText" />
-    <span class="search-icon" (click)="focusSearch(searchInput)">
-      🔍
-    </span>
-  </div>
-</div>
-
-<!-- <!================= PROJECT TABLE ================= -->
 <div class="table-container">
 
   <table class="project-table header-table">
@@ -94,7 +17,6 @@
       </tr>
     </thead>
   </table>
-
 
   <div class="table-scroll-wrapper">
     <table class="project-table body-table">
@@ -139,37 +61,14 @@
 
 </div>
 
-<!-- ✅ PAGINATION NOW SEPARATE -->
-<div class="pagination-container" *ngIf="filteredProjects.length > 0">
-
-  <div class="pagination-left">
-    <span>Items per page:</span>
-
-    <select [(ngModel)]="itemsPerPage" (change)="onItemsPerPageChange()">
-      <option *ngFor="let size of pageSizeOptions" [value]="size">
-        {{ size }}
-      </option>
-    </select>
-  </div>
-
-  <div class="pagination-center">
-    {{ pageStart + 1 }} - {{ displayEnd }} of {{ filteredProjects.length }}
-  </div>
-
-  <div class="pagination-right">
-    <button (click)="goToFirst()" [disabled]="currentPage === 1">⏮</button>
-    <button (click)="prevPage()" [disabled]="currentPage === 1">◀</button>
-    <button (click)="nextPage()" [disabled]="currentPage === totalPages">▶</button>
-    <button (click)="goToLast()" [disabled]="currentPage === totalPages">⏭</button>
-  </div>
-</div>
-
+<!-- ================= NO PROJECTS MESSAGE ================= -->
 
 <p *ngIf="!loading && filteredProjects.length === 0" class="no-projects">
   No projects found
 </p>
 
 <!-- ================= SHARE POPUP ================= -->
+
 <div class="popup-overlay" *ngIf="showSharePopup">
   <div class="share-popup">
     <h2>Share via Email</h2>
@@ -195,151 +94,3 @@
     </div>
   </div>
 </div>
-
-<!-- ================= USERS LIST POPUP ================= -->
-<div *ngIf="showUsersSection">
-  <div class="share-popup large" (click)="$event.stopPropagation()">
-
-
-    <!-- HEADER -->
-    <div class="popup-header users-header">
-      <h2>Users</h2>
-
-      <div class="header-actions">
-        <button class="btn-send" (click)="openCreateUserPopup()">+ New User</button>
-        <button class="close-icon" (click)="showProjectsSection()">✕</button>
-      </div>
-    </div>
-
-    <!-- Users Search Bar -->
-    <div class="users-search">
-      <input type="text" placeholder="Search by username, email or user id" [(ngModel)]="userSearchText"
-        (input)="filterUsers()" />
-    </div>
-
-
-    <!-- TABLE WRAPPER -->
-    <div class="users-table-wrapper">
-
-      <table class="project-table users-table">
-        <thead>
-          <tr>
-            <th>SL No</th>
-            <th>Username</th>
-            <th>User ID</th>
-            <th>Email</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-
-          <!-- USERS -->
-          <tr *ngFor="let user of paginatedUsers; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ user.userName || '-' }}</td>
-            <td>{{ user.userID || '-' }}</td>
-            <td>{{ user.userEmail || '-' }}</td>
-            <td class="action-cell">
-              <button class="icon-btn edit" (click)="editUser(user)">✏️</button>
-              <button class="icon-btn delete" (click)="deleteUser(user)">🗑️</button>
-            </td>
-          </tr>
-
-          <!-- EMPTY STATE -->
-          <tr *ngIf="filteredUsers?.length === 0">
-            <td colspan="5" class="no-data">
-              No users found
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- USERS PAGINATION -->
-    <div class="pagination-container users-pagination" *ngIf="filteredUsers.length > 0">
-
-      <div class="pagination-left">
-        <span>Items per page:</span>
-
-        <select [(ngModel)]="usersItemsPerPage" (change)="onUsersItemsPerPageChange()">
-          <option *ngFor="let size of usersPageSizeOptions" [value]="size">
-            {{ size }}
-          </option>
-        </select>
-      </div>
-
-      <div class="pagination-center">
-        {{ usersPageStart + 1 }} - {{ usersDisplayEnd }} of {{ filteredUsers.length }}
-      </div>
-
-      <div class="pagination-right">
-        <button (click)="goToUsersFirst()" [disabled]="usersCurrentPage === 1">⏮</button>
-        <button (click)="prevUsersPage()" [disabled]="usersCurrentPage === 1">◀</button>
-        <button (click)="nextUsersPage()" [disabled]="usersCurrentPage === usersTotalPages">▶</button>
-        <button (click)="goToUsersLast()" [disabled]="usersCurrentPage === usersTotalPages">⏭</button>
-      </div>
-
-    </div>
-
-  </div>
-
-
-
-  <!-- ================= CREATE USER POPUP ================= -->
-  <div class="popup-overlay" *ngIf="showCreateUserPopup">
-    <div class="share-popup create-user-popup">
-
-      <h2>Create User</h2>
-
-      <!-- ROW 1 -->
-      <div class="form-row">
-        <div class="form-group">
-          <label>Username</label>
-          <input type="text" [(ngModel)]="newUser.username" />
-        </div>
-
-        <div class="form-group">
-          <label>Email</label>
-          <input type="text" [(ngModel)]="newUser.email" />
-        </div>
-      </div>
-
-      <!-- Copy Email checkbox-->
-      <div class="checkbox-wrapper">
-        <input type="checkbox" id="copyEmail" (change)="onCopyEmailChange($event)" />
-        <label for="copyEmail">Copy Email</label>
-      </div>
-      <!-- ROW 2 -->
-      <div class="form-row">
-        <div class="form-group">
-          <label>User ID</label>
-          <input type="text" [(ngModel)]="newUser.userId" />
-        </div>
-
-        <div class="form-group">
-          <label>Password</label>
-
-          <div class="input-wrapper">
-            <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="newUser.password" />
-
-            <span class="eye-icon" [class.slash]="!showPassword" (click)="togglePassword()">
-              👁
-            </span>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Is Admin checkbox-->
-      <div class="checkbox-wrapper">
-        <input type="checkbox" id="isAdmin" [(ngModel)]="newUser.isAdmin" />
-        <label for="isAdmin">Is Admin</label>
-      </div>
-
-      <!-- ACTION BUTTONS -->
-      <div class="popup-actions">
-        <button class="btn-cancel" (click)="closeCreateUserPopup()">Cancel</button>
-        <button class="btn-send" (click)="createUser()">Create</button>
-      </div>
-    </div>
-  </div>

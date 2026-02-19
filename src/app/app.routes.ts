@@ -10,11 +10,10 @@ import { UsersComponent } from './pages/users/users.component';
 // ];
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' }, 
   { path: 'login', component: LoginComponent },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, 
   { path: 'dashboard', component: ProjectListComponent },
    { path: 'users', component: UsersComponent },  
   { path: 'project/:id', component: ProjectDetailsComponent },
-  { path: '**', redirectTo: 'login' } 
 ];
 

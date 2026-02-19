@@ -266,17 +266,6 @@ export class ProjectListComponent implements OnInit {
   editingUserId: string | null = null;
   copyEmailChecked = false;
 
-  // openUsersPopup() {
-  //   this.showUsersPopup = true;
-  //   this.loadUsers();
-  //   this.userSearchText = '';
-  // }
-
-  // closeUsersPopup() {
-  //   this.showUsersPopup = false;
-  // }
-
-
   openUsersSection() {
     this.showUsersSection = true;
     this.loadUsers();
