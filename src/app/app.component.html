@@ -10,10 +10,10 @@
 
   <div class="mini-sidebar" [class.expanded]="isExpanded">
 
-    <div class="mini-item">
+    <!-- <div class="mini-item">
       <span class="mini-icon">📋</span>
       <span class="mini-text">Audit Logs</span>
-    </div>
+    </div> -->
 
     <div class="side-under-logo" [class.expanded]="isExpanded">
 
@@ -80,9 +80,10 @@
   <div class="search-container-right">
     <div class="search-box">
       <input #searchInput
-             type="text"
-             placeholder="Search..."
-             [(ngModel)]="searchText" />
+       type="text"
+       placeholder="Search..."
+       [(ngModel)]="searchText"
+       (ngModelChange)="onSearchChange()" />
 
       <span class="search-icon"
             (click)="focusSearch(searchInput)">

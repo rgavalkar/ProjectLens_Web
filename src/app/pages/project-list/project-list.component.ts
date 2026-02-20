@@ -2,10 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProjectService } from '../../services/project.service';
-import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
-
-
 import jsPDF from 'jspdf';
 
 @Component({
@@ -17,19 +14,12 @@ import jsPDF from 'jspdf';
 })
 export class ProjectListComponent implements OnInit {
 
-  userSearchText: string = '';
-  allUsers: any[] = [];
-  filteredUsers: any[] = [];
   projects: any[] = [];
   loggedInUsername: string = '';
-
   searchText: string = '';
-  isSidebarOpen: boolean = false;
   loading: boolean = false;
-  showUsersSection: boolean = false;
 
-
-  // ================= SHARE POPUP VARIABLES =================
+  // ================= SHARE POPUP =================
   showSharePopup: boolean = false;
   selectedProject: any = null;
 
@@ -41,32 +31,22 @@ export class ProjectListComponent implements OnInit {
 
   constructor(
     private projectService: ProjectService,
-    private userService: UserService,
     private router: Router
   ) { }
-
 
   ngOnInit(): void {
     this.loadProjects();
     this.loggedInUsername = localStorage.getItem('username') || 'User';
   }
 
-  goToDashboard() {
-    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-      this.router.navigate(['/dashboard']);
-    });
-  }
-
   loadProjects(): void {
     this.loading = true;
     this.projectService.getProjects().subscribe({
       next: (response: any) => {
-        console.log('API RESPONSE:', response);
         this.projects = response?.data || response || [];
         this.loading = false;
       },
-      error: (err) => {
-        console.error('API error', err);
+      error: () => {
         this.loading = false;
       }
     });
@@ -79,42 +59,7 @@ export class ProjectListComponent implements OnInit {
     );
   }
 
-  toggleSidebar(): void {
-    this.isSidebarOpen = !this.isSidebarOpen;
-  }
-
-  closeSidebar() {
-    this.isSidebarOpen = false;
-  }
-
-  isExpanded = false;
-
-  toggleSidebarExpand() {
-    this.isExpanded = !this.isExpanded;
-  }
-
-  focusSearch(input: HTMLInputElement) {
-    input.focus();
-  }
-
-  onSearch(): void { }
-
-  getTimeAgo(dateString: string): string {
-    if (!dateString) return '';
-    const createdDate = new Date(dateString);
-    const now = new Date();
-    const diffMs = now.getTime() - createdDate.getTime();
-    const diffMinutes = Math.floor(diffMs / (1000 * 60));
-    const diffHours = Math.floor(diffMinutes / 60);
-    const diffDays = Math.floor(diffHours / 24);
-
-    if (diffMinutes < 1) return 'just now';
-    if (diffMinutes < 60) return `${diffMinutes} minutes ago`;
-    if (diffHours < 24) return `${diffHours} hours ago`;
-    return `${diffDays} days ago`;
-  }
-
-  // ================= VIEW BUTTON  =================
+  // ================= VIEW =================
   viewProject(project: any) {
     if (!project?.shareLink) {
       alert('View link not available from API');
@@ -123,7 +68,7 @@ export class ProjectListComponent implements OnInit {
     window.open(project.shareLink, '_blank', 'noopener,noreferrer');
   }
 
-  // ================= DOWNLOAD BUTTON =================
+  // ================= DOWNLOAD =================
   downloadPDF(project: any) {
     const doc = new jsPDF('p', 'mm', 'a4');
     doc.rect(10, 10, 190, 277);
@@ -150,7 +95,7 @@ export class ProjectListComponent implements OnInit {
     };
   }
 
-  // ================= SHARE POPUP FUNCTIONS =================
+  // ================= SHARE =================
   openSharePopup(project: any) {
     this.selectedProject = project;
     this.showSharePopup = true;
@@ -181,280 +126,13 @@ export class ProjectListComponent implements OnInit {
       }
     };
 
-    console.log('EMAIL PAYLOAD:', payload);
-
     this.projectService.sendEmail(payload).subscribe({
       next: () => {
         alert('Email sent successfully');
         this.closeSharePopup();
       },
-      error: (err) => {
-        console.error('Email error:', err);
-        if (err?.status === 200 || err?.status === 0) {
-          alert('Email sent successfully');
-          this.closeSharePopup();
-        } else {
-          alert('Failed to send email');
-        }
-      }
-    });
-  }
-
-  // ================= PAGINATION =================
-  itemsPerPage: number = 15;
-  pageSizeOptions: number[] = [15, 30, 50, 100];
-  currentPage: number = 1;
-
-  get totalPages(): number {
-    return Math.ceil(this.filteredProjects.length / this.itemsPerPage);
-  }
-
-  get pageStart(): number {
-    return (this.currentPage - 1) * this.itemsPerPage;
-  }
-
-  get pageEnd(): number {
-    const end = this.pageStart + this.itemsPerPage;
-    return end > this.filteredProjects.length ? this.filteredProjects.length : end;
-  }
-
-  get paginatedProjects(): any[] {
-    return this.filteredProjects.slice(this.pageStart, this.pageEnd);
-  }
-
-  onItemsPerPageChange(): void {
-    this.currentPage = 1;
-  }
-
-  nextPage(): void {
-    if (this.currentPage < this.totalPages) this.currentPage++;
-  }
-
-  prevPage(): void {
-    if (this.currentPage > 1) this.currentPage--;
-  }
-
-  goToFirst(): void {
-    this.currentPage = 1;
-  }
-
-  goToLast(): void {
-    this.currentPage = this.totalPages;
-  }
-
-  get displayEnd(): number {
-    return Math.min(this.pageEnd, this.filteredProjects.length);
-  }
-
-  // ================= USERS =================
-  // showUsersPopup = false;
-  showCreateUserPopup = false;
-  selectedUser: any = null;
-
-  users: any[] = [];
-
-  newUser = {
-    username: '',
-    userId: '',
-    email: '',
-    password: '',
-    isAdmin: false
-  };
-
-  // ================= EDIT MODE =================
-  isEditMode: boolean = false;
-  editingUserId: string | null = null;
-  copyEmailChecked = false;
-
-  openUsersSection() {
-    this.showUsersSection = true;
-    this.loadUsers();
-    this.userSearchText = '';
-  }
-
-  showProjectsSection() {
-    this.showUsersSection = false;
-  }
-
-
-  openCreateUserPopup() {
-    this.isEditMode = false;
-    this.editingUserId = null;
-
-    this.newUser = {
-      username: '',
-      userId: '',
-      email: '',
-      password: '',
-      isAdmin: false
-    };
-
-    // this.showUsersPopup = false;
-    this.showCreateUserPopup = true;
-  }
-
-  loadUsers() {
-    this.userService.getUsers().subscribe({
-      next: (res: any) => {
-        console.log("USERS API =", res);
-        this.users = res || [];
-        this.allUsers = [...this.users];
-        this.filteredUsers = [...this.users];
-      },
-      error: (err) => {
-        console.error(err);
-        alert('Failed to load users');
-      }
-    });
-  }
-  filterUsers() {
-    this.usersCurrentPage = 1;
-    const text = this.userSearchText.toLowerCase().trim();
-
-    if (!text) {
-      this.filteredUsers = [...this.allUsers];
-      return;
-    }
-
-    this.filteredUsers = this.allUsers.filter(user =>
-      user.userName?.toLowerCase().includes(text) ||
-      user.userEmail?.toLowerCase().includes(text) ||
-      user.userID?.toLowerCase().includes(text)
-    );
-  }
-
-  closeCreateUserPopup() {
-    this.showCreateUserPopup = false;
-  }
-
-
-  // ================= CREATE USER (API CALL INTEGRATED) =================
-  createUser() {
-    if (
-      !this.newUser.username ||
-      !this.newUser.userId ||
-      !this.newUser.email ||
-      (!this.isEditMode && !this.newUser.password)
-    ) {
-      alert('Username, User ID, Email and Password are required');
-      return;
-    }
-    if (this.isEditMode) {
-      const index = this.users.findIndex(
-        u => u.userID === this.editingUserId
-      );
-
-      if (index !== -1) {
-        this.users[index] = {
-          ...this.users[index],
-          userName: this.newUser.username,
-          userID: this.newUser.userId,
-          userEmail: this.newUser.email,
-          isAdmin: this.newUser.isAdmin
-        };
-      }
-      this.allUsers = [...this.users];
-      this.filteredUsers = [...this.users];
-      alert('User updated successfully');
-      this.closeCreateUserPopup();
-      this.isEditMode = false;
-      this.editingUserId = null;
-      return;
-    }
-    const payload = {
-      userID: this.newUser.userId,
-      userName: this.newUser.username,
-      userEmail: this.newUser.email,
-      password: this.newUser.password,
-      isAdmin: this.newUser.isAdmin
-    };
-
-    this.userService.createUser(payload).subscribe({
-      next: () => {
-        alert('User created successfully');
-        this.loadUsers();
-        this.closeCreateUserPopup();
-      },
-      error: (err) => {
-        console.error(err);
-        alert('Failed to create user');
-      }
-    });
-  }
-  onCopyEmailToggle() {
-    if (this.copyEmailChecked) {
-      this.newUser.userId = this.newUser.email || '';
-    } else {
-      this.newUser.userId = '';
-    }
-  }
-
-  onEmailChange() {
-    if (this.copyEmailChecked) {
-      this.newUser.userId = this.newUser.email || '';
-    }
-  }
-
-  onCopyEmailChange(event: any) {
-    if (event.target.checked) {
-      this.newUser.userId = this.newUser.email;
-    }
-  }
-
-  // ================= PASSWORD VISIBILITY =================
-  showPassword: boolean = false;
-  togglePassword() {
-    this.showPassword = !this.showPassword;
-  }
-
-  // ================= COPY EMAIL =================
-  copyEmail(email: string) {
-    if (!email) {
-      alert('Email is empty');
-      return;
-    }
-    navigator.clipboard.writeText(email);
-    alert('Email copied to clipboard');
-  }
-  // ================= EDIT USER =================
-  editUser(user: any) {
-    console.log('EDIT USER:', user);
-
-    this.isEditMode = true;
-    this.editingUserId = user.userID;
-
-    this.newUser = {
-      username: user.userName,
-      userId: user.userID,
-      email: user.userEmail,
-      password: '',
-      isAdmin: user.isAdmin || false
-    };
-
-    // this.showUsersPopup = false;
-    this.showCreateUserPopup = true;
-  }
-
-
-  // ================= DELETE USER =================
-  deleteUser(user: any) {
-    const confirmDelete = confirm(
-      `Are you sure you want to delete user "${user.userName}"?`
-    );
-
-    if (!confirmDelete) return;
-
-    console.log('DELETE USER:', user);
-
-    // API call 
-    this.userService.deleteUser(user.userID).subscribe({
-      next: () => {
-        alert('User deleted successfully');
-        this.loadUsers();
-      },
-      error: (err) => {
-        console.error(err);
-        alert('Failed to delete user');
+      error: () => {
+        alert('Failed to send email');
       }
     });
   }
@@ -462,62 +140,7 @@ export class ProjectListComponent implements OnInit {
   logout() {
     localStorage.clear();
     sessionStorage.clear();
-    // window.location.href = '/login';
     this.router.navigateByUrl('/login');
   }
 
-  // ================= USERS PAGINATION =================
-
-  usersItemsPerPage: number = 5;
-  usersPageSizeOptions: number[] = [5, 10, 20, 50];
-  usersCurrentPage: number = 1;
-
-  get usersTotalPages(): number {
-    return Math.ceil(this.filteredUsers.length / this.usersItemsPerPage);
-  }
-
-  get usersPageStart(): number {
-    return (this.usersCurrentPage - 1) * this.usersItemsPerPage;
-  }
-
-  get usersPageEnd(): number {
-    const end = this.usersPageStart + this.usersItemsPerPage;
-    return end > this.filteredUsers.length ? this.filteredUsers.length : end;
-  }
-
-  get paginatedUsers(): any[] {
-    return this.filteredUsers.slice(this.usersPageStart, this.usersPageEnd);
-  }
-
-  onUsersItemsPerPageChange(): void {
-    this.usersCurrentPage = 1;
-  }
-
-  nextUsersPage(): void {
-    if (this.usersCurrentPage < this.usersTotalPages) {
-      this.usersCurrentPage++;
-    }
-  }
-
-  prevUsersPage(): void {
-    if (this.usersCurrentPage > 1) {
-      this.usersCurrentPage--;
-    }
-  }
-
-  goToUsersFirst(): void {
-    this.usersCurrentPage = 1;
-  }
-
-  goToUsersLast(): void {
-    this.usersCurrentPage = this.usersTotalPages;
-  }
-
-  get usersDisplayEnd(): number {
-    return Math.min(this.usersPageEnd, this.filteredUsers.length);
-  }
-
 }
-
-
-

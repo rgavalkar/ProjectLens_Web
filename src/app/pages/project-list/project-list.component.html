@@ -21,7 +21,8 @@
   <div class="table-scroll-wrapper">
     <table class="project-table body-table">
       <tbody>
-        <tr *ngFor="let project of paginatedProjects; let i = index">
+        <!--PAGINATION REMOVED HERE -->
+        <tr *ngFor="let project of filteredProjects; let i = index">
           <td>{{ i + 1 }}</td>
           <td>{{ project.poNumber || '-' }}</td>
           <td>{{ project.bolNumber || '-' }}</td>
@@ -94,3 +95,4 @@
     </div>
   </div>
 </div>
+

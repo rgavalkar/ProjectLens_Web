@@ -714,7 +714,7 @@
 .search-container-right,
 .table-container,
 .pagination-container {
-  margin-left: 64px;
+  /* margin-left: 64px; */
   transition: margin-left 0.25s ease;
 }
 
@@ -827,7 +827,7 @@
 .search-container-right,
 .table-container,
 .pagination-container {
-  margin-left: 90px;
+  margin-left: 0px;
 }
 
 .side-under-logo.expanded~.search-container-right,
@@ -943,7 +943,7 @@
 .search-container-right,
 .table-container,
 .pagination-container {
-  margin-left: 70px;
+  margin-left: 0;
 }
 
 /* Move content down below header */
@@ -992,9 +992,10 @@
 
 /* ensure sidebar items are clickable */
 .side-under-logo {
-  z-index: 3000 !important;
+  z-index: 3000;
   pointer-events: auto;
 }
+
 
 .side-item {
   pointer-events: auto;
@@ -1339,4 +1340,12 @@
 
 .btn-logout:hover {
   background: #1e293b;
+}
+
+
+.table-container {
+  width: 100%;
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
 }

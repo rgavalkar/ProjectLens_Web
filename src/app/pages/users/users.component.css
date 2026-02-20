@@ -1,0 +1,82 @@
+.content-container {
+  padding: 20px;
+}
+
+.table-container {
+  background: #ffffff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* Remove scroll from wrapper */
+.table-scroll {
+  max-height: none;
+  overflow: hidden;
+}
+
+/* Make only tbody scroll */
+tbody {
+  display: block;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+/* Keep alignment proper */
+thead, tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+
+thead {
+  background-color: #0b1e3c;
+  color: #ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+th {
+  padding: 16px;
+  font-weight: 600;
+  text-align: left;
+}
+
+td {
+  padding: 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+tbody tr:hover {
+  background-color: #f3f6fb;
+}
+
+
+tbody tr:nth-child(odd) {
+  background-color: #f7f9fc;   
+}
+
+tbody tr:nth-child(even) {
+  background-color: #ffffff;   
+}
+
+
+.action-icon {
+  cursor: pointer;
+  margin: 0 8px;
+}
+
+
+.pagination-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 10px;
+  font-size: 14px;
+}
