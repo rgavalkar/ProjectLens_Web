@@ -5,6 +5,7 @@ import { ProjectService } from '../../services/project.service';
 import { Router } from '@angular/router';
 import jsPDF from 'jspdf';
 
+
 @Component({
   selector: 'app-project-list',
   standalone: true,

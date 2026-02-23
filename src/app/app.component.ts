@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http'
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { filter } from 'rxjs/operators';
+import { ProjectService } from './services/project.service';
 
 @Component({
   selector: 'app-root',
@@ -46,7 +47,8 @@ export class AppComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private projectService: ProjectService
   ) {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
@@ -117,6 +119,8 @@ export class AppComponent implements OnInit {
   // Update pagination after filtering
   this.updatePagination();
 }
+
+
   // ================= API =================
   fetchProjects(): void {
 

@@ -17,23 +17,17 @@
 
     <div class="side-under-logo" [class.expanded]="isExpanded">
 
-      <div class="side-item"
-           title="Project Details"
-           (click)="goToDashboard()">
+      <div class="side-item" title="Project Details" (click)="goToDashboard()">
         <span class="side-icon">📋</span>
         <span class="side-text">Project Details</span>
       </div>
 
-      <div class="side-item"
-           title="Users"
-           (click)="openUsersSection()">
+      <div class="side-item" title="Users" (click)="openUsersSection()">
         <span class="side-icon">👥</span>
         <span class="side-text">Users</span>
       </div>
 
-      <div class="side-item"
-           title="Logout"
-           (click)="logout()">
+      <div class="side-item" title="Logout" (click)="logout()">
         <span class="side-icon">🚪</span>
         <span class="side-text">Logout</span>
       </div>
@@ -79,14 +73,10 @@
 
   <div class="search-container-right">
     <div class="search-box">
-      <input #searchInput
-       type="text"
-       placeholder="Search..."
-       [(ngModel)]="searchText"
-       (ngModelChange)="onSearchChange()" />
+      <input #searchInput type="text" placeholder="Search..." [(ngModel)]="searchText"
+        (ngModelChange)="onSearchChange()" />
 
-      <span class="search-icon"
-            (click)="focusSearch(searchInput)">
+      <span class="search-icon" (click)="focusSearch(searchInput)">
         🔍
       </span>
     </div>
@@ -102,16 +92,13 @@
 
   <!-- ================= GLOBAL PAGINATION ================= -->
 
-  <div class="pagination-container"
-       *ngIf="showPagination">
+  <div class="pagination-container" *ngIf="showPagination">
 
     <div class="pagination-left">
       <span>Items per page:</span>
 
-      <select [(ngModel)]="itemsPerPage"
-              (change)="onItemsPerPageChange()">
-        <option *ngFor="let size of pageSizeOptions"
-                [value]="size">
+      <select [(ngModel)]="itemsPerPage" (change)="onItemsPerPageChange()">
+        <option *ngFor="let size of pageSizeOptions" [value]="size">
           {{ size }}
         </option>
       </select>
