@@ -82,8 +82,8 @@ export class AppComponent implements OnInit {
   }
 
   goToDashboard(): void {
-  this.router.navigate(['/dashboard']);
-}
+    this.router.navigate(['/dashboard']);
+  }
 
   openUsersSection(): void {
     this.router.navigate(['/users']);
@@ -94,31 +94,31 @@ export class AppComponent implements OnInit {
     input.focus();
   }
 
- onSearchChange(): void {
+   onSearchChange(): void {
 
-  const search = (this.searchText || '').toLowerCase().trim();
+    const search = (this.searchText || '').toLowerCase().trim();
 
-  // If projects not loaded yet, stop
-  if (!this.allProjects || this.allProjects.length === 0) {
-    return;
+    // If projects not loaded yet, stop
+    if (!this.allProjects || this.allProjects.length === 0) {
+      return;
+    }
+
+    if (!search) {
+      this.filteredProjects = [...this.allProjects];
+    } else {
+      this.filteredProjects = this.allProjects.filter(project =>
+        (project.poNumber || '').toLowerCase().includes(search) ||
+        (project.bolNumber || '').toLowerCase().includes(search) ||
+        (project.fileName || '').toLowerCase().includes(search)
+      );
+    }
+
+    // Reset to first page
+    this.currentPage = 1;
+
+    // Update pagination after filtering
+    this.updatePagination();
   }
-
-  if (!search) {
-    this.filteredProjects = [...this.allProjects];
-  } else {
-    this.filteredProjects = this.allProjects.filter(project =>
-      (project.poNumber || '').toLowerCase().includes(search) ||
-      (project.bolNumber || '').toLowerCase().includes(search) ||
-      (project.fileName || '').toLowerCase().includes(search)
-    );
-  }
-
-  // Reset to first page
-  this.currentPage = 1;
-
-  // Update pagination after filtering
-  this.updatePagination();
-}
 
 
   // ================= API =================
@@ -137,7 +137,7 @@ export class AppComponent implements OnInit {
           this.filteredProjects = [...this.allProjects];
           this.currentPage = 1;
           this.updatePagination();
-          this.onSearchChange();  
+          this.onSearchChange();
         },
         error: (error) => {
           console.error('API Error:', error);

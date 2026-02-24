@@ -1,3 +1,12 @@
+<!-- ================= SEARCH BAR ================= -->
+
+<div class="search-container-right">
+  <div class="search-box">
+    <input type="text" placeholder="Search" [(ngModel)]="searchText" />
+    <span class="search-icon">🔍</span>
+  </div>
+</div>
+
 <!-- ================= PROJECT TABLE ================= -->
 
 <div class="table-container">
@@ -22,7 +31,7 @@
     <table class="project-table body-table">
       <tbody>
         <!--PAGINATION REMOVED HERE -->
-        <tr *ngFor="let project of filteredProjects; let i = index">
+        <tr *ngFor="let project of paginatedProjects; let i = index">
           <td>{{ i + 1 }}</td>
           <td>{{ project.poNumber || '-' }}</td>
           <td>{{ project.bolNumber || '-' }}</td>
@@ -96,3 +105,39 @@
   </div>
 </div>
 
+<div class="pagination-container" *ngIf="totalItems > 0">
+
+  <!-- LEFT -->
+  <div class="pagination-left">
+    <span>Items per page:</span>
+
+    <select [(ngModel)]="itemsPerPage"
+            (change)="onItemsPerPageChange()">
+      <option *ngFor="let size of pageSizeOptions"
+              [value]="size">
+        {{ size }}
+      </option>
+    </select>
+  </div>
+
+  <!-- CENTER -->
+  <div class="pagination-center">
+    {{ (currentPage - 1) * itemsPerPage + 1 }}
+    -
+    {{
+      currentPage * itemsPerPage > totalItems
+        ? totalItems
+        : currentPage * itemsPerPage
+    }}
+    of {{ totalItems }}
+  </div>
+
+  <!-- RIGHT -->
+  <div class="pagination-right">
+    <button (click)="goToFirst()" [disabled]="currentPage === 1">⏮</button>
+    <button (click)="prevPage()" [disabled]="currentPage === 1">◀</button>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">▶</button>
+    <button (click)="goToLast()" [disabled]="currentPage === totalPages">⏭</button>
+  </div>
+
+</div>

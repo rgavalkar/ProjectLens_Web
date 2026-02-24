@@ -1,7 +1,17 @@
+<!-- ================= SEARCH BAR ================= -->
+
+<div class="search-container-right">
+  <div class="search-box">
+    <input type="text" placeholder="Search" [(ngModel)]="searchText" />
+    <!-- <span class="search-icon">🔍</span> -->
+  </div>
+</div>
+
 <div class="users-header">
-  <h2>Users</h2>
+  <h2></h2>
   <button class="new-user-btn" (click)="openModal()">+ New User</button>
 </div>
+
 
 <div class="table-container">
   <table>
@@ -16,8 +26,8 @@
     </thead>
 
     <tbody>
-      <tr *ngFor="let user of filteredUsers; let i = index">
-        <td>{{ i + 1 }}</td>
+      <tr *ngFor="let user of paginatedUsers; let i = index">
+        <td>{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
         <td>{{ user.userName }}</td>
         <td>{{ user.userID }}</td>
         <td>{{ user.userEmail }}</td>
@@ -29,10 +39,45 @@
   </table>
 </div>
 
+<!-- ================= PAGINATION ================= -->
+<div class="pagination-container" *ngIf="totalItems > 0">
+
+  <div class="pagination-left">
+    <span>Items per page:</span>
+
+    <select [(ngModel)]="itemsPerPage" (change)="onItemsPerPageChange()">
+      <option *ngFor="let size of pageSizeOptions" [value]="size">
+        {{ size }}
+      </option>
+    </select>
+  </div>
+
+  <div class="pagination-center">
+    {{ (currentPage - 1) * itemsPerPage + 1 }}
+    -
+    {{
+    currentPage * itemsPerPage > totalItems
+    ? totalItems
+    : currentPage * itemsPerPage
+    }}
+    of {{ totalItems }}
+  </div>
+
+  <div class="pagination-right">
+    <button (click)="goToFirst()" [disabled]="currentPage === 1">⏮</button>
+    <button (click)="prevPage()" [disabled]="currentPage === 1">◀</button>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">▶</button>
+    <button (click)="goToLast()" [disabled]="currentPage === totalPages">⏭</button>
+  </div>
+
+</div>
+
 <!-- ================= CREATE USER MODAL ================= -->
 
 <div class="modal-overlay" *ngIf="showModal">
   <div class="modal">
+    <!-- Close Button -->
+    <span class="close-btn" (click)="closeModal()">✖</span>
 
     <h3>Create User</h3>
 

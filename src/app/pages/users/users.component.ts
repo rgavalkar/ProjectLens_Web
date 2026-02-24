@@ -20,7 +20,20 @@ export class UsersComponent implements OnInit {
   copyEmail: boolean = false;
   showPassword: boolean = false;
 
-  // MUST MATCH API STRUCTURE
+  // ================= PAGINATION =================
+  currentPage: number = 1;
+  itemsPerPage: number = 10;
+  pageSizeOptions: number[] = [10,20, 25, 50,100,200];
+
+  get totalItems(): number {
+    return this.filteredUsers.length;
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.totalItems / this.itemsPerPage);
+  }
+
+
   newUser: any = {
     userID: '',
     userName: '',
@@ -63,6 +76,15 @@ export class UsersComponent implements OnInit {
       user.userEmail?.toLowerCase().includes(search) ||
       user.userID?.toLowerCase().includes(search)
     );
+  }
+
+  // ================= PAGINATED USERS =================
+  get paginatedUsers(): any[] {
+
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+
+    return this.filteredUsers.slice(startIndex, endIndex);
   }
 
   // ================= OPEN MODAL =================
@@ -152,6 +174,32 @@ export class UsersComponent implements OnInit {
         alert('Failed to delete user');
       }
     });
+  }
+
+  // ================= PAGINATION FUNCTIONS =================
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  goToFirst(): void {
+    this.currentPage = 1;
+  }
+
+  goToLast(): void {
+    this.currentPage = this.totalPages;
+  }
+
+  onItemsPerPageChange(): void {
+    this.currentPage = 1;
   }
 
   // ================= RESET FORM =================

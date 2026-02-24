@@ -5,7 +5,6 @@ import { ProjectService } from '../../services/project.service';
 import { Router } from '@angular/router';
 import jsPDF from 'jspdf';
 
-
 @Component({
   selector: 'app-project-list',
   standalone: true,
@@ -19,6 +18,11 @@ export class ProjectListComponent implements OnInit {
   loggedInUsername: string = '';
   searchText: string = '';
   loading: boolean = false;
+
+  // ================= PAGINATION =================
+  currentPage: number = 1;
+  itemsPerPage: number = 5;
+  pageSizeOptions: number[] = [10,20,50,100,200];
 
   // ================= SHARE POPUP =================
   showSharePopup: boolean = false;
@@ -46,6 +50,7 @@ export class ProjectListComponent implements OnInit {
       next: (response: any) => {
         this.projects = response?.data || response || [];
         this.loading = false;
+        this.currentPage = 1; // reset page when data loads
       },
       error: () => {
         this.loading = false;
@@ -53,11 +58,57 @@ export class ProjectListComponent implements OnInit {
     });
   }
 
+  // ================= FILTER (ONLY ONE) =================
   get filteredProjects(): any[] {
-    if (!this.searchText) return this.projects;
+
+    const search = this.searchText?.toLowerCase().trim();
+
+    if (!search) return this.projects;
+
     return this.projects.filter(project =>
-      project.fileName?.toLowerCase().includes(this.searchText.toLowerCase())
+      (project.poNumber || '').toLowerCase().includes(search) ||
+      (project.bolNumber || '').toLowerCase().includes(search) ||
+      (project.fileName || '').toLowerCase().includes(search)
     );
+  }
+
+  // ================= PAGINATION =================
+  get totalItems(): number {
+    return this.filteredProjects.length;
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.totalItems / this.itemsPerPage);
+  }
+
+  get paginatedProjects(): any[] {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    return this.filteredProjects.slice(start, end);
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  prevPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  goToFirst() {
+    this.currentPage = 1;
+  }
+
+  goToLast() {
+    this.currentPage = this.totalPages;
+  }
+
+  onItemsPerPageChange() {
+    this.currentPage = 1;
   }
 
   // ================= VIEW =================
@@ -143,5 +194,4 @@ export class ProjectListComponent implements OnInit {
     sessionStorage.clear();
     this.router.navigateByUrl('/login');
   }
-
 }

@@ -68,53 +68,10 @@
 
   </header>
 
-
-  <!-- ================= SEARCH BAR ================= -->
-
-  <div class="search-container-right">
-    <div class="search-box">
-      <input #searchInput type="text" placeholder="Search..." [(ngModel)]="searchText"
-        (ngModelChange)="onSearchChange()" />
-
-      <span class="search-icon" (click)="focusSearch(searchInput)">
-        🔍
-      </span>
-    </div>
-  </div>
-
-
   <!-- ================= PAGE CONTENT ================= -->
 
   <div class="page-content">
     <router-outlet></router-outlet>
-  </div>
-
-
-  <!-- ================= GLOBAL PAGINATION ================= -->
-
-  <div class="pagination-container" *ngIf="showPagination">
-
-    <div class="pagination-left">
-      <span>Items per page:</span>
-
-      <select [(ngModel)]="itemsPerPage" (change)="onItemsPerPageChange()">
-        <option *ngFor="let size of pageSizeOptions" [value]="size">
-          {{ size }}
-        </option>
-      </select>
-    </div>
-
-    <div class="pagination-center">
-      {{ pageStart + 1 }} - {{ displayEnd }} of {{ totalItems }}
-    </div>
-
-    <div class="pagination-right">
-      <button (click)="goToFirst()" [disabled]="currentPage === 1">⏮</button>
-      <button (click)="prevPage()" [disabled]="currentPage === 1">◀</button>
-      <button (click)="nextPage()" [disabled]="currentPage === totalPages">▶</button>
-      <button (click)="goToLast()" [disabled]="currentPage === totalPages">⏭</button>
-    </div>
-
   </div>
 
 </ng-template>

@@ -550,14 +550,16 @@
 
 .pagination-container {
   display: flex;
-  justify-content: flex-end;
   align-items: center;
-  padding-right: 24px;
-  gap: 20px;
+  justify-content: flex-end;
+  gap: 40px;
+
+  padding: 12px 28px 18px;
+  font-size: 14px;
+  color: #374151;
 }
 
-
-
+/* LEFT SIDE */
 .pagination-left {
   display: flex;
   align-items: center;
@@ -565,23 +567,24 @@
 }
 
 .pagination-left select {
-  padding: 6px 10px;
+  padding: 6px 8px;
   border-radius: 6px;
   border: 1px solid #d1d5db;
-  cursor: pointer;
   background: #ffffff;
+  cursor: pointer;
+  font-size: 14px;
 }
 
-
-
+/* CENTER TEXT */
 .pagination-center {
-  color: #06080a;
-  font-weight: 400;
+  font-weight: 500;
+  color: #111827;
 }
 
+/* RIGHT BUTTONS */
 .pagination-right {
   display: flex;
-  gap: 6px;
+  gap: 8px;
 }
 
 .pagination-right button {
@@ -591,30 +594,17 @@
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
-  transition: 0.2s ease;
+  transition: all 0.2s ease;
 }
 
-
 .pagination-right button:hover:not(:disabled) {
-  background: #10B981;
+  background: #0F172A;
   color: #ffffff;
 }
 
 .pagination-right button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
-}
-
-.header-table,
-.body-table {
-  table-layout: fixed;
-  width: 100%;
-}
-
-/* ensure identical cell sizing */
-.header-table th,
-.body-table td {
-  box-sizing: border-box;
 }
 
 /* ================= MINI SIDEBAR ================= */
