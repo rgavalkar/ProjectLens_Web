@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,20 +10,22 @@ export class ProjectService {
   private apiUrl = '/api/Upload/all';
   private apiurl = '/api/Upload/savemailrequest';
 
-  // private searchSource = new BehaviorSubject<string>('');
-  // search$ = this.searchSource.asObservable();
+  constructor(private http: HttpClient) { }
 
-  constructor(private http: HttpClient) {}
-
+  // Get project list
   getProjects(): Observable<any> {
     return this.http.get(this.apiUrl);
   }
 
+  // Send Email 
   sendEmail(payload: any): Observable<any> {
-    return this.http.post(this.apiurl, payload);
-  }
 
-  // setSearch(value: string) {
-  //   this.searchSource.next(value);
-  // }
+    return this.http.post(
+      this.apiurl,
+      payload,
+      {
+        responseType: 'text'
+      }
+    );
+  }
 }

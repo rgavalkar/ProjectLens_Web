@@ -21,7 +21,7 @@ export class ProjectListComponent implements OnInit {
 
   // ================= PAGINATION =================
   currentPage: number = 1;
-  itemsPerPage: number = 5;
+  itemsPerPage: number = 10;
   pageSizeOptions: number[] = [10,20,50,100,200];
 
   // ================= SHARE POPUP =================

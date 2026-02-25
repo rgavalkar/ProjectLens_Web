@@ -58,7 +58,12 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     this.loadLoggedInUser();
+
+    this.router.events.subscribe(() => {
+      this.loadLoggedInUser();
+    });
 
     if (!this.router.url.includes('login')) {
       this.fetchProjects();
@@ -94,7 +99,7 @@ export class AppComponent implements OnInit {
     input.focus();
   }
 
-   onSearchChange(): void {
+  onSearchChange(): void {
 
     const search = (this.searchText || '').toLowerCase().trim();
 
