@@ -29,8 +29,11 @@
         <td>{{ user.userName }}</td>
         <td>{{ user.userID }}</td>
         <td>{{ user.userEmail }}</td>
-        <td>
+        <!-- <td>
           ✏️ 🗑️
+        </td> -->
+        <td>
+          <span (click)="deleteUser(user)" style="cursor:pointer;">🗑️</span>
         </td>
       </tr>
     </tbody>

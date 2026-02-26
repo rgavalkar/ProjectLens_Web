@@ -162,19 +162,25 @@ export class UsersComponent implements OnInit {
   // ================= DELETE USER =================
   deleteUser(user: any): void {
 
-    if (!confirm(`Delete user ${user.userName}?`)) return;
+  if (!confirm(`Delete user ${user.userName}?`)) return;
 
-    this.userService.deleteUser(user.userID).subscribe({
-      next: () => {
-        alert('User deleted successfully');
-        this.loadUsers();
-      },
-      error: (error) => {
-        console.error('Delete failed:', error);
-        alert('Failed to delete user');
-      }
-    });
-  }
+  this.userService.deleteUser(user.userID).subscribe({
+
+    next: (response: any) => {
+
+      console.log("DELETE RESPONSE:", response);
+
+      alert("User deleted successfully");
+
+      this.loadUsers();   // reload list
+    },
+
+    error: (error) => {
+      console.error("Delete failed:", error);
+      alert("Failed to delete user");
+    }
+  });
+}
 
   // ================= PAGINATION FUNCTIONS =================
 

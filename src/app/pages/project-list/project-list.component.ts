@@ -22,7 +22,7 @@ export class ProjectListComponent implements OnInit {
   // ================= PAGINATION =================
   currentPage: number = 1;
   itemsPerPage: number = 10;
-  pageSizeOptions: number[] = [10,20,50,100,200];
+  pageSizeOptions: number[] = [10, 20, 50, 100, 200];
 
   // ================= SHARE POPUP =================
   showSharePopup: boolean = false;
@@ -120,31 +120,14 @@ export class ProjectListComponent implements OnInit {
     window.open(project.shareLink, '_blank', 'noopener,noreferrer');
   }
 
-  // ================= DOWNLOAD =================
-  downloadPDF(project: any) {
-    const doc = new jsPDF('p', 'mm', 'a4');
-    doc.rect(10, 10, 190, 277);
-    doc.setFontSize(14);
-    doc.setFont('helvetica', 'bold');
+  // ================= download =================
+  downloadProject(project: any) {
 
-    doc.text(`Subject : ${project.subject || project.fileName}`, 20, 30);
-    doc.text(`Date : ${project.createdOn ? new Date(project.createdOn).toLocaleDateString() : ''}`, 20, 45);
-    doc.text(`Facility : ${project.facility || ''}`, 20, 60);
-    doc.text(`Picture Count : ${project.pictureCount || project.images?.length || 1}`, 20, 75);
-    doc.line(10, 90, 200, 90);
-
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.src = project.imageUrl || project.images?.[0];
-
-    img.onload = () => {
-      doc.addImage(img, 'JPEG', 45, 105, 120, 130);
-      doc.save(`${project.fileName}.pdf`);
-    };
-
-    img.onerror = () => {
-      doc.save(`${project.fileName}.pdf`);
-    };
+    if (!project?.blobUrl) {
+      alert('Download link not available from API');
+      return;
+    }
+    window.open(project.blobUrl, '_blank', 'noopener,noreferrer');
   }
 
   // ================= SHARE =================

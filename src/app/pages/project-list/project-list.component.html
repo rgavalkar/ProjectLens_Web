@@ -56,7 +56,7 @@
           </td>
 
           <td>
-            <button class="download-btn" (click)="downloadPDF(project)">
+            <button class= "download-btn "(click)="downloadProject(project)">
               Download
             </button>
           </td>
@@ -111,10 +111,8 @@
   <div class="pagination-left">
     <span>Items per page:</span>
 
-    <select [(ngModel)]="itemsPerPage"
-            (change)="onItemsPerPageChange()">
-      <option *ngFor="let size of pageSizeOptions"
-              [value]="size">
+    <select [(ngModel)]="itemsPerPage" (change)="onItemsPerPageChange()">
+      <option *ngFor="let size of pageSizeOptions" [value]="size">
         {{ size }}
       </option>
     </select>
@@ -125,9 +123,9 @@
     {{ (currentPage - 1) * itemsPerPage + 1 }}
     -
     {{
-      currentPage * itemsPerPage > totalItems
-        ? totalItems
-        : currentPage * itemsPerPage
+    currentPage * itemsPerPage > totalItems
+    ? totalItems
+    : currentPage * itemsPerPage
     }}
     of {{ totalItems }}
   </div>

@@ -27,11 +27,15 @@ export class UserService {
   }
 
   // =============== DELETE USER =================
-  deleteUser(userID: string) {
-    return this.http.delete(
-      `${this.baseUrl}/deleteUser/${userID}`
-    );
-  }
+  // deleteUser(userID: string) {
+  //   return this.http.delete(
+  //     `${this.baseUrl}/deleteUser/${userID}`
+  //   );
+  // }
+ deleteUser(userID: string) {
+  const encodedId = encodeURIComponent(userID);
+  return this.http.delete<any>(`/api/User/DeleteUser/${encodedId}`);
+}
 
   // ================= LOGIN =================
   login(credentials: any) {
