@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class UserService {
 
+  // ✅ USE RELATIVE PATH FOR PROXY
   private baseUrl = '/api/User';
 
   constructor(private http: HttpClient) { }
@@ -21,25 +22,29 @@ export class UserService {
     return this.http.post(`${this.baseUrl}/CreateUser`, user);
   }
 
-  // ✅ GET SINGLE USER (optional for future use)
+  // ✅ GET SINGLE USER
   getUserById(userId: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/GetUser/${userId}`);
+    return this.http.get(`${this.baseUrl}/GetUser/${encodeURIComponent(userId)}`);
   }
 
-  // =============== DELETE USER =================
-  // deleteUser(userID: string) {
-  //   return this.http.delete(
-  //     `${this.baseUrl}/deleteUser/${userID}`
-  //   );
-  // }
- deleteUser(userID: string) {
-  const encodedId = encodeURIComponent(userID);
-  return this.http.delete<any>(`/api/User/DeleteUser/${encodedId}`);
-}
+  // ✅ DELETE USER (FIXED)
+  deleteUser(userID: string) {
+    return this.http.delete(
+      `${this.baseUrl}/DeleteUser/${encodeURIComponent(userID)}`
+    );
+  }
 
-  // ================= LOGIN =================
+  // ✅ UPDATE USER (FIXED)
+  updateUser(userID: string, userData: any) {
+    return this.http.put(
+      `${this.baseUrl}/UpdateUser/${encodeURIComponent(userID)}`,
+      userData
+    );
+  }
+
+  // ✅ LOGIN
   login(credentials: any) {
-    return this.http.post(`${this.baseUrl.replace('/User', '')}/Login`, {
+    return this.http.post(`/api/Login`, {
       userID: credentials.userId,
       password: credentials.password,
       appKey: 'PROJECT_LENS_WEB'

@@ -11,6 +11,8 @@
 </div>
 
 
+<!-- ================= USERS TABLE ================= -->
+
 <div class="table-container">
   <table>
     <thead>
@@ -29,10 +31,9 @@
         <td>{{ user.userName }}</td>
         <td>{{ user.userID }}</td>
         <td>{{ user.userEmail }}</td>
-        <!-- <td>
-          ✏️ 🗑️
-        </td> -->
         <td>
+          <span (click)="editUser(user)" style="cursor:pointer;">✏️</span>
+          &nbsp;&nbsp;
           <span (click)="deleteUser(user)" style="cursor:pointer;">🗑️</span>
         </td>
       </tr>
@@ -40,7 +41,9 @@
   </table>
 </div>
 
+
 <!-- ================= PAGINATION ================= -->
+
 <div class="pagination-container" *ngIf="totalItems > 0">
 
   <div class="pagination-left">
@@ -57,9 +60,9 @@
     {{ (currentPage - 1) * itemsPerPage + 1 }}
     -
     {{
-    currentPage * itemsPerPage > totalItems
-    ? totalItems
-    : currentPage * itemsPerPage
+      currentPage * itemsPerPage > totalItems
+      ? totalItems
+      : currentPage * itemsPerPage
     }}
     of {{ totalItems }}
   </div>
@@ -73,35 +76,50 @@
 
 </div>
 
-<!-- ================= CREATE USER MODAL ================= -->
+
+<!-- ================= CREATE / UPDATE USER MODAL ================= -->
 
 <div class="modal-overlay" *ngIf="showModal">
   <div class="modal">
+
     <!-- Close Button -->
     <span class="close-btn" (click)="closeModal()">✖</span>
 
-    <h3>Create User</h3>
+    <!-- 🔥 Dynamic Title -->
+    <h3>{{ isEditMode ? 'Update User' : 'Create User' }}</h3>
 
     <label>Username</label>
     <input type="text" [(ngModel)]="newUser.userName">
 
     <label>Email</label>
-    <input type="email" [(ngModel)]="newUser.userEmail" (input)="onEmailChange()">
+    <input type="email"
+           [(ngModel)]="newUser.userEmail"
+           (input)="onEmailChange()">
 
-    <div class="checkbox-row">
-      <input type="checkbox" [(ngModel)]="copyEmail" (change)="onCopyEmailChange()">
+    <!-- Hide Copy Email when editing -->
+    <div class="checkbox-row" *ngIf="!isEditMode">
+      <input type="checkbox"
+             [(ngModel)]="copyEmail"
+             (change)="onCopyEmailChange()">
       <span>Copy Email</span>
     </div>
 
     <label>User ID</label>
-    <input type="text" [(ngModel)]="newUser.userID">
+
+    <!-- Disable UserID in edit mode -->
+    <input type="text"
+           [(ngModel)]="newUser.userID"
+           [disabled]="isEditMode">
 
     <label>Password</label>
 
     <div class="password-wrapper">
-      <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="newUser.password" />
+      <input [type]="showPassword ? 'text' : 'password'"
+             [(ngModel)]="newUser.password" />
 
-      <i class="fa" [ngClass]="showPassword ? 'fa-eye' : 'fa-eye-slash'" (click)="togglePassword()">
+      <i class="fa"
+         [ngClass]="showPassword ? 'fa-eye' : 'fa-eye-slash'"
+         (click)="togglePassword()">
       </i>
     </div>
 
@@ -112,7 +130,12 @@
 
     <div class="modal-buttons">
       <button class="cancel-btn" (click)="closeModal()">Cancel</button>
-      <button class="create-btn" (click)="createUser()">Create</button>
+
+      <!-- 🔥 Dynamic Button -->
+      <button class="create-btn"
+              (click)="isEditMode ? updateUser() : createUser()">
+        {{ isEditMode ? 'Update' : 'Create' }}
+      </button>
     </div>
 
   </div>
