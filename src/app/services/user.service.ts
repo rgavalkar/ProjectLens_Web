@@ -50,4 +50,9 @@ export class UserService {
       appKey: 'PROJECT_LENS_WEB'
     });
   }
+  // ✅ LOGIN (Final Correct Version)
+  // login(credentials: any) {
+  //   return this.http.post(`/api/Login`, credentials);
+  // }
+
 }

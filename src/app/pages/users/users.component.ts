@@ -22,6 +22,9 @@ export class UsersComponent implements OnInit {
 
   isEditMode: boolean = false;
   selectedUserID: string = '';
+  currentUser: any = null;
+  isAdminUser: boolean = false;
+  // dataLoaded: boolean = false;
 
   // ================= PAGINATION =================
   currentPage: number = 1;
@@ -47,6 +50,14 @@ export class UsersComponent implements OnInit {
   constructor(private userService: UserService) { }
 
   ngOnInit(): void {
+
+    const storedUser = localStorage.getItem('currentUser');
+
+    if (storedUser) {
+      this.currentUser = JSON.parse(storedUser);
+      this.isAdminUser = this.currentUser?.isAdmin === true;
+    }
+
     this.loadUsers();
   }
 
@@ -177,6 +188,21 @@ export class UsersComponent implements OnInit {
     this.showModal = true;
   }
 
+  // ================= VIEW USER (NON ADMIN) =================
+  viewUser(user: any): void {
+
+    this.isEditMode = true;
+
+    this.newUser = {
+      userID: user.userID,
+      userName: user.userName,
+      userEmail: user.userEmail,
+      password: '',
+      isAdmin: user.isAdmin
+    };
+
+    this.showModal = true;
+  }
   // ================= UPDATE USER =================
   updateUser(): void {
 

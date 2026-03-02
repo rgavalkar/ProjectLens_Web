@@ -43,7 +43,7 @@ export class AppComponent implements OnInit {
   filteredProjects: any[] = [];
   paginatedProjects: any[] = [];
 
-  private apiUrl = 'https://your-api-url.com/api/projects';
+  private apiUrl = '/api/projects';
 
   constructor(
     private router: Router,

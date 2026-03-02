@@ -30,7 +30,8 @@
   <div class="table-scroll-wrapper">
     <table class="project-table body-table">
       <tbody>
-        <!--PAGINATION REMOVED HERE -->
+
+        <!-- PROJECT ROWS -->
         <tr *ngFor="let project of paginatedProjects; let i = index">
           <td>{{ i + 1 }}</td>
           <td>{{ project.poNumber || '-' }}</td>
@@ -56,7 +57,7 @@
           </td>
 
           <td>
-            <button class= "download-btn "(click)="downloadProject(project)">
+            <button class="download-btn" (click)="downloadProject(project)">
               Download
             </button>
           </td>
@@ -65,17 +66,19 @@
             <button class="icon-btn share" (click)="openSharePopup(project)">🔗</button>
           </td>
         </tr>
+
+        <!-- NO PROJECTS ROW -->
+        <tr *ngIf="!loading && filteredProjects.length === 0">
+          <td colspan="9" class="no-data">
+            No projects found
+          </td>
+        </tr>
+
       </tbody>
     </table>
   </div>
 
 </div>
-
-<!-- ================= NO PROJECTS MESSAGE ================= -->
-
-<p *ngIf="!loading && filteredProjects.length === 0" class="no-projects">
-  No projects found
-</p>
 
 <!-- ================= SHARE POPUP ================= -->
 

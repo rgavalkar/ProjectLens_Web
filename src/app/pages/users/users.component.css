@@ -392,3 +392,17 @@ td:nth-child(5) {
 .search-box {
   width: 380px;
 }
+
+.view-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  height: 100%;
+}
+
+.view-icon i {
+  font-size: 16px;
+  color: #2c3e50;
+}
+

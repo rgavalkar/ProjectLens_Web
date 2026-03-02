@@ -6,7 +6,9 @@
     <input type="text" placeholder="Search" [(ngModel)]="searchText" />
   </div>
 
-  <button class="new-user-btn" (click)="openModal()">+ New User</button>
+  <button class="new-user-btn" *ngIf="isAdminUser" (click)="openModal()">
+    + New User
+  </button>
 
 </div>
 
@@ -26,17 +28,43 @@
     </thead>
 
     <tbody>
-      <tr *ngFor="let user of paginatedUsers; let i = index">
-        <td>{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
-        <td>{{ user.userName }}</td>
-        <td>{{ user.userID }}</td>
-        <td>{{ user.userEmail }}</td>
-        <td>
-          <span (click)="editUser(user)" style="cursor:pointer;">✏️</span>
-          &nbsp;&nbsp;
-          <span (click)="deleteUser(user)" style="cursor:pointer;">🗑️</span>
-        </td>
-      </tr>
+
+      <!-- If users found -->
+      <ng-container *ngIf="paginatedUsers.length > 0; else noUsers">
+
+        <tr *ngFor="let user of paginatedUsers; let i = index">
+          <td>{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
+          <td>{{ user.userName }}</td>
+          <td>{{ user.userID }}</td>
+          <td>{{ user.userEmail }}</td>
+          <td>
+
+            <ng-container *ngIf="isAdminUser; else viewOnly">
+              <span (click)="editUser(user)" style="cursor:pointer;">✏️</span>
+              &nbsp;&nbsp;
+              <span (click)="deleteUser(user)" style="cursor:pointer;">🗑️</span>
+            </ng-container>
+
+            <ng-template #viewOnly>
+              <div class="view-icon" (click)="viewUser(user)">
+                <i class="fa fa-eye"></i>
+              </div>
+            </ng-template>
+
+          </td>
+        </tr>
+
+      </ng-container>
+
+      <!-- If no users found -->
+      <ng-template #noUsers>
+        <tr>
+          <td colspan="5" style="text-align:center; padding: 20px; font-weight: 500;">
+            No users found
+          </td>
+        </tr>
+      </ng-template>
+
     </tbody>
   </table>
 </div>
@@ -60,9 +88,9 @@
     {{ (currentPage - 1) * itemsPerPage + 1 }}
     -
     {{
-      currentPage * itemsPerPage > totalItems
-      ? totalItems
-      : currentPage * itemsPerPage
+    currentPage * itemsPerPage > totalItems
+    ? totalItems
+    : currentPage * itemsPerPage
     }}
     of {{ totalItems }}
   </div>
@@ -89,42 +117,46 @@
     <h3>{{ isEditMode ? 'Update User' : 'Create User' }}</h3>
 
     <label>Username</label>
-    <input type="text" [(ngModel)]="newUser.userName">
+    <input type="text" [(ngModel)]="newUser.userName" [disabled]="!isAdminUser">
 
     <label>Email</label>
-    <input type="email"
-           [(ngModel)]="newUser.userEmail"
-           (input)="onEmailChange()">
+    <input type="email" [(ngModel)]="newUser.userEmail" (input)="onEmailChange()" [disabled]="!isAdminUser">
 
     <!-- Hide Copy Email when editing -->
     <div class="checkbox-row" *ngIf="!isEditMode">
-      <input type="checkbox"
-             [(ngModel)]="copyEmail"
-             (change)="onCopyEmailChange()">
+      <input type="checkbox" [(ngModel)]="copyEmail" (change)="onCopyEmailChange()">
       <span>Copy Email</span>
     </div>
 
     <label>User ID</label>
 
     <!-- Disable UserID in edit mode -->
-    <input type="text"
-           [(ngModel)]="newUser.userID"
-           [disabled]="isEditMode">
+    <input type="text" [(ngModel)]="newUser.userID" [disabled]="isEditMode || !isAdminUser">
 
-    <label>Password</label>
+    <!-- <label>Password</label>
 
     <div class="password-wrapper">
-      <input [type]="showPassword ? 'text' : 'password'"
-             [(ngModel)]="newUser.password" />
+      <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="newUser.password" [disabled]="!isAdminUser" />
 
-      <i class="fa"
-         [ngClass]="showPassword ? 'fa-eye' : 'fa-eye-slash'"
-         (click)="togglePassword()">
+      <i class="fa" [ngClass]="showPassword ? 'fa-eye' : 'fa-eye-slash'" (click)="togglePassword()">
       </i>
+    </div> -->
+
+    <div *ngIf="isAdminUser">
+
+      <label>Password</label>
+
+      <div class="password-wrapper">
+        <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="newUser.password" />
+
+        <i class="fa" [ngClass]="showPassword ? 'fa-eye' : 'fa-eye-slash'" (click)="togglePassword()">
+        </i>
+      </div>
+
     </div>
 
     <div class="checkbox-row">
-      <input type="checkbox" [(ngModel)]="newUser.isAdmin">
+      <input type="checkbox" [(ngModel)]="newUser.isAdmin" [disabled]="!isAdminUser">
       <span>Is Admin</span>
     </div>
 
@@ -132,8 +164,7 @@
       <button class="cancel-btn" (click)="closeModal()">Cancel</button>
 
       <!-- 🔥 Dynamic Button -->
-      <button class="create-btn"
-              (click)="isEditMode ? updateUser() : createUser()">
+      <button class="create-btn" *ngIf="isAdminUser" (click)="isEditMode ? updateUser() : createUser()">
         {{ isEditMode ? 'Update' : 'Create' }}
       </button>
     </div>
