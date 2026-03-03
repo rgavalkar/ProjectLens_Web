@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
+import * as CryptoJS from 'crypto-js';
 
 @Component({
   selector: 'app-users',
@@ -152,8 +153,15 @@ export class UsersComponent implements OnInit {
       alert('User already exists');
       return;
     }
+    // 🔐 HASH PASSWORD HERE
+    const hashedPassword = CryptoJS.SHA256(this.newUser.password).toString();
 
-    this.userService.createUser(this.newUser).subscribe({
+    const userPayload = {
+      ...this.newUser,
+      password: hashedPassword
+    };
+
+    this.userService.createUser(userPayload).subscribe({
 
       next: () => {
         alert('User created successfully');
@@ -216,6 +224,8 @@ export class UsersComponent implements OnInit {
       userEmail: this.newUser.userEmail,
       isAdmin: this.newUser.isAdmin,
       password: this.newUser.password
+        ? CryptoJS.SHA256(this.newUser.password).toString()
+        : undefined
     };
 
     this.userService.updateUser(this.selectedUserID, updatePayload)

@@ -406,3 +406,14 @@ td:nth-child(5) {
   color: #2c3e50;
 }
 
+.page-heading {
+  margin: 20px 0 10px 0;
+  padding-left: 10px;
+}
+
+.page-heading h2 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #0f1f3d;   /* dark blue */
+  letter-spacing: 1px;
+}

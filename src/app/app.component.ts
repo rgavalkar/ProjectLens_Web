@@ -131,11 +131,12 @@ export class AppComponent implements OnInit {
 
     const token = localStorage.getItem('token');
 
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
+    // const headers = new HttpHeaders({
+    //   Authorization: `Bearer ${token}`
+    // });
 
-    this.http.get<any[]>(this.apiUrl, { headers })
+    // this.http.get<any[]>(this.apiUrl, { headers })
+    this.http.get<any[]>(this.apiUrl)
       .subscribe({
         next: (response) => {
           this.allProjects = response || [];

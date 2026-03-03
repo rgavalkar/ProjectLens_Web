@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user.service';
 import * as CryptoJS from 'crypto-js';
- 
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -13,92 +13,94 @@ import * as CryptoJS from 'crypto-js';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
- 
+
   showPassword = false;
   errorMessage: string = '';
- 
+
   credentials = {
     userId: '',
     password: ''
   };
- 
+
   constructor(
     private router: Router,
     private userService: UserService
   ) { }
- 
+
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
- 
+
   login() {
- 
+
     this.errorMessage = '';
- 
-    if (!this.credentials.userId && !this.credentials.password) {
+
+    if (!this.credentials.userId || !this.credentials.password) {
       this.errorMessage = 'User ID and Password are required';
       return;
     }
- 
-    if (!this.credentials.userId) {
-      this.errorMessage = 'User ID is required';
-      return;
-    }
- 
-    if (!this.credentials.password) {
-      this.errorMessage = 'Password is required';
-      return;
-    }
- 
-    this.userService.login(this.credentials).subscribe({
+
+    // 🔐 HASH PASSWORD BEFORE LOGIN
+    // const hashedPassword = CryptoJS.SHA256(this.credentials.password).toString();
+
+    // const loginPayload = {
+    //   UserID: this.credentials.userId,   // must match backend exactly
+    //   password: hashedPassword,
+    //   appKey: '47d23b50-b690-4f74-a3fc-d587339f7d60'
+    // };
+    const loginPayload = {
+      userId: this.credentials.userId,
+      password: this.credentials.password
+    };
+    this.userService.login(loginPayload).subscribe({
       next: (res: any) => {
- 
-  console.log('Login Successful:', res);
- 
-  localStorage.setItem('isLoggedIn', 'true');
- 
-  // 🔥 Call GetUsers to fetch role
-  this.userService.getUsers().subscribe({
-    next: (users: any[]) => {
- 
-      const matchedUser = users.find(
-        (u: any) =>
-          u.userID.toLowerCase() === this.credentials.userId.toLowerCase()
-      );
- 
-      if (matchedUser) {
- 
-        // ✅ Store full user object
-        localStorage.setItem(
-          'currentUser',
-          JSON.stringify(matchedUser)
-        );
- 
-        localStorage.setItem(
-          'username',
-          matchedUser.userName
-        );
- 
-      } else {
- 
-        // Fallback safety
-        localStorage.setItem(
-          'currentUser',
-          JSON.stringify({
-            userID: this.credentials.userId,
-            userName: this.credentials.userId,
-            isAdmin: false
-          })
-        );
-      }
- 
-      this.router.navigate(['/dashboard']);
-    },
-    error: () => {
-      this.errorMessage = 'Unable to fetch user details';
-    }
-  });
-},
+
+        console.log('Login Successful:', res);
+
+        localStorage.setItem('isLoggedIn', 'true');
+
+        this.userService.getUsers().subscribe({
+          next: (users: any[]) => {
+
+            const matchedUser = users.find(
+              (u: any) =>
+                u.userID.toLowerCase() === this.credentials.userId.toLowerCase()
+            );
+
+            if (matchedUser) {
+
+              localStorage.setItem(
+                'currentUser',
+                JSON.stringify(matchedUser)
+              );
+
+              localStorage.setItem(
+                'username',
+                matchedUser.userName
+              );
+            }
+
+            this.router.navigate(['/dashboard']);
+          }
+        });
+      },
+
+      // next: (res: any) => {
+
+      //   console.log('Login Successful:', res);
+
+      //   // Store tokens
+      //   localStorage.setItem('token', res.accessToken);
+      //   localStorage.setItem('refreshToken', res.refreshToken);
+
+      //   // Store user details
+      //   localStorage.setItem('userId', this.credentials.userId);
+      //   localStorage.setItem('username', res.userName);
+
+      //   localStorage.setItem('isLoggedIn', 'true');
+
+      //   this.router.navigate(['/dashboard']);
+      // },
       error: () => {
         this.errorMessage = 'Invalid User ID or Password';
       }
