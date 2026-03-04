@@ -44,24 +44,26 @@ export class UserService {
   }
 
   // ✅ LOGIN
-  login(credentials: any) {
-  return this.http.post(`/api/Login`, {
-    userID: credentials.userId,
-    password: credentials.password,
-    appKey: '47d23b50-b690-4f74-a3fc-d587339f7d60'
-  });
-}
+  //   login(credentials: any) {
+  //   return this.http.post(`/api/Login`, {
+  //     userID: credentials.userID,
+  //     password: credentials.password,
+  //     appKey: '47d23b50-b690-4f74-a3fc-d587339f7d60'
+  //   });
+  // }
   // ✅ LOGIN (Final Correct Version)
   // login(credentials: any) {         
   //   return this.http.post(`/api/Login`, credentials);
   // }
-
+  login(payload: any) {
+    return this.http.post(`/api/Login`, payload);
+  }
   refreshToken() {
-  return this.http.post('/api/Login/refresh-token', {
-    userEmail: '', // put value only if backend requires
-    userID: localStorage.getItem('userId'),
-    appKey: '47d23b50-b690-4f74-a3fc-d587339f7d60',
-    refreshToken: localStorage.getItem('refreshToken')
-  });
-}
+    return this.http.post('/api/Login/refresh-token', {
+      userEmail: '',
+      userID: localStorage.getItem('userId'),
+      appKey: '47d23b50-b690-4f74-a3fc-d587339f7d60',
+      refreshToken: localStorage.getItem('refreshToken')
+    });
+  }
 }

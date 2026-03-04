@@ -1,6 +1,7 @@
-<!-- <div class="page-heading">
+<!-- ================= PAGE HEADING ================= -->
+<div class="page-header">
   <h2>USERS</h2>
-</div> -->
+</div>
 
 <!-- ================= SEARCH BAR ================= -->
 
@@ -44,9 +45,13 @@
           <td>
 
             <ng-container *ngIf="isAdminUser; else viewOnly">
-              <span (click)="editUser(user)" style="cursor:pointer;">✏️</span>
-              &nbsp;&nbsp;
-              <span (click)="deleteUser(user)" style="cursor:pointer;">🗑️</span>
+              <span class="action-icon" (click)="editUser(user)">
+                <i class="fa-regular fa-pen-to-square"></i>
+              </span>
+
+              <span class="action-icon" (click)="deleteUser(user)">
+                <i class="fa-regular fa-trash-can"></i>
+              </span>
             </ng-container>
 
             <ng-template #viewOnly>
@@ -117,7 +122,7 @@
     <!-- Close Button -->
     <span class="close-btn" (click)="closeModal()">✖</span>
 
-    <!-- 🔥 Dynamic Title -->
+    <!--Dynamic Title -->
     <h3>{{ isEditMode ? 'Update User' : 'Create User' }}</h3>
 
     <label>Username</label>
@@ -167,7 +172,7 @@
     <div class="modal-buttons">
       <button class="cancel-btn" (click)="closeModal()">Cancel</button>
 
-      <!-- 🔥 Dynamic Button -->
+      <!--  Dynamic Button -->
       <button class="create-btn" *ngIf="isAdminUser" (click)="isEditMode ? updateUser() : createUser()">
         {{ isEditMode ? 'Update' : 'Create' }}
       </button>

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user.service';
-import * as CryptoJS from 'crypto-js';
+// import * as CryptoJS from 'crypto-js';
 
 @Component({
   selector: 'app-login',
@@ -31,7 +31,14 @@ export class LoginComponent {
     this.showPassword = !this.showPassword;
   }
 
-  login() {
+  private async hashPasswordSHA256(password: string): Promise<string> {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password.trim());
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+  async login() {
 
     this.errorMessage = '';
 
@@ -40,70 +47,35 @@ export class LoginComponent {
       return;
     }
 
-    // 🔐 HASH PASSWORD BEFORE LOGIN
-    // const hashedPassword = CryptoJS.SHA256(this.credentials.password).toString();
+    try {
+      // 🔐 Hash using Web Crypto API
+      const hashedPassword = await hashPasswordSHA256(
+        this.credentials.password
+      );
 
-    // const loginPayload = {
-    //   UserID: this.credentials.userId,   // must match backend exactly
-    //   password: hashedPassword,
-    //   appKey: '47d23b50-b690-4f74-a3fc-d587339f7d60'
-    // };
-    const loginPayload = {
-      userId: this.credentials.userId,
-      password: this.credentials.password
-    };
-    this.userService.login(loginPayload).subscribe({
-      next: (res: any) => {
+      const loginPayload = {
+        userID: this.credentials.userId,
+        password: hashedPassword,
+        appKey: '47d23b50-b690-4f74-a3fc-d587339f7d60'
+      };
 
-        console.log('Login Successful:', res);
+      this.userService.login(loginPayload).subscribe({
+        next: (res: any) => {
 
-        localStorage.setItem('isLoggedIn', 'true');
+          console.log('Login Successful:', res);
 
-        this.userService.getUsers().subscribe({
-          next: (users: any[]) => {
+          localStorage.setItem('isLoggedIn', 'true');
 
-            const matchedUser = users.find(
-              (u: any) =>
-                u.userID.toLowerCase() === this.credentials.userId.toLowerCase()
-            );
+          this.router.navigate(['/dashboard']);
+        },
+        error: () => {
+          this.errorMessage = 'Invalid User ID or Password';
+        }
+      });
 
-            if (matchedUser) {
-
-              localStorage.setItem(
-                'currentUser',
-                JSON.stringify(matchedUser)
-              );
-
-              localStorage.setItem(
-                'username',
-                matchedUser.userName
-              );
-            }
-
-            this.router.navigate(['/dashboard']);
-          }
-        });
-      },
-
-      // next: (res: any) => {
-
-      //   console.log('Login Successful:', res);
-
-      //   // Store tokens
-      //   localStorage.setItem('token', res.accessToken);
-      //   localStorage.setItem('refreshToken', res.refreshToken);
-
-      //   // Store user details
-      //   localStorage.setItem('userId', this.credentials.userId);
-      //   localStorage.setItem('username', res.userName);
-
-      //   localStorage.setItem('isLoggedIn', 'true');
-
-      //   this.router.navigate(['/dashboard']);
-      // },
-      error: () => {
-        this.errorMessage = 'Invalid User ID or Password';
-      }
-    });
+    } catch (err) {
+      console.error('Hashing failed:', err);
+      this.errorMessage = 'Something went wrong. Try again.';
+    }
   }
 }
