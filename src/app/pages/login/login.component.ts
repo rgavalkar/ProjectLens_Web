@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user.service';
-// import * as CryptoJS from 'crypto-js';
-
+import * as CryptoJS from 'crypto-js';
+ 
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -13,10 +13,10 @@ import { UserService } from '../../services/user.service';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-
+ 
   showPassword = false;
   errorMessage: string = '';
-
+ 
   credentials = {
     userId: '',
     password: ''
@@ -30,52 +30,61 @@ export class LoginComponent {
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
-
-  private async hashPasswordSHA256(password: string): Promise<string> {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(password.trim());
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-  }
-  async login() {
-
+ 
+  login() {
+ 
     this.errorMessage = '';
-
+ 
     if (!this.credentials.userId || !this.credentials.password) {
       this.errorMessage = 'User ID and Password are required';
       return;
     }
+ 
+    // 🔐 HASH PASSWORD BEFORE LOGIN
+    const hashedPassword = CryptoJS.SHA256(this.credentials.password).toString();
+ 
+    const loginPayload = {
+      userID: this.credentials.userId,   
+      password: hashedPassword,
+      appKey: '47d23b50-b690-4f74-a3fc-d587339f7d60'
+    };
 
-    try {
-      // 🔐 Hash using Web Crypto API
-      const hashedPassword = await hashPasswordSHA256(
-        this.credentials.password
-      );
-
-      const loginPayload = {
-        userID: this.credentials.userId,
-        password: hashedPassword,
-        appKey: '47d23b50-b690-4f74-a3fc-d587339f7d60'
-      };
-
-      this.userService.login(loginPayload).subscribe({
-        next: (res: any) => {
-
-          console.log('Login Successful:', res);
-
-          localStorage.setItem('isLoggedIn', 'true');
-
-          this.router.navigate(['/dashboard']);
-        },
-        error: () => {
-          this.errorMessage = 'Invalid User ID or Password';
-        }
-      });
-
-    } catch (err) {
-      console.error('Hashing failed:', err);
-      this.errorMessage = 'Something went wrong. Try again.';
-    }
+    this.userService.login(loginPayload).subscribe({
+      next: (res: any) => {
+ 
+        console.log('Login Successful:', res);
+ 
+        localStorage.setItem('isLoggedIn', 'true');
+ 
+        this.userService.getUsers().subscribe({
+          next: (users: any[]) => {
+ 
+            const matchedUser = users.find(
+              (u: any) =>
+                u.userID.toLowerCase() === this.credentials.userId.toLowerCase()
+            );
+ 
+            if (matchedUser) {
+ 
+              localStorage.setItem(
+                'currentUser',
+                JSON.stringify(matchedUser)
+              );
+ 
+              localStorage.setItem(
+                'username',
+                matchedUser.userName
+              );
+            }
+ 
+            this.router.navigate(['/dashboard']);
+          }
+        });
+      },
+ 
+      error: () => {
+        this.errorMessage = 'Invalid User ID or Password';
+      }
+    });
   }
 }

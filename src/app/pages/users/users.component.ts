@@ -25,7 +25,8 @@ export class UsersComponent implements OnInit {
   selectedUserID: string = '';
   currentUser: any = null;
   isAdminUser: boolean = false;
-  // dataLoaded: boolean = false;
+  toastMessage: string = '';
+  showToast: boolean = false;
 
   // ================= PAGINATION =================
   currentPage: number = 1;
@@ -250,7 +251,7 @@ export class UsersComponent implements OnInit {
         },
 
         error: () => {
-          alert('Failed to update user');
+          this.showToastMessage('Failed to update user');
         }
       });
   }
@@ -258,33 +259,33 @@ export class UsersComponent implements OnInit {
   // ================= DELETE USER =================
   deleteUser(user: any): void {
 
-    if (!confirm(`Delete user ${user.userName}?`)) return;
+  if (!confirm(`Delete user ${user.userName}?`)) return;
 
-    this.userService.deleteUser(user.userID).subscribe({
+  this.userService.deleteUser(user.userID).subscribe({
 
-      next: (response: any) => {
+    next: (response: any) => {
 
-        const result = response?.data ? response.data : response;
+      const result = response?.data ? response.data : response;
 
-        if (result?.isSuccess === true ||
-          result?.extError === "UserID Already deleted") {
+      if (result?.isSuccess === true ||
+        result?.extError === "UserID Already deleted") {
 
-          alert("User deleted successfully");
+        this.showToastMessage("User deleted successfully");
 
-          this.users = this.users.filter(
-            u => u.userID !== user.userID
-          );
-        }
-        else {
-          alert(result?.extError || "Delete failed");
-        }
-      },
-
-      error: () => {
-        alert("Failed to delete user");
+        this.users = this.users.filter(
+          u => u.userID !== user.userID
+        );
       }
-    });
-  }
+      else {
+        this.showToastMessage(result?.extError || "Delete failed");
+      }
+    },
+
+    error: () => {
+      this.showToastMessage("Failed to delete user");
+    }
+  });
+}
 
   // ================= PAGINATION =================
   nextPage(): void {
@@ -323,4 +324,13 @@ export class UsersComponent implements OnInit {
 
     this.copyEmail = false;
   }
+
+  showToastMessage(message: string) {
+  this.toastMessage = message;
+  this.showToast = true;
+
+  setTimeout(() => {
+    this.showToast = false;
+  }, 3000); 
+}
 }
