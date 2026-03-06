@@ -2,31 +2,55 @@
 
   <img src="assets/icons/project-lens.png.jpg" alt="" class="login-logo" />
   <h1 class="project-title">PROJECT LENS</h1>
+
   <h2 class="login-heading">Login</h2>
   <p class="login-subtext">Enter your User ID and Password</p>
 
+  <!-- LOGIN FORM -->
   <form class="login-form" (ngSubmit)="login()">
 
-    <input type="text" placeholder="User ID" class="login-input" [(ngModel)]="credentials.userId" name="userId" />
+    <!-- USER ID -->
+    <input
+      type="text"
+      placeholder="User ID"
+      class="login-input"
+      [(ngModel)]="credentials.userId"
+      name="userId"
+    />
 
-
-    <!-- Password -->
+    <!-- PASSWORD -->
     <div class="password-wrapper">
-      <input [type]="showPassword ? 'text' : 'password'" placeholder="Password" class="login-input"
-        [(ngModel)]="credentials.password" name="password" />
 
-      <span class="eye-icon" [class.slash]="!showPassword" (click)="togglePassword()">
-        👁
-      </span>
+      <input
+        [type]="showPassword ? 'text' : 'password'"
+        placeholder="Password"
+        class="login-input"
+        [(ngModel)]="credentials.password"
+        name="password"
+      />
+
+      <i
+        class="fa"
+        [ngClass]="showPassword ? 'fa-eye' : 'fa-eye-slash'"
+        (click)="togglePassword()"
+      ></i>
+
     </div>
 
+    <!-- ERROR MESSAGE -->
     <div *ngIf="errorMessage" class="error-message">
       {{ errorMessage }}
     </div>
 
-    <!-- Login Button -->
+    <!-- FORGOT PASSWORD -->
+    <div class="forgot-password">
+      <a (click)="goToForgotPassword()">Forgot Password?</a>
+    </div>
+
+    <!-- LOGIN BUTTON -->
     <button type="submit" class="login-btn">
       Login
     </button>
+
   </form>
 </div>

@@ -27,6 +27,7 @@ export class UsersComponent implements OnInit {
   isAdminUser: boolean = false;
   toastMessage: string = '';
   showToast: boolean = false;
+  isLoading: boolean = true;
 
   // ================= PAGINATION =================
   currentPage: number = 1;
@@ -234,7 +235,7 @@ export class UsersComponent implements OnInit {
 
         next: () => {
 
-          alert('User updated successfully');
+          this.showToastMessage('User updated successfully');
 
           const index = this.users.findIndex(
             u => u.userID === this.selectedUserID
@@ -259,33 +260,33 @@ export class UsersComponent implements OnInit {
   // ================= DELETE USER =================
   deleteUser(user: any): void {
 
-  if (!confirm(`Delete user ${user.userName}?`)) return;
+    if (!confirm(`Delete user ${user.userName}?`)) return;
 
-  this.userService.deleteUser(user.userID).subscribe({
+    this.userService.deleteUser(user.userID).subscribe({
 
-    next: (response: any) => {
+      next: (response: any) => {
 
-      const result = response?.data ? response.data : response;
+        const result = response?.data ? response.data : response;
 
-      if (result?.isSuccess === true ||
-        result?.extError === "UserID Already deleted") {
+        if (result?.isSuccess === true ||
+          result?.extError === "UserID Already deleted") {
 
-        this.showToastMessage("User deleted successfully");
+          this.showToastMessage("User deleted successfully");
 
-        this.users = this.users.filter(
-          u => u.userID !== user.userID
-        );
+          this.users = this.users.filter(
+            u => u.userID !== user.userID
+          );
+        }
+        else {
+          this.showToastMessage(result?.extError || "Delete failed");
+        }
+      },
+
+      error: () => {
+        this.showToastMessage("Failed to delete user");
       }
-      else {
-        this.showToastMessage(result?.extError || "Delete failed");
-      }
-    },
-
-    error: () => {
-      this.showToastMessage("Failed to delete user");
-    }
-  });
-}
+    });
+  }
 
   // ================= PAGINATION =================
   nextPage(): void {
@@ -326,11 +327,11 @@ export class UsersComponent implements OnInit {
   }
 
   showToastMessage(message: string) {
-  this.toastMessage = message;
-  this.showToast = true;
+    this.toastMessage = message;
+    this.showToast = true;
 
-  setTimeout(() => {
-    this.showToast = false;
-  }, 3000); 
-}
+    setTimeout(() => {
+      this.showToast = false;
+    }, 3000);
+  }
 }

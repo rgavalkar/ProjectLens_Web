@@ -19,6 +19,9 @@ export class ProjectListComponent implements OnInit {
   searchText: string = '';
   loading: boolean = false;
 
+  toastMessage: string = '';
+  showToast: boolean = false;
+
   // ================= PAGINATION =================
   currentPage: number = 1;
   itemsPerPage: number = 10;
@@ -163,11 +166,11 @@ export class ProjectListComponent implements OnInit {
 
     this.projectService.sendEmail(payload).subscribe({
       next: () => {
-        alert('Email sent successfully');
         this.closeSharePopup();
+        this.showToastMessage('Email sent successfully');
       },
       error: () => {
-        alert('Failed to send email');
+        this.showToastMessage('Failed to send email');
       }
     });
   }
@@ -176,5 +179,14 @@ export class ProjectListComponent implements OnInit {
     localStorage.clear();
     sessionStorage.clear();
     this.router.navigateByUrl('/login');
+  }
+
+  showToastMessage(message: string) {
+    this.toastMessage = message;
+    this.showToast = true;
+
+    setTimeout(() => {
+      this.showToast = false;
+    }, 3000);
   }
 }

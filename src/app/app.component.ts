@@ -53,7 +53,13 @@ export class AppComponent implements OnInit {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: any) => {
-        this.isLoginPage = event.urlAfterRedirects.includes('login');
+
+        const url = event.urlAfterRedirects;
+
+        this.isLoginPage =
+          url.includes('login') ||
+          url.includes('forgot-password');
+
       });
   }
 
@@ -65,7 +71,10 @@ export class AppComponent implements OnInit {
       this.loadLoggedInUser();
     });
 
-    if (!this.router.url.includes('login')) {
+    if (
+      !this.router.url.includes('login') &&
+      !this.router.url.includes('forgot-password')
+    ) {
       this.fetchProjects();
     }
   }

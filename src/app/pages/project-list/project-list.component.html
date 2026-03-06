@@ -2,6 +2,11 @@
   <h2>PROJECT LIST</h2>
 </div>
 
+<!-- ===== TOAST MESSAGE ===== -->
+<div class="toast-message" *ngIf="showToast">
+  {{ toastMessage }}
+</div>
+
 <!-- ================= SEARCH BAR ================= -->
 <div class="search-container-right">
   <div class="search-box">

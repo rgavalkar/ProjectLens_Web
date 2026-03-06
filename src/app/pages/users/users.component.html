@@ -22,7 +22,6 @@
 
 </div>
 
-
 <!-- ================= USERS TABLE ================= -->
 
 <div class="table-container">
@@ -40,7 +39,7 @@
     <tbody>
 
       <!-- If users found -->
-      <ng-container *ngIf="paginatedUsers.length > 0; else noUsers">
+      <ng-container *ngIf="!loading && paginatedUsers.length > 0; else noUsers">
 
         <tr *ngFor="let user of paginatedUsers; let i = index">
           <td>{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td>
@@ -72,7 +71,7 @@
 
       <!-- If no users found -->
       <ng-template #noUsers>
-        <tr>
+        <tr *ngIf="!loading">
           <td colspan="5" style="text-align:center; padding: 20px; font-weight: 500;">
             No users found
           </td>
