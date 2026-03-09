@@ -10,30 +10,15 @@
   <form class="login-form" (ngSubmit)="login()">
 
     <!-- USER ID -->
-    <input
-      type="text"
-      placeholder="User ID"
-      class="login-input"
-      [(ngModel)]="credentials.userId"
-      name="userId"
-    />
+    <input type="text" placeholder="User ID" class="login-input" [(ngModel)]="credentials.userId" name="userId" />
 
     <!-- PASSWORD -->
     <div class="password-wrapper">
 
-      <input
-        [type]="showPassword ? 'text' : 'password'"
-        placeholder="Password"
-        class="login-input"
-        [(ngModel)]="credentials.password"
-        name="password"
-      />
+      <input [type]="showPassword ? 'text' : 'password'" placeholder="Password" class="login-input"
+        [(ngModel)]="credentials.password" name="password" />
 
-      <i
-        class="fa"
-        [ngClass]="showPassword ? 'fa-eye' : 'fa-eye-slash'"
-        (click)="togglePassword()"
-      ></i>
+      <i class="fa" [ngClass]="showPassword ? 'fa-eye' : 'fa-eye-slash'" (click)="togglePassword()"></i>
 
     </div>
 
@@ -48,8 +33,8 @@
     </div>
 
     <!-- LOGIN BUTTON -->
-    <button type="submit" class="login-btn">
-      Login
+    <button type="submit" class="login-btn" [disabled]="isLoading">
+      {{ isLoading ? 'Logging in...' : 'Login' }}
     </button>
 
   </form>

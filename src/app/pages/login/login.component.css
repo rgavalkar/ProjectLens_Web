@@ -149,7 +149,7 @@
   width:100%;
   padding:10px;
   border-radius:6px;
-  border:1px solid #ccc;
+ border:2px solid #070606;
 }
 
 .password-wrapper{
@@ -190,4 +190,33 @@
 .forgot-password a{
   cursor:pointer;
   color:#2563eb;
+}
+
+.login-btn {
+  margin-top: 10px;
+  padding: 8px 18px; 
+  width: 140px;       
+  align-self: center;  
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #0c0c0c;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.login-btn:hover {
+  background: #1d4ed8;
+}
+
+.login-input:focus{
+  border:2px solid #2563eb;
+  background:#ffffff;
+}
+
+.login-btn:hover{
+  background:#1d4ed8;
+  box-shadow:0 2px 6px rgba(0,0,0,0.2);
 }

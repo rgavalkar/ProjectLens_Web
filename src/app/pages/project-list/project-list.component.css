@@ -239,12 +239,12 @@
 }
 
 /* ================= ICON BUTTONS ================= */
-
 .icon-btn {
   border: none;
   background: none;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 24px;   
+  padding: 4px;      
   transition: transform 0.2s ease;
 }
 

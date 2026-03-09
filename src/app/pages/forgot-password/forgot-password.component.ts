@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-forgot-password',
@@ -11,23 +12,49 @@ import { CommonModule } from '@angular/common';
 })
 export class ForgotPasswordComponent {
 
-  userId = '';
+  userId = ''; 
   newPassword = '';
+  confirmPassword = '';
 
   errorMessage = '';
   successMessage = '';
+
+
+  showNewPassword = false;
+  showConfirmPassword = false;
+
+  constructor(private router: Router) { }
+
+ 
+  toggleNewPassword() {
+    this.showNewPassword = !this.showNewPassword;
+  }
+
+ 
+  toggleConfirmPassword() {
+    this.showConfirmPassword = !this.showConfirmPassword;
+  }
 
   resetPassword() {
 
     this.errorMessage = '';
     this.successMessage = '';
 
-    if (!this.userId || !this.newPassword) {
-      this.errorMessage = 'User ID and New Password are required';
+    if (!this.userId || !this.newPassword || !this.confirmPassword) {
+      this.errorMessage = 'All fields are required';
       return;
     }
 
-    // UI success only (no API yet)
+    if (this.newPassword !== this.confirmPassword) {
+      this.errorMessage = 'Passwords do not match';
+      return;
+    }
+
     this.successMessage = 'Password reset successful';
   }
+
+  goToLogin() {
+    this.router.navigate(['/login']);
+  }
+
 }

@@ -16,6 +16,7 @@ export class LoginComponent {
 
   showPassword = false;
   errorMessage: string = '';
+  isLoading = false;
 
   credentials = {
     userId: '',
@@ -31,11 +32,23 @@ export class LoginComponent {
     this.showPassword = !this.showPassword;
   }
 
-  goToForgotPassword() {
-    this.router.navigate(['/forgot-password']);
+goToForgotPassword() {
+
+  this.errorMessage = '';
+
+  if (!this.credentials.userId) {
+    this.errorMessage = 'Please enter User ID';
+    return;
   }
 
+  this.router.navigate(['/forgot-password'], {
+    queryParams: { userId: this.credentials.userId }
+  });
+
+}
+
   login() {
+    this.isLoading = true;
 
     this.errorMessage = '';
 

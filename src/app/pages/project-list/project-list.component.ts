@@ -53,7 +53,7 @@ export class ProjectListComponent implements OnInit {
       next: (response: any) => {
         this.projects = response?.data || response || [];
         this.loading = false;
-        this.currentPage = 1; // reset page when data loads
+        this.currentPage = 1; 
       },
       error: () => {
         this.loading = false;
@@ -61,7 +61,7 @@ export class ProjectListComponent implements OnInit {
     });
   }
 
-  // ================= FILTER (ONLY ONE) =================
+  // ================= FILTER =================
   get filteredProjects(): any[] {
 
     const search = this.searchText?.toLowerCase().trim();
