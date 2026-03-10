@@ -25,9 +25,15 @@ export class UsersComponent implements OnInit {
   selectedUserID: string = '';
   currentUser: any = null;
   isAdminUser: boolean = false;
+
   toastMessage: string = '';
   showToast: boolean = false;
+
   isLoading: boolean = true;
+
+  // ✅ DELETE MODAL VARIABLES
+  showDeleteModal: boolean = false;
+  userToDelete: any = null;
 
   // ================= PAGINATION =================
   currentPage: number = 1;
@@ -50,7 +56,7 @@ export class UsersComponent implements OnInit {
     isAdmin: false
   };
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService) {}
 
   ngOnInit(): void {
 
@@ -155,7 +161,7 @@ export class UsersComponent implements OnInit {
       alert('User already exists');
       return;
     }
-    // 🔐 HASH PASSWORD HERE
+
     const hashedPassword = CryptoJS.SHA256(this.newUser.password).toString();
 
     const userPayload = {
@@ -166,7 +172,7 @@ export class UsersComponent implements OnInit {
     this.userService.createUser(userPayload).subscribe({
 
       next: () => {
-        alert('User created successfully');
+        this.showToastMessage('User created successfully');
         this.closeModal();
         this.loadUsers();
       },
@@ -198,7 +204,7 @@ export class UsersComponent implements OnInit {
     this.showModal = true;
   }
 
-  // ================= VIEW USER (NON ADMIN) =================
+  // ================= VIEW USER =================
   viewUser(user: any): void {
 
     this.isEditMode = true;
@@ -213,6 +219,7 @@ export class UsersComponent implements OnInit {
 
     this.showModal = true;
   }
+
   // ================= UPDATE USER =================
   updateUser(): void {
 
@@ -259,10 +266,16 @@ export class UsersComponent implements OnInit {
 
   // ================= DELETE USER =================
   deleteUser(user: any): void {
+    this.userToDelete = user;
+    this.showDeleteModal = true;
+  }
 
-    if (!confirm(`Delete user ${user.userName}?`)) return;
+  // ================= CONFIRM DELETE =================
+  confirmDelete(): void {
 
-    this.userService.deleteUser(user.userID).subscribe({
+    if (!this.userToDelete) return;
+
+    this.userService.deleteUser(this.userToDelete.userID).subscribe({
 
       next: (response: any) => {
 
@@ -274,18 +287,28 @@ export class UsersComponent implements OnInit {
           this.showToastMessage("User deleted successfully");
 
           this.users = this.users.filter(
-            u => u.userID !== user.userID
+            u => u.userID !== this.userToDelete.userID
           );
         }
         else {
           this.showToastMessage(result?.extError || "Delete failed");
         }
+
+        this.showDeleteModal = false;
+        this.userToDelete = null;
       },
 
       error: () => {
         this.showToastMessage("Failed to delete user");
+        this.showDeleteModal = false;
       }
     });
+  }
+
+  // ================= CANCEL DELETE =================
+  cancelDelete(): void {
+    this.showDeleteModal = false;
+    this.userToDelete = null;
   }
 
   // ================= PAGINATION =================

@@ -14,6 +14,7 @@
 
   <div class="search-box">
     <input type="text" placeholder="Search" [(ngModel)]="searchText" />
+    <span class="search-icon">🔍</span>
   </div>
 
   <button class="new-user-btn" *ngIf="isAdminUser" (click)="openModal()">
@@ -129,10 +130,10 @@
     <!--Dynamic Title -->
     <h3>{{ isEditMode ? 'Update User' : 'Create User' }}</h3>
 
-    <label>Username</label>
+    <label>Username <span class="required">*</span></label>
     <input type="text" [(ngModel)]="newUser.userName" [disabled]="!isAdminUser">
 
-    <label>Email</label>
+    <label>Email <span class="required">*</span></label>
     <input type="email" [(ngModel)]="newUser.userEmail" (input)="onEmailChange()" [disabled]="!isAdminUser">
 
     <!-- Hide Copy Email when editing -->
@@ -141,23 +142,14 @@
       <span>Copy Email</span>
     </div>
 
-    <label>User ID</label>
+    <label>User ID <span class="required">*</span></label>
 
     <!-- Disable UserID in edit mode -->
     <input type="text" [(ngModel)]="newUser.userID" [disabled]="isEditMode || !isAdminUser">
 
-    <!-- <label>Password</label>
-
-    <div class="password-wrapper">
-      <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="newUser.password" [disabled]="!isAdminUser" />
-
-      <i class="fa" [ngClass]="showPassword ? 'fa-eye' : 'fa-eye-slash'" (click)="togglePassword()">
-      </i>
-    </div> -->
-
     <div *ngIf="isAdminUser">
 
-      <label>Password</label>
+      <label>Password <span class="required">*</span></label>
 
       <div class="password-wrapper">
         <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="newUser.password" />
@@ -176,10 +168,30 @@
     <div class="modal-buttons">
       <button class="cancel-btn" (click)="closeModal()">Cancel</button>
 
-      <!--  Dynamic Button -->
       <button class="create-btn" *ngIf="isAdminUser" (click)="isEditMode ? updateUser() : createUser()">
         {{ isEditMode ? 'Update' : 'Create' }}
       </button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ================= DELETE CONFIRM MODAL ================= -->
+
+<div class="modal-overlay" *ngIf="showDeleteModal">
+  <div class="modal">
+
+    <h3>Delete User</h3>
+
+    <p>
+      Are you sure you want to delete
+      <b>{{ userToDelete?.userName }}</b> ?
+    </p>
+
+    <div class="modal-buttons">
+      <button class="cancel-btn" (click)="cancelDelete()">Cancel</button>
+      <button class="create-btn" (click)="confirmDelete()">Delete</button>
     </div>
 
   </div>
