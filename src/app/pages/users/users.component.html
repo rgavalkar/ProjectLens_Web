@@ -14,7 +14,7 @@
 
   <div class="search-box">
     <input type="text" placeholder="Search" [(ngModel)]="searchText" />
-    <span class="search-icon">🔍</span>
+    <!-- <span class="search-icon">🔍</span> -->
   </div>
 
   <button class="new-user-btn" *ngIf="isAdminUser" (click)="openModal()">
@@ -165,6 +165,7 @@
       <span>Is Admin</span>
     </div>
 
+    
     <div class="modal-buttons">
       <button class="cancel-btn" (click)="closeModal()">Cancel</button>
 

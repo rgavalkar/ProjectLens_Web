@@ -14,6 +14,7 @@ import * as CryptoJS from 'crypto-js';
 export class UsersComponent implements OnInit {
 
   users: any[] = [];
+  allUserIDs: string[] = []; 
   searchText: string = '';
   loading: boolean = false;
 
@@ -28,14 +29,13 @@ export class UsersComponent implements OnInit {
 
   toastMessage: string = '';
   showToast: boolean = false;
+  
 
   isLoading: boolean = true;
 
-  // ✅ DELETE MODAL VARIABLES
   showDeleteModal: boolean = false;
   userToDelete: any = null;
 
-  // ================= PAGINATION =================
   currentPage: number = 1;
   itemsPerPage: number = 10;
   pageSizeOptions: number[] = [10, 20, 25, 50, 100, 200];
@@ -72,13 +72,21 @@ export class UsersComponent implements OnInit {
 
   // ================= LOAD USERS =================
   loadUsers(): void {
+
     this.loading = true;
 
     this.userService.getUsers().subscribe({
+
       next: (response: any) => {
 
         const usersList = response?.data ? response.data : response;
 
+        // NEW → store ALL userIDs (even deleted)
+        this.allUserIDs = (usersList || []).map((user: any) =>
+          user.userID?.toLowerCase()
+        );
+
+        
         this.users = (usersList || []).filter((user: any) =>
           user.isDeleted !== true &&
           user.IsDeleted !== true &&
@@ -87,6 +95,7 @@ export class UsersComponent implements OnInit {
 
         this.loading = false;
       },
+
       error: (error) => {
         console.error('Error loading users:', error);
         this.loading = false;
@@ -110,8 +119,10 @@ export class UsersComponent implements OnInit {
 
   // ================= PAGINATED USERS =================
   get paginatedUsers(): any[] {
+
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
+
     return this.filteredUsers.slice(startIndex, endIndex);
   }
 
@@ -123,20 +134,24 @@ export class UsersComponent implements OnInit {
 
   // ================= CLOSE MODAL =================
   closeModal(): void {
+
     this.showModal = false;
     this.isEditMode = false;
     this.selectedUserID = '';
+
     this.resetForm();
   }
 
   // ================= COPY EMAIL =================
   onCopyEmailChange(): void {
+
     if (this.copyEmail) {
       this.newUser.userID = this.newUser.userEmail;
     }
   }
 
   onEmailChange(): void {
+
     if (this.copyEmail) {
       this.newUser.userID = this.newUser.userEmail;
     }
@@ -146,23 +161,30 @@ export class UsersComponent implements OnInit {
   createUser(): void {
 
     if (!this.newUser.userName ||
-      !this.newUser.userEmail ||
-      !this.newUser.userID ||
-      !this.newUser.password) {
+        !this.newUser.userEmail ||
+        !this.newUser.userID ||
+        !this.newUser.password) {
+
       alert('Please fill all required fields');
       return;
     }
 
-    const userExists = this.users.some(
-      user => user.userID.toLowerCase() === this.newUser.userID.toLowerCase()
+    // NEW → check against ALL userIDs (including deleted)
+    const userExists = this.allUserIDs.includes(
+      this.newUser.userID.toLowerCase()
     );
 
     if (userExists) {
-      alert('User already exists');
+
+      this.showToastMessage(
+        'User ID already exists. Please enter a different User ID'
+      );
+
       return;
     }
 
-    const hashedPassword = CryptoJS.SHA256(this.newUser.password).toString();
+    const hashedPassword =
+      CryptoJS.SHA256(this.newUser.password).toString();
 
     const userPayload = {
       ...this.newUser,
@@ -172,13 +194,15 @@ export class UsersComponent implements OnInit {
     this.userService.createUser(userPayload).subscribe({
 
       next: () => {
+
         this.showToastMessage('User created successfully');
+
         this.closeModal();
         this.loadUsers();
       },
 
       error: () => {
-        alert('Failed to create user');
+        this.showToastMessage('Failed to create user');
       }
     });
   }
@@ -229,43 +253,49 @@ export class UsersComponent implements OnInit {
     }
 
     const updatePayload = {
+
       userName: this.newUser.userName,
       userEmail: this.newUser.userEmail,
       isAdmin: this.newUser.isAdmin,
+
       password: this.newUser.password
         ? CryptoJS.SHA256(this.newUser.password).toString()
         : undefined
     };
 
-    this.userService.updateUser(this.selectedUserID, updatePayload)
-      .subscribe({
+    this.userService.updateUser(
+      this.selectedUserID,
+      updatePayload
+    ).subscribe({
 
-        next: () => {
+      next: () => {
 
-          this.showToastMessage('User updated successfully');
+        this.showToastMessage('User updated successfully');
 
-          const index = this.users.findIndex(
-            u => u.userID === this.selectedUserID
-          );
+        const index = this.users.findIndex(
+          u => u.userID === this.selectedUserID
+        );
 
-          if (index !== -1) {
-            this.users[index] = {
-              ...this.users[index],
-              ...updatePayload
-            };
-          }
+        if (index !== -1) {
 
-          this.closeModal();
-        },
-
-        error: () => {
-          this.showToastMessage('Failed to update user');
+          this.users[index] = {
+            ...this.users[index],
+            ...updatePayload
+          };
         }
-      });
+
+        this.closeModal();
+      },
+
+      error: () => {
+        this.showToastMessage('Failed to update user');
+      }
+    });
   }
 
   // ================= DELETE USER =================
   deleteUser(user: any): void {
+
     this.userToDelete = user;
     this.showDeleteModal = true;
   }
@@ -275,14 +305,18 @@ export class UsersComponent implements OnInit {
 
     if (!this.userToDelete) return;
 
-    this.userService.deleteUser(this.userToDelete.userID).subscribe({
+    this.userService.deleteUser(
+      this.userToDelete.userID
+    ).subscribe({
 
       next: (response: any) => {
 
-        const result = response?.data ? response.data : response;
+        const result = response?.data
+          ? response.data
+          : response;
 
         if (result?.isSuccess === true ||
-          result?.extError === "UserID Already deleted") {
+            result?.extError === "UserID Already deleted") {
 
           this.showToastMessage("User deleted successfully");
 
@@ -291,7 +325,10 @@ export class UsersComponent implements OnInit {
           );
         }
         else {
-          this.showToastMessage(result?.extError || "Delete failed");
+
+          this.showToastMessage(
+            result?.extError || "Delete failed"
+          );
         }
 
         this.showDeleteModal = false;
@@ -299,26 +336,29 @@ export class UsersComponent implements OnInit {
       },
 
       error: () => {
+
         this.showToastMessage("Failed to delete user");
         this.showDeleteModal = false;
       }
     });
   }
 
-  // ================= CANCEL DELETE =================
   cancelDelete(): void {
+
     this.showDeleteModal = false;
     this.userToDelete = null;
   }
 
   // ================= PAGINATION =================
   nextPage(): void {
+
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
     }
   }
 
   prevPage(): void {
+
     if (this.currentPage > 1) {
       this.currentPage--;
     }
@@ -338,6 +378,7 @@ export class UsersComponent implements OnInit {
 
   // ================= RESET FORM =================
   resetForm(): void {
+
     this.newUser = {
       userID: '',
       userName: '',
@@ -350,6 +391,7 @@ export class UsersComponent implements OnInit {
   }
 
   showToastMessage(message: string) {
+
     this.toastMessage = message;
     this.showToast = true;
 

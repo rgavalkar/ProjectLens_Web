@@ -17,19 +17,22 @@
 
     <div class="side-under-logo" [class.expanded]="isExpanded">
 
-      <div class="side-item" title="Project Details" (click)="goToDashboard()">
+      <div class="side-item tooltip-item" (click)="goToDashboard()">
         <span class="side-icon">📋</span>
         <span class="side-text">Project Details</span>
+        <span class="tooltip">Project Details</span>
       </div>
 
-      <div class="side-item" title="Users" (click)="openUsersSection()">
+      <div class="side-item tooltip-item" (click)="openUsersSection()">
         <span class="side-icon">👥</span>
         <span class="side-text">Users</span>
+        <span class="tooltip">Users</span>
       </div>
 
-      <div class="side-item" title="Logout" (click)="logout()">
+      <div class="side-item tooltip-item" (click)="logout()">
         <span class="side-icon">🚪</span>
         <span class="side-text">Logout</span>
+        <span class="tooltip">Logout</span>
       </div>
 
       <div class="side-expand" (click)="toggleSidebarExpand()">
