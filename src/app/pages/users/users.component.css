@@ -463,3 +463,63 @@ td:nth-child(5) {
   margin-bottom: 10px;
   font-size: 14px;
 }
+
+.pagination-container {
+  display: flex;
+  justify-content: flex-end;  
+  margin-top: 20px;
+  padding-right: 30px;       
+}
+
+.pagination-right {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.pagination-right button {
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  background-color: #ffffff;
+  color: #111827;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 14px;
+  min-width: 36px;
+  transition: all 0.2s ease;
+}
+
+/* Hover */
+.pagination-right button:hover:not(:disabled) {
+  background-color: #0b1f3a;
+  color: #ffffff;
+}
+
+/* Active Page */
+.pagination-right button.active {
+  background-color: #0b1f3a;
+  color: #ffffff;
+  border-color: #0b1f3a;
+  font-weight: 600;
+}
+
+/* Disabled */
+.pagination-right button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Ellipsis (...) */
+.pagination-right button:disabled:not(.active) {
+  background: transparent;
+  border: none;
+  cursor: default;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .pagination-right {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}

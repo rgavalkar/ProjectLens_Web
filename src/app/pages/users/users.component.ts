@@ -30,15 +30,16 @@ export class UsersComponent implements OnInit {
   toastMessage: string = '';
   showToast: boolean = false;
   
-
   isLoading: boolean = true;
 
   showDeleteModal: boolean = false;
   userToDelete: any = null;
 
+  // ================= PAGINATION =================
   currentPage: number = 1;
   itemsPerPage: number = 10;
   pageSizeOptions: number[] = [10, 20, 25, 50, 100, 200];
+  visiblePages: (number | string)[] = [];
 
   get totalItems(): number {
     return this.filteredUsers.length;
@@ -81,17 +82,19 @@ export class UsersComponent implements OnInit {
 
         const usersList = response?.data ? response.data : response;
 
-        // NEW → store ALL userIDs (even deleted)
         this.allUserIDs = (usersList || []).map((user: any) =>
           user.userID?.toLowerCase()
         );
 
-        
         this.users = (usersList || []).filter((user: any) =>
           user.isDeleted !== true &&
           user.IsDeleted !== true &&
           user.deleted !== true
         );
+
+        // ✅ IMPORTANT FIX
+        this.currentPage = 1;
+        this.generateVisiblePages();
 
         this.loading = false;
       },
@@ -124,6 +127,77 @@ export class UsersComponent implements OnInit {
     const endIndex = startIndex + this.itemsPerPage;
 
     return this.filteredUsers.slice(startIndex, endIndex);
+  }
+
+  // ================= PAGINATION =================
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.generateVisiblePages();
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.generateVisiblePages();
+    }
+  }
+
+  goToPage(page: number | string): void {
+    if (page === '...') return;
+
+    this.currentPage = page as number;
+    this.generateVisiblePages();
+  }
+
+  generateVisiblePages(): void {
+
+    const pages: (number | string)[] = [];
+    const total = this.totalPages;
+    const current = this.currentPage;
+
+    if (total <= 7) {
+      for (let i = 1; i <= total; i++) {
+        pages.push(i);
+      }
+    } else {
+      pages.push(1);
+
+      if (current > 4) {
+        pages.push('...');
+      }
+
+      for (let i = current - 1; i <= current + 1; i++) {
+        if (i > 1 && i < total) {
+          pages.push(i);
+        }
+      }
+
+      if (current < total - 3) {
+        pages.push('...');
+      }
+
+      pages.push(total);
+    }
+
+    this.visiblePages = pages;
+  }
+
+  goToFirst(): void {
+    this.currentPage = 1;
+    this.generateVisiblePages();
+  }
+
+  goToLast(): void {
+    this.currentPage = this.totalPages;
+    this.generateVisiblePages();
+  }
+
+  onItemsPerPageChange(): void {
+    this.currentPage = 1;
+    this.generateVisiblePages();
   }
 
   // ================= OPEN MODAL =================
@@ -169,7 +243,6 @@ export class UsersComponent implements OnInit {
       return;
     }
 
-    // NEW → check against ALL userIDs (including deleted)
     const userExists = this.allUserIDs.includes(
       this.newUser.userID.toLowerCase()
     );
@@ -347,33 +420,6 @@ export class UsersComponent implements OnInit {
 
     this.showDeleteModal = false;
     this.userToDelete = null;
-  }
-
-  // ================= PAGINATION =================
-  nextPage(): void {
-
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-    }
-  }
-
-  prevPage(): void {
-
-    if (this.currentPage > 1) {
-      this.currentPage--;
-    }
-  }
-
-  goToFirst(): void {
-    this.currentPage = 1;
-  }
-
-  goToLast(): void {
-    this.currentPage = this.totalPages;
-  }
-
-  onItemsPerPageChange(): void {
-    this.currentPage = 1;
   }
 
   // ================= RESET FORM =================

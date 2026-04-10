@@ -824,3 +824,63 @@
   margin-left: 3px;
   font-weight: bold;
 } 
+
+/* ================= PAGINATION CONTAINER ================= */
+
+.pagination-container {
+  display: flex;
+  justify-content: flex-end; /* move to right */
+  margin-top: 15px;
+  padding: 10px 0;
+}
+
+/* ================= PAGINATION RIGHT ================= */
+
+.pagination-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ================= BUTTON BASE ================= */
+
+.pagination-right button {
+  border: none;
+  background: transparent;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  min-width: 32px;
+  border-radius: 4px;
+}
+
+/* ================= ACTIVE PAGE ================= */
+
+.pagination-right button.active {
+  background-color: #111827;
+  color: #fff;
+  font-weight: 500;
+}
+
+/* ================= HOVER EFFECT ================= */
+
+.pagination-right button:hover:not(:disabled) {
+  background-color: #e6e6e6;
+}
+
+/* ================= DISABLED ================= */
+
+.pagination-right button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pagination-right button:first-child,
+.pagination-right button:last-child {
+  font-weight: 500;
+}
+
+.pagination-right button:disabled {
+  background: transparent;
+}

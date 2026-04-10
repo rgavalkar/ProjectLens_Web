@@ -27,6 +27,9 @@ export class ProjectListComponent implements OnInit {
   itemsPerPage: number = 10;
   pageSizeOptions: number[] = [10, 20, 50, 100, 200];
 
+  // ✅ NEW (for numbered pagination UI)
+  visiblePages: (number | string)[] = [];
+
   // ================= SHARE POPUP =================
   showSharePopup: boolean = false;
   selectedProject: any = null;
@@ -53,7 +56,10 @@ export class ProjectListComponent implements OnInit {
       next: (response: any) => {
         this.projects = response?.data || response || [];
         this.loading = false;
-        this.currentPage = 1; 
+        this.currentPage = 1;
+
+        // ✅ NEW
+        this.generateVisiblePages();
       },
       error: () => {
         this.loading = false;
@@ -90,28 +96,66 @@ export class ProjectListComponent implements OnInit {
     return this.filteredProjects.slice(start, end);
   }
 
+  // ✅ NEW FUNCTION (core logic for page numbers)
+  generateVisiblePages() {
+    const pages: (number | string)[] = [];
+
+    let start = Math.max(1, this.currentPage - 2);
+    let end = Math.min(this.totalPages, this.currentPage + 2);
+
+    if (start > 1) {
+      pages.push(1);
+      if (start > 2) pages.push('...');
+    }
+
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+
+    if (end < this.totalPages) {
+      if (end < this.totalPages - 1) pages.push('...');
+      pages.push(this.totalPages);
+    }
+
+    this.visiblePages = pages;
+  }
+
   nextPage() {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
+      this.generateVisiblePages(); // ✅ NEW
     }
   }
 
   prevPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
+      this.generateVisiblePages(); // ✅ NEW
     }
   }
 
   goToFirst() {
     this.currentPage = 1;
+    this.generateVisiblePages(); // ✅ NEW
   }
 
   goToLast() {
     this.currentPage = this.totalPages;
+    this.generateVisiblePages(); // ✅ NEW
   }
+
+  // ✅ NEW METHOD
+  goToPage(page: number | string) {
+
+  if (page === '...') return;
+
+  this.currentPage = page as number;  // ✅ FIX HERE
+  this.generateVisiblePages();
+}
 
   onItemsPerPageChange() {
     this.currentPage = 1;
+    this.generateVisiblePages(); // ✅ NEW
   }
 
   // ================= VIEW =================
