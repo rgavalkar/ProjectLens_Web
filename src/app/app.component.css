@@ -332,3 +332,42 @@
   opacity: 1;
   left: 80px;
 }
+
+.topbar-left-fixed {
+  left: 64px;
+  transition: left 0.25s ease;
+}
+
+.mini-sidebar.expanded ~ .topbar .topbar-left-fixed {
+  left: 200px;
+}
+
+.topbar-left-fixed {
+  width: auto;
+  padding-left: 20px;
+}
+
+.mini-sidebar.expanded ~ .topbar .topbar-left-fixed {
+  left: 200px;
+  padding-left: 60px;
+}
+
+
+.mini-sidebar.expanded .tooltip {
+  opacity: 0 !important;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.side-icon i {
+  font-size: 18px;
+  color: #cbd5e1;
+}
+
+.side-item:hover .side-icon i {
+  color: #ffffff;
+}
+
+.btn-logout i {
+  margin-right: 5px;
+}

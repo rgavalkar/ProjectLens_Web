@@ -32,30 +32,33 @@ export class LoginComponent {
     this.showPassword = !this.showPassword;
   }
 
-goToForgotPassword() {
-
-  this.errorMessage = '';
-
-  if (!this.credentials.userId) {
-    this.errorMessage = 'Please enter User ID';
-    return;
-  }
-
-  this.router.navigate(['/forgot-password'], {
-    queryParams: { userId: this.credentials.userId }
-  });
-
-}
-
-  login() {
-    this.isLoading = true;
+  goToForgotPassword() {
 
     this.errorMessage = '';
 
+    if (!this.credentials.userId) {
+      this.errorMessage = 'Please enter User ID';
+      return;
+    }
+
+    this.router.navigate(['/forgot-password'], {
+      queryParams: { userId: this.credentials.userId }
+    });
+
+  }
+
+  login() {
+
+    this.errorMessage = '';
+
+    // ✅ VALIDATION FIRST
     if (!this.credentials.userId || !this.credentials.password) {
       this.errorMessage = 'User ID and Password are required';
       return;
     }
+
+    // ✅ SET LOADING ONLY AFTER VALIDATION
+    this.isLoading = true;
 
     // 🔐 HASH PASSWORD BEFORE LOGIN
     const hashedPassword = CryptoJS.SHA256(this.credentials.password).toString();
@@ -94,13 +97,18 @@ goToForgotPassword() {
               );
             }
 
+            this.isLoading = false; // ✅ STOP LOADING
             this.router.navigate(['/dashboard']);
+          },
+          error: () => {
+            this.isLoading = false; // ✅ SAFETY
           }
         });
       },
 
       error: () => {
         this.errorMessage = 'Invalid User ID or Password';
+        this.isLoading = false; // ✅ IMPORTANT FIX
       }
     });
   }

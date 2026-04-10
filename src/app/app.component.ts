@@ -90,10 +90,22 @@ export class AppComponent implements OnInit {
     this.loggedInUsername = user ? user : 'Admin';
   }
 
+  // logout(): void {
+  //   localStorage.clear();
+  //   this.router.navigate(['/login']);
+  // }
+
   logout(): void {
-    localStorage.clear();
-    this.router.navigate(['/login']);
+
+  const confirmLogout = confirm('Are you sure you want to logout?'); 
+
+  if (!confirmLogout) {
+    return; 
   }
+
+  localStorage.clear();
+  this.router.navigate(['/login']);
+}
 
   goToDashboard(): void {
     this.router.navigate(['/dashboard']);
